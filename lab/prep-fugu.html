@@ -1,0 +1,432 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>복어 독 제거</title>
+<style>html,body{margin:0;height:100%;background:#132430;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+body{display:flex;align-items:center;justify-content:center}canvas{display:block;touch-action:none}
+#back{position:fixed;left:10px;top:8px;font:600 13px system-ui,'Malgun Gothic',sans-serif;color:#9DB4B6;text-decoration:none;z-index:2}#out{display:none}</style>
+</head><body><a id="back" href="./">← 실험실</a><canvas id="c"></canvas><pre id="out"></pre>
+<script>
+'use strict';
+window.onerror = (m, s, l, c) => { const o = document.getElementById('out'); if (o) o.textContent = 'ERR ' + m + ' @' + l + ':' + c; };
+// ── 공통 뼈대: 화면 맞춤 · 입력 · 소리 · 진동 · UI 조각 · 봇/검증 훅 ──
+const W = 800, H = 800;
+const QS = new URLSearchParams(location.search);
+const BOT = +(QS.get('bot') || 0);            // 1 = 잘하는 봇, 2 = 서툰 봇 (검증용)
+const FAST = Math.max(1, +(QS.get('fast') || 1));
+let seed = +(QS.get('seed') || (Date.now() % 1e9));
+function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+const R = (a, b) => a + (b - a) * rnd();
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, t) => a + (b - a) * t;
+const C = { bg: '#132430', bg2: '#1B3442', cream: '#FFF3DC', gold: '#F7B94E', red: '#E5533D', teal: '#3FA7A0', green: '#7BC96F', wood: '#C98B4F', wood2: '#A86F3B', ink: '#0B1820', dim: '#9DB4B6' };
+
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let DPR = 1, SC = 1;
+function fit() {
+  DPR = Math.min(2, devicePixelRatio || 1);
+  const de = document.documentElement, s = Math.floor(Math.min(innerWidth || de.clientWidth, innerHeight || de.clientHeight)) || 800;
+  SC = s / W; cv.style.width = s + 'px'; cv.style.height = s + 'px';
+  cv.width = Math.round(s * DPR); cv.height = Math.round(s * DPR);
+}
+addEventListener('resize', fit); addEventListener('load', fit); fit();
+let lastFit = '';
+function refit() { const k = innerWidth + 'x' + innerHeight; if (k !== lastFit) { lastFit = k; fit(); } }
+
+// ── 입력 ──
+const P = { x: W / 2, y: H / 2, down: false, id: null };
+let btns = [];
+function toL(e) { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; }
+cv.addEventListener('pointerdown', e => {
+  ac(); e.preventDefault();
+  const [x, y] = toL(e);
+  for (const b of btns) if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) { G.onButton && G.onButton(b.id); return; }
+  if (BOT) return;
+  if (P.down) return;               // 두 번째 손가락은 버튼만
+  try { cv.setPointerCapture(e.pointerId); } catch (_) {}
+  P.x = x; P.y = y; P.down = true; P.id = e.pointerId;
+  G.onDown && G.onDown(x, y);
+});
+cv.addEventListener('pointermove', e => {
+  if (BOT || e.pointerId !== P.id) return;
+  const [x, y] = toL(e); P.x = x; P.y = y; G.onMove && G.onMove(x, y);
+});
+function up(e) { if (BOT || e.pointerId !== P.id) return; P.down = false; P.id = null; G.onUp && G.onUp(); }
+cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+addEventListener('keydown', e => { ac(); G.onKey && G.onKey(e.code); });
+
+// ── 소리 (WebAudio 합성, 외부 파일 없음) ──
+let AC = null, MASTER = null, NB = null;
+function ac() {
+  if (BOT) return null;
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); MASTER = AC.createGain(); MASTER.gain.value = 0.55; MASTER.connect(AC.destination); } catch (_) { return null; } }
+  if (AC.state === 'suspended') AC.resume();
+  return AC;
+}
+const live = () => AC && AC.state === 'running';
+function tone(f, d = 0.1, type = 'sine', g = 0.2, f2 = 0) {
+  if (!live()) return;
+  const t = AC.currentTime, o = AC.createOscillator(), v = AC.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t);
+  if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+  v.gain.setValueAtTime(g, t); v.gain.exponentialRampToValueAtTime(0.001, t + d);
+  o.connect(v); v.connect(MASTER); o.start(t); o.stop(t + d + 0.02);
+}
+function nbuf() { if (!NB) { NB = AC.createBuffer(1, AC.sampleRate, AC.sampleRate); const d = NB.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; } return NB; }
+function noise(d = 0.1, g = 0.2, freq = 1200, q = 1, type = 'bandpass') {
+  if (!live()) return;
+  const t = AC.currentTime, s = AC.createBufferSource(), f = AC.createBiquadFilter(), v = AC.createGain();
+  s.buffer = nbuf(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+  v.gain.setValueAtTime(g, t); v.gain.exponentialRampToValueAtTime(0.001, t + d);
+  s.connect(f); f.connect(v); v.connect(MASTER); s.start(t, Math.random() * 0.5); s.stop(t + d + 0.02);
+}
+function loopNoise(freq = 900, q = 0.8) {   // 문지르기처럼 계속 나는 소리
+  let s = null, v = null, f = null;
+  return {
+    set(g, fr) {
+      if (!live()) return;
+      if (!s) { s = AC.createBufferSource(); s.buffer = nbuf(); s.loop = true; f = AC.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q; v = AC.createGain(); v.gain.value = 0; s.connect(f); f.connect(v); v.connect(MASTER); s.start(); }
+      v.gain.setTargetAtTime(g, AC.currentTime, 0.05);
+      if (fr) f.frequency.setTargetAtTime(fr, AC.currentTime, 0.05);
+    }
+  };
+}
+let lastBuzz = 0;
+function buzz(ms, force) {
+  if (BOT) return; const n = performance.now();
+  if (!force && n - lastBuzz < 70) return; lastBuzz = n;
+  try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {}
+}
+
+// ── 그리기 조각 ──
+const FONT = 'system-ui,"Malgun Gothic","Apple SD Gothic Neo",sans-serif';
+function T(s, x, y, size = 20, col = C.cream, al = 'center', wt = 700, base = 'middle') {
+  ctx.font = `${wt} ${size}px ${FONT}`; ctx.fillStyle = col; ctx.textAlign = al; ctx.textBaseline = base; ctx.fillText(s, x, y);
+}
+function TS(s, x, y, size = 24, col = C.cream, al = 'center', wt = 900) {   // 외곽선 있는 안내 글자
+  ctx.font = `${wt} ${size}px ${FONT}`; ctx.textAlign = al; ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round'; ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(11,24,32,0.9)'; ctx.strokeText(s, x, y);
+  ctx.fillStyle = col; ctx.fillText(s, x, y);
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
+function panel(x, y, w, h, fill = C.cream, stroke = C.ink, r = 16) { rr(x, y, w, h, r); ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = stroke; ctx.stroke(); }
+function button(id, label, x, y, w, h, col = C.gold, size = 24) {
+  btns.push({ id, x, y, w, h });
+  rr(x, y + 5, w, h, 14); ctx.fillStyle = C.ink; ctx.fill();
+  panel(x, y, w, h, col, C.ink, 14); T(label, x + w / 2, y + h / 2 + 1, size, C.ink, 'center', 800);
+}
+function star(x, y, r, on) {
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr_ = i % 2 ? r * 0.45 : r; ctx.lineTo(x + Math.cos(a) * rr_, y + Math.sin(a) * rr_); }
+  ctx.closePath(); ctx.fillStyle = on ? C.gold : '#3A5563'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke();
+}
+function ellipse(x, y, rx, ry, rot = 0) { ctx.beginPath(); ctx.ellipse(x, y, Math.max(0.1, rx), Math.max(0.1, ry), rot, 0, Math.PI * 2); }
+// 글 상자 (여러 줄)
+function lines(arr, x, y, size = 20, col = C.ink, gap = 1.45, al = 'left', wt = 600) { arr.forEach((s, i) => T(s, x, y + i * size * gap, size, col, al, wt)); }
+
+function titleCard(title, sub, howto, levels) {
+  ctx.fillStyle = 'rgba(11,24,32,0.72)'; ctx.fillRect(0, 0, W, H);
+  panel(70, 110, 660, 580);
+  T(title, W / 2, 175, 40, C.ink, 'center', 900);
+  T(sub, W / 2, 222, 19, '#5B6F78', 'center', 600);
+  lines(howto, 115, 290, 21, C.ink, 1.6);
+  if (levels) levels.forEach((l, i) => button(l.id, l.label, 115 + i * 196, 590, 176, 70, l.col || C.gold, 22));
+  else button('start', '시작', W / 2 - 110, 590, 220, 70);
+}
+function resultCard(title, stars, rows, comment, col = C.ink) {
+  ctx.fillStyle = 'rgba(11,24,32,0.72)'; ctx.fillRect(0, 0, W, H);
+  panel(90, 100, 620, 600);
+  T(title, W / 2, 160, 36, col, 'center', 900);
+  for (let i = 0; i < 3; i++) star(W / 2 - 70 + i * 70, 222, 26, i < stars);
+  rows.forEach(([k, v], i) => { T(k, 140, 300 + i * 44, 22, '#3A4E57', 'left', 600); T(String(v), 660, 300 + i * 44, 24, C.ink, 'right', 800); });
+  if (comment) lines(Array.isArray(comment) ? comment : [comment], W / 2, 300 + rows.length * 44 + 26, 19, '#5B6F78', 1.45, 'center', 600);
+  button('retry', '다시 하기', W / 2 - 250, 600, 230, 66);
+  button('title', '처음으로', W / 2 + 20, 600, 230, 66, C.cream);
+}
+
+// 검증용: 판이 끝나면 결과를 문서 제목과 #out에 남긴다
+let DONE = false;
+function report(obj) { DONE = true; const s = JSON.stringify(obj); document.title = 'DONE ' + s; const el = document.getElementById('out'); if (el) el.textContent = s; }
+
+// ── 루프 ──
+let last = performance.now(), NOW = 0, FRAMES = 0;
+function frame(now) {
+  const dt = BOT ? 1 / 60 : Math.min(0.05, (now - last) / 1000); last = now;
+  for (let i = 0; i < (BOT ? FAST : 1); i++) { NOW += dt; if (BOT && G.bot) G.bot(dt); G.update(dt); }
+  refit();
+  btns = [];
+  ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0);
+  if (!BOT || (FRAMES++ % 30) === 0) G.draw();
+  if (BOT) setTimeout(() => frame(performance.now()), 0); else requestAnimationFrame(frame);
+}
+function boot() {
+  if (!BOT) { requestAnimationFrame(frame); return; }
+  // 검증 봇: 타이머 없이 한 번에 끝까지 시뮬레이션하고 마지막 화면만 그린다
+  const dt = 1 / 60; let i = 0;
+  const SHOT = +(QS.get('shot') || 0);   // 스크린샷용: 이 시각에서 멈춤
+  for (; i < 60 * 900 && !DONE && !(SHOT && NOW >= SHOT); i++) { NOW += dt; G.bot(dt); G.update(dt); }
+  if (!DONE && !SHOT) report({ timeout: true, steps: i });
+  const fin = () => { fit(); ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0); G.draw(); };
+  fin(); addEventListener('load', fin);
+  if (QS.get('png')) { const o = document.getElementById('out'); o.setAttribute('data-png', cv.toDataURL('image/png')); }
+}
+
+// ── 복어 독 제거 ──
+// 칼은 누른 순간이 아니라 D초 뒤에 닿는다 (시간차 입력). 복어는 가끔 움찔하는데, 그 전에 눈을 굴리고 지느러미를 떤다.
+// 칼이 닿는 순간 움찔하면 칼이 미끄러진다 → 초록 점은 지저분한 칼질, 빨간 점(독 장기 옆)은 독이 번진다.
+const LV = {   // [튜닝] 난이도 테이블
+  1: { name: '입문', lead: 1.0, gap: 2.8, minGap: 1.6, fake: 0, decay: 0.40, sweat: true },
+  2: { name: '보통', lead: 0.8, gap: 2.2, minGap: 1.3, fake: 0.2, decay: 0.45, sweat: false },
+  3: { name: '장인', lead: 0.6, gap: 1.7, minGap: 1.0, fake: 0.35, decay: 0.50, sweat: false },
+};
+const D = 0.7, CUT = 0.22, FX = 390, FY = 430;
+const ORG = [
+  { id: 'liver', name: '간', x: -40, y: 42, rx: 70, ry: 32, col: '#7A2433' },
+  { id: 'ovary', name: '난소', x: 78, y: 52, rx: 38, ry: 22, col: '#E3895C' },
+  { id: 'eye', name: '눈', x: -152, y: -40, rx: 17, ry: 17, col: '#1C1C1C' },
+];
+const STEPS = [
+  { name: '지느러미 자르기', tip: '초록 점은 안전해요. 그래도 움찔하면 칼이 미끄러져요',
+    pts: [[-72, 52, 0, 'fin_p'], [70, -132, 0, 'fin_d'], [70, 132, 0, 'fin_a'], [222, 0, 0, 'tail']] },
+  { name: '껍질 벗기기', tip: '등을 따라 칼집을 넣어요',
+    pts: [[-105, -96, 0], [-40, -114, 0], [25, -118, 0], [90, -110, 0], [150, -88, 0]] },
+  { name: '배 가르기', tip: '빨간 점은 간·난소 바로 옆이에요. 움찔하면 독이 번져요!',
+    pts: [[-125, 96, 0], [-62, 104, 1], [0, 106, 1], [62, 104, 1], [125, 96, 0]] },
+  { name: '독 장기 떼기', tip: '장기를 붙든 막을 끊으면 독 폐기함으로 옮겨요',
+    pts: [[-112, 42, 1, 'liver'], [32, 42, 1, 'liver'], [38, 52, 1, 'ovary'], [118, 52, 1, 'ovary'], [-152, -66, 1, 'eye'], [-152, -14, 1, 'eye']] },
+];
+
+let st = 'title', lv = LV[1], lvN = 1, time = 0, stepI = 0, pts = [], knife = null, tw = null, fake = null;
+let acc = 0, messy = 0, stains = [], fx = [], gone = {}, flying = [], binned = [], msg = '', msgT = 0, msgCol = C.cream, stepT = 0, wasTw = false;
+
+function sched(after) {
+  const gap = Math.max(lv.minGap, R(0.6, 1.4) * lv.gap);
+  tw = { start: after + gap, dur: R(0.45, 0.7), str: R(0.55, 1) }; fake = null;
+  if (rnd() < lv.fake && gap > lv.lead + 1.3) { const fs = after + R(0.3, gap - lv.lead - 1.0); fake = { start: fs, end: fs + lv.lead * R(0.6, 0.9) }; }
+}
+const tellOn = t => (t >= tw.start - lv.lead && t < tw.start) || (fake && t >= fake.start && t < fake.end);
+const twAmt = t => t >= tw.start && t < tw.start + tw.dur ? tw.str * Math.sin(Math.PI * (t - tw.start) / tw.dur) : 0;
+const fresh = () => Math.max(0, 100 - time * lv.decay);
+
+function loadStep(i) { stepI = i; stepT = 0; pts = STEPS[i].pts.map(([x, y, red, tag]) => ({ x: FX + x, y: FY + y, red: !!red, tag, done: false, res: '' })); say(STEPS[i].name + ' — ' + STEPS[i].tip, C.cream, 3.2); }
+function start(n) {
+  lvN = n || lvN; lv = LV[lvN]; time = 0; acc = 0; messy = 0; stains = []; fx = []; gone = {}; flying = []; binned = []; knife = null;
+  sched(0.5); loadStep(0); st = 'play';
+}
+function say(s, col = C.cream, d = 1.6) { msg = s; msgT = d; msgCol = col; }
+
+const G = {
+  onButton(id) {
+    if (id.startsWith('lv')) start(+id.slice(2));
+    else if (id === 'retry') start();
+    else if (id === 'title') st = 'title';
+  },
+  onKey(c) { if (st !== 'play' && c === 'Space') start(); },
+  onDown(x, y) {
+    if (st !== 'play') return;
+    let best = null, bd = 40;
+    for (const p of pts) if (!p.done) { const d = Math.hypot(x - p.x, y - p.y); if (d < bd) { bd = d; best = p; } }
+    if (!best) return;
+    if (knife) { say('칼이 아직 내려가는 중이에요', C.dim, 0.8); return; }
+    commit(best);
+  },
+
+  update(dt) {
+    for (const f of fx) { f.x += f.vx * dt; f.y += f.vy * dt; f.vy += 300 * dt; f.a -= 1.3 * dt; }
+    fx = fx.filter(f => f.a > 0);
+    for (const s of stains) s.r = Math.min(s.max, s.r + 30 * dt);
+    for (const f of flying) f.t = Math.min(1, f.t + dt * 1.4);
+    flying = flying.filter(f => { if (f.t >= 1) { binned.push(f.o); noise(0.1, 0.25, 300, 1); tone(140, 0.12, 'square', 0.06); return false; } return true; });
+    if (msgT > 0) msgT -= dt;
+    if (st !== 'play') return;
+    time += dt; stepT += dt;
+    if (time >= tw.start + tw.dur) sched(tw.start + tw.dur);
+    const a = twAmt(time);
+    if (a > 0 && !wasTw) { tone(110, 0.35, 'sine', 0.22, 70); noise(0.25, 0.2, 400, 0.8); buzz(Math.round(30 + 50 * tw.str), true); }
+    wasTw = a > 0;
+    if (tellOn(time) && rnd() < dt * 6) buzz(4);
+    if (knife) {
+      if (time >= knife.arrive) { knife.slip = Math.max(knife.slip, a); if (!knife.landed) { knife.landed = true; noise(0.06, 0.3, 2600, 2); buzz(12, true); } }
+      if (time >= knife.arrive + CUT) resolve();
+    }
+    if (pts.every(p => p.done) && !knife && flying.length === 0) {
+      if (stepI + 1 < STEPS.length) { loadStep(stepI + 1); if (stepI === 2) tone(660, 0.15, 'sine', 0.1); }
+      else finish();
+    }
+  },
+
+  bot(dt) {
+    if (st === 'title') { start(+(QS.get('lv') || 1)); return; }
+    if (st !== 'play' || knife) return;
+    const p = pts.find(q => !q.done); if (!p) return;
+    if (BOT === 2) { commit(p); return; }
+    const land = time + D, end = land + CUT;
+    const safe = end < tw.start - 0.04 || (land > tw.start + tw.dur + 0.02 && D + CUT < lv.minGap);
+    if (safe) commit(p);
+  },
+
+  draw() {
+    ctx.fillStyle = '#1D2F3A'; ctx.fillRect(0, 0, W, H);
+    panel(20, 170, 760, 520, '#EAD2A8', C.ink, 26);
+    ctx.strokeStyle = 'rgba(150,100,50,0.16)'; ctx.lineWidth = 3;
+    for (let i = 0; i < 10; i++) { ctx.beginPath(); ctx.moveTo(40, 200 + i * 48); ctx.bezierCurveTo(300, 190 + i * 50, 520, 215 + i * 46, 760, 196 + i * 49); ctx.stroke(); }
+    drawBin();
+    if (st !== 'title') {
+      drawFugu();
+      for (const s of stains) { const g = ctx.createRadialGradient(s.x, s.y, 2, s.x, s.y, s.r); g.addColorStop(0, 'rgba(110,40,150,0.85)'); g.addColorStop(1, 'rgba(110,40,150,0)'); ellipse(s.x, s.y, s.r, s.r * 0.8); ctx.fillStyle = g; ctx.fill(); }
+      drawPts(); drawKnife();
+      for (const f of flying) { const o = ORG.find(q => q.id === f.o), k = f.t, x = lerp(FX + o.x, 690, k), y = lerp(FY + o.y, 90, k) - Math.sin(k * Math.PI) * 120; ellipse(x, y, o.rx * (1 - k * 0.6), o.ry * (1 - k * 0.6)); ctx.fillStyle = o.col; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke(); }
+      for (const f of fx) { ellipse(f.x, f.y, f.r, f.r); ctx.fillStyle = `rgba(${f.c},${f.a})`; ctx.fill(); }
+      // HUD
+      panel(30, 20, 520, 70, 'rgba(255,243,220,0.95)');
+      T(`${stepI + 1} / ${STEPS.length}  ${STEPS[stepI].name}`, 50, 44, 21, C.ink, 'left', 800);
+      T(`면허 시험 · ${lv.name}`, 50, 72, 15, '#5B6F78', 'left', 700);
+      T(`신선도 ${fresh().toFixed(0)}`, 530, 44, 18, fresh() > 60 ? '#2F7D4A' : '#B5462F', 'right', 800);
+      T(`독 사고 ${acc} · 지저분 ${messy}`, 530, 72, 15, acc ? C.red : '#5B6F78', 'right', 800);
+      if (msgT > 0) TS(msg, W / 2, 140, msg.length > 30 ? 19 : 24, msgCol);
+      drawTimeline();
+    }
+    if (st === 'title') titleCard('복어 독 제거', '복어의 반응을 보며, 칼이 닿을 순간을 미리 계산해요',
+      ['· 점을 누르면 칼이 0.7초 뒤에 닿아요 (되돌릴 수 없어요)',
+       '· 복어는 가끔 움찔해요. 그 전에 눈을 굴리고 지느러미를 떨어요',
+       '· 칼이 닿는 순간 움찔하면 칼이 미끄러져요',
+       '   초록 점 = 지저분해짐 · 빨간 점 = 독이 번짐(불합격)',
+       '· 기다리면 신선도가 떨어져요. 움찔이 끝나기 직전에 누르면 고수'],
+      [{ id: 'lv1', label: '입문', col: C.green }, { id: 'lv2', label: '보통' }, { id: 'lv3', label: '장인', col: '#F08A5D' }]);
+    if (st === 'result') {
+      const pass = acc === 0, f = fresh();
+      const stars = !pass ? 0 : messy <= 1 && f >= 75 ? 3 : messy <= 3 && f >= 55 ? 2 : 1;
+      resultCard(pass ? (stars === 3 ? '합격 · 장인의 손' : '합격') : '불합격 — 독이 번졌어요', stars, [
+        ['난이도', lv.name], ['독 사고', acc], ['지저분한 칼질', messy], ['신선도', f.toFixed(0)], ['걸린 시간', time.toFixed(1) + '초']],
+        pass ? (messy > 1 ? '눈을 굴리기 시작하면 손을 멈춰요' : '') : ['빨간 점은 복어가 조용할 때만.', '칼이 0.7초 뒤에 닿는다는 걸 기억해요'], pass ? C.ink : C.red);
+    }
+  }
+};
+
+function commit(p) {
+  knife = { p, t0: time, arrive: time + D, slip: 0, landed: false };
+  tone(900, 0.05, 'triangle', 0.06); buzz(10, true);
+}
+function resolve() {
+  const { p, slip } = knife; knife = null; p.done = true;
+  if (slip > 0.12) {
+    p.off = (rnd() < 0.5 ? -1 : 1) * (12 + 22 * slip);
+    if (p.red) {
+      acc++; p.res = 'poison'; stains.push({ x: p.x + p.off * 0.6, y: p.y + 6, r: 6, max: 34 + 26 * slip });
+      say('독이 번졌어요! 이 부위는 폐기해요', C.red, 2.2);
+      tone(300, 0.12, 'square', 0.12); setTimeout(() => tone(240, 0.3, 'square', 0.12), 130); buzz(160, true);
+      for (let i = 0; i < 12; i++) fx.push({ x: p.x, y: p.y, vx: R(-120, 120), vy: R(-180, -20), a: 1, r: R(2, 5), c: '110,40,150' });
+    } else {
+      messy++; p.res = 'messy'; say('움찔! 칼이 미끄러졌어요', C.gold, 1.2);
+      noise(0.12, 0.3, 1600, 1.2); buzz(40, true);
+    }
+  } else {
+    p.res = 'clean'; tone(1180, 0.08, 'sine', 0.1, 1500); noise(0.08, 0.18, 5200, 3);
+    for (let i = 0; i < 5; i++) fx.push({ x: p.x, y: p.y, vx: R(-80, 80), vy: R(-120, -30), a: 0.8, r: R(1.5, 3), c: '255,255,255' });
+  }
+  if (p.tag && !p.tag.startsWith('fin') && p.tag !== 'tail') {
+    const o = p.tag; if (pts.filter(q => q.tag === o).every(q => q.done)) { gone[o] = true; flying.push({ o, t: 0 }); }
+  } else if (p.tag) gone[p.tag] = true;
+}
+function finish() {
+  st = 'result';
+  report({ game: 'fugu', lv: lvN, acc, messy, fresh: +fresh().toFixed(1), time: +time.toFixed(1) });
+}
+
+function drawFugu() {
+  const a = twAmt(time), tell = tellOn(time);
+  const puff = 1 + 0.2 * a, jx = (rnd() - 0.5) * 10 * a + (tell ? Math.sin(time * 60) * 1.4 : 0), jy = (rnd() - 0.5) * 6 * a;
+  ctx.save(); ctx.translate(FX + jx, FY + jy); ctx.scale(puff, puff);
+  const flap = Math.sin(time * (tell ? 40 : 6)) * (tell ? 0.5 : 0.12) + a * 0.6;
+  // 지느러미
+  const fin = (x, y, rot, s, id) => {
+    if (gone[id]) { ellipse(x, y, 7, 5); ctx.fillStyle = '#C9877A'; ctx.fill(); return; }
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(1, 1 + flap * 0.4);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-s * 0.6, s, 0, s * 1.15); ctx.quadraticCurveTo(s * 0.6, s, 0, 0);
+    ctx.fillStyle = 'rgba(190,170,130,0.95)'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke(); ctx.restore();
+  };
+  fin(70, -122, Math.PI, 34, 'fin_d'); fin(70, 122, 0, 34, 'fin_a');
+  if (!gone.tail) { ctx.save(); ctx.translate(205, 0); ctx.scale(1, 1 + flap * 0.3); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(62, -48); ctx.quadraticCurveTo(48, 0, 62, 48); ctx.closePath(); ctx.fillStyle = '#BFA77E'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = C.ink; ctx.stroke(); ctx.restore(); }
+  // 몸통
+  ellipse(0, 0, 222, 132);
+  const g = ctx.createLinearGradient(0, -132, 0, 132);
+  if (stepI >= 2 || (stepI === 1 && pts.every(p => p.done))) { g.addColorStop(0, '#F2C9BC'); g.addColorStop(1, '#FBEDE6'); }
+  else { g.addColorStop(0, '#8E7A55'); g.addColorStop(0.45, '#B8A27A'); g.addColorStop(0.62, '#F4ECDC'); g.addColorStop(1, '#FBF6EC'); }
+  ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = C.ink; ctx.stroke();
+  if (stepI < 2) { ctx.fillStyle = 'rgba(70,55,35,0.55)'; for (const [x, y, r] of [[-60, -70, 9], [-10, -88, 7], [40, -66, 10], [95, -84, 8], [140, -55, 7], [-100, -50, 6], [10, -40, 6]]) { ellipse(x, y, r, r); ctx.fill(); } }
+  // 껍질 칼집 진행
+  if (stepI === 1) { const done = pts.filter(p => p.done); ctx.strokeStyle = 'rgba(160,60,50,0.8)'; ctx.lineWidth = 3; ctx.beginPath(); done.forEach(p => ctx.lineTo(p.x - FX, p.y - FY)); ctx.stroke(); }
+  // 가시 (부풀 때)
+  if (a > 0.05) { ctx.fillStyle = '#6B5A3C'; for (let i = 0; i < 22; i++) { const t = i / 22 * Math.PI * 2, x = Math.cos(t) * 222, y = Math.sin(t) * 132, nx = Math.cos(t), ny = Math.sin(t) * 1.6, L = 14 * a; ctx.beginPath(); ctx.moveTo(x - ny * 4, y + nx * 4); ctx.lineTo(x + nx * L, y + ny * L * 0.6); ctx.lineTo(x + ny * 4, y - nx * 4); ctx.fill(); } }
+  // 장기 (배를 가르기 전엔 점선 윤곽만)
+  const open = stepI >= 3;
+  if (open) { ellipse(0, 70, 190, 60); ctx.fillStyle = '#D9A79A'; ctx.fill(); }
+  for (const o of ORG) {
+    if (o.id === 'eye' || gone[o.id] || binned.includes(o.id) || flying.some(f => f.o === o.id)) continue;
+    ellipse(o.x, o.y, o.rx, o.ry);
+    if (open) { ctx.fillStyle = o.col; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke(); T(o.name, o.x, o.y, 15, '#fff', 'center', 800); }
+    else { ctx.setLineDash([6, 6]); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(122,36,51,0.45)'; ctx.stroke(); ctx.setLineDash([]); }
+  }
+  // 배 가르기 선
+  if (stepI === 2) { const done = pts.filter(p => p.done); ctx.strokeStyle = '#7A2433'; ctx.lineWidth = 4; ctx.beginPath(); done.forEach(p => ctx.lineTo(p.x - FX, p.y - FY)); ctx.stroke(); }
+  // 가슴지느러미
+  fin(-72, 46, -0.3, 30, 'fin_p');
+  // 얼굴
+  if (!gone.eye && !flying.some(f => f.o === 'eye')) {
+    const ex = -152, ey = -40, er = 22 + a * 6 + (tell ? 3 : 0);
+    ellipse(ex, ey, er, er); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = C.ink; ctx.stroke();
+    const look = tell ? Math.sin(time * 9) * 9 : knife ? clamp((knife.p.x - FX - ex) / 40, -6, 6) : 0;
+    const pr = tell ? 5 : 9 - a * 3;
+    ellipse(ex + look, ey + (tell ? -3 : 1), pr, pr); ctx.fillStyle = C.ink; ctx.fill();
+    ellipse(ex + look - 2, ey - 3, 2.2, 2.2); ctx.fillStyle = '#fff'; ctx.fill();
+    if (tell && lv.sweat) { ctx.fillStyle = '#7EC8F2'; ctx.beginPath(); ctx.moveTo(ex + 30, ey - 34); ctx.quadraticCurveTo(ex + 40, ey - 18, ex + 30, ey - 14); ctx.quadraticCurveTo(ex + 20, ey - 18, ex + 30, ey - 34); ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = C.ink; ctx.stroke(); }
+  } else { ellipse(-152, -40, 12, 12); ctx.fillStyle = '#C9877A'; ctx.fill(); }
+  ellipse(-216, 12, 9 + a * 3, 7 + a * 2); ctx.fillStyle = '#F4ECDC'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke();
+  ctx.restore();
+}
+function drawPts() {
+  for (const p of pts) {
+    if (p.done) {
+      ctx.save(); ctx.translate(p.x, p.y);
+      const off = p.off || 0;
+      ctx.strokeStyle = p.res === 'clean' ? 'rgba(255,255,255,0.95)' : p.res === 'messy' ? C.gold : '#7A2B9A'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(-16, -6); if (p.res === 'clean') ctx.lineTo(16, 6); else { ctx.lineTo(0, off * 0.4); ctx.lineTo(16, 6 + off * 0.6); } ctx.stroke();
+      ctx.restore(); continue;
+    }
+    const k = knife && knife.p === p, pulse = 1 + Math.sin(time * 5 + p.x) * 0.08;
+    ellipse(p.x, p.y, 15 * pulse, 15 * pulse); ctx.fillStyle = p.red ? 'rgba(229,83,61,0.9)' : 'rgba(123,201,111,0.95)'; ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = k ? '#fff' : C.ink; ctx.stroke();
+    if (p.red) T('!', p.x, p.y + 1, 16, '#fff', 'center', 900);
+  }
+}
+function drawKnife() {
+  if (!knife) return;
+  const p = knife.p, k = clamp((time - knife.t0) / D, 0, 1);
+  // 닫히는 고리 = 칼이 닿을 때까지 남은 시간
+  ctx.lineWidth = 5; ctx.strokeStyle = `rgba(255,255,255,${0.4 + 0.6 * k})`; ellipse(p.x, p.y, lerp(52, 16, k), lerp(52, 16, k)); ctx.stroke();
+  const ky = lerp(p.y - 110, p.y - 8, k * k), slip = twAmt(time) * (time >= knife.arrive ? 1 : 0);
+  ctx.save(); ctx.translate(p.x + 30 + slip * 20 * Math.sin(time * 70), ky); ctx.rotate(-0.5);
+  ctx.fillStyle = '#DDE4E8'; ctx.beginPath(); ctx.moveTo(-60, -6); ctx.lineTo(10, -8); ctx.lineTo(18, 6); ctx.lineTo(-60, 4); ctx.closePath(); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke();
+  ctx.fillStyle = '#5B3A22'; rr(18, -7, 46, 14, 5); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+function drawTimeline() {
+  // 칼 상태 막대: 언제 누르면 언제 닿는지
+  const x = 140, y = 740, w = 520;
+  panel(x - 14, y - 26, w + 28, 56, 'rgba(255,243,220,0.95)');
+  T('칼', x - 2, y + 2, 15, '#5B6F78', 'left', 800);
+  const bx = x + 30, bw = w - 30;
+  ctx.fillStyle = '#D6DDE0'; ctx.fillRect(bx, y - 6, bw, 14);
+  if (knife) { const k = clamp((time - knife.t0) / (D + CUT), 0, 1); ctx.fillStyle = time >= knife.arrive ? C.gold : '#7FA6B8'; ctx.fillRect(bx, y - 6, bw * k, 14); ctx.fillStyle = C.ink; ctx.fillRect(bx + bw * D / (D + CUT) - 1, y - 10, 3, 22); T('닿음', bx + bw * D / (D + CUT), y + 20, 11, '#5B6F78', 'center', 700); }
+  else T('준비됨 — 점을 누르면 0.7초 뒤에 닿아요', bx + bw / 2, y + 1, 14, '#3A4E57', 'center', 700);
+}
+function drawBin() {
+  const x = 620, y = 22;
+  panel(x, y, 140, 100, '#3B4A52', C.ink, 12);
+  T('독 폐기함', x + 70, y + 22, 15, '#FFD6CF', 'center', 800);
+  T('(잠금)', x + 70, y + 42, 12, '#C9D3D8', 'center', 600);
+  ctx.strokeStyle = '#E7C15A'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x + 70, y + 66, 10, Math.PI, 0); ctx.stroke(); ctx.fillStyle = '#E7C15A'; rr(x + 56, y + 66, 28, 22, 4); ctx.fill();
+  binned.forEach((o, i) => { const g = ORG.find(q => q.id === o); ellipse(x + 22 + i * 10, y + 86, 8, 6); ctx.fillStyle = g.col; ctx.fill(); });
+}
+boot();
+
+</script></body></html>
