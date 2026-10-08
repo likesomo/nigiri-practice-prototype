@@ -1,0 +1,478 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>새벽 경매 감정</title>
+<style>html,body{margin:0;height:100%;background:#132430;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+body{display:flex;align-items:center;justify-content:center}canvas{display:block;touch-action:none}
+#back{position:fixed;left:10px;top:8px;font:600 13px system-ui,'Malgun Gothic',sans-serif;color:#9DB4B6;text-decoration:none;z-index:2}#out{display:none}</style>
+</head><body><a id="back" href="./">← 실험실</a><canvas id="c"></canvas><pre id="out"></pre>
+<script>
+'use strict';
+window.onerror = (m, s, l, c) => { const o = document.getElementById('out'); if (o) o.textContent = 'ERR ' + m + ' @' + l + ':' + c; };
+// ── 공통 뼈대: 화면 맞춤 · 입력 · 소리 · 진동 · UI 조각 · 봇/검증 훅 ──
+const W = 800, H = 800;
+const QS = new URLSearchParams(location.search);
+const BOT = +(QS.get('bot') || 0);            // 1 = 잘하는 봇, 2 = 서툰 봇 (검증용)
+const FAST = Math.max(1, +(QS.get('fast') || 1));
+let seed = +(QS.get('seed') || (Date.now() % 1e9));
+function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+const R = (a, b) => a + (b - a) * rnd();
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, t) => a + (b - a) * t;
+const C = { bg: '#132430', bg2: '#1B3442', cream: '#FFF3DC', gold: '#F7B94E', red: '#E5533D', teal: '#3FA7A0', green: '#7BC96F', wood: '#C98B4F', wood2: '#A86F3B', ink: '#0B1820', dim: '#9DB4B6' };
+
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let DPR = 1, SC = 1;
+function fit() {
+  DPR = Math.min(2, devicePixelRatio || 1);
+  const de = document.documentElement, s = Math.floor(Math.min(innerWidth || de.clientWidth, innerHeight || de.clientHeight)) || 800;
+  SC = s / W; cv.style.width = s + 'px'; cv.style.height = s + 'px';
+  cv.width = Math.round(s * DPR); cv.height = Math.round(s * DPR);
+}
+addEventListener('resize', fit); addEventListener('load', fit); fit();
+let lastFit = '';
+function refit() { const k = innerWidth + 'x' + innerHeight; if (k !== lastFit) { lastFit = k; fit(); } }
+
+// ── 입력 ──
+const P = { x: W / 2, y: H / 2, down: false, id: null };
+let btns = [];
+function toL(e) { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; }
+cv.addEventListener('pointerdown', e => {
+  ac(); e.preventDefault();
+  const [x, y] = toL(e);
+  for (const b of btns) if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) { G.onButton && G.onButton(b.id); return; }
+  if (BOT) return;
+  if (P.down) return;               // 두 번째 손가락은 버튼만
+  try { cv.setPointerCapture(e.pointerId); } catch (_) {}
+  P.x = x; P.y = y; P.down = true; P.id = e.pointerId;
+  G.onDown && G.onDown(x, y);
+});
+cv.addEventListener('pointermove', e => {
+  if (BOT || e.pointerId !== P.id) return;
+  const [x, y] = toL(e); P.x = x; P.y = y; G.onMove && G.onMove(x, y);
+});
+function up(e) { if (BOT || e.pointerId !== P.id) return; P.down = false; P.id = null; G.onUp && G.onUp(); }
+cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+addEventListener('keydown', e => { ac(); G.onKey && G.onKey(e.code); });
+
+// ── 소리 (WebAudio 합성, 외부 파일 없음) ──
+let AC = null, MASTER = null, NB = null;
+function ac() {
+  if (BOT) return null;
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); MASTER = AC.createGain(); MASTER.gain.value = 0.55; MASTER.connect(AC.destination); } catch (_) { return null; } }
+  if (AC.state === 'suspended') AC.resume();
+  return AC;
+}
+const live = () => AC && AC.state === 'running';
+function tone(f, d = 0.1, type = 'sine', g = 0.2, f2 = 0) {
+  if (!live()) return;
+  const t = AC.currentTime, o = AC.createOscillator(), v = AC.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t);
+  if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+  v.gain.setValueAtTime(g, t); v.gain.exponentialRampToValueAtTime(0.001, t + d);
+  o.connect(v); v.connect(MASTER); o.start(t); o.stop(t + d + 0.02);
+}
+function nbuf() { if (!NB) { NB = AC.createBuffer(1, AC.sampleRate, AC.sampleRate); const d = NB.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; } return NB; }
+function noise(d = 0.1, g = 0.2, freq = 1200, q = 1, type = 'bandpass') {
+  if (!live()) return;
+  const t = AC.currentTime, s = AC.createBufferSource(), f = AC.createBiquadFilter(), v = AC.createGain();
+  s.buffer = nbuf(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+  v.gain.setValueAtTime(g, t); v.gain.exponentialRampToValueAtTime(0.001, t + d);
+  s.connect(f); f.connect(v); v.connect(MASTER); s.start(t, Math.random() * 0.5); s.stop(t + d + 0.02);
+}
+function loopNoise(freq = 900, q = 0.8) {   // 문지르기처럼 계속 나는 소리
+  let s = null, v = null, f = null;
+  return {
+    set(g, fr) {
+      if (!live()) return;
+      if (!s) { s = AC.createBufferSource(); s.buffer = nbuf(); s.loop = true; f = AC.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q; v = AC.createGain(); v.gain.value = 0; s.connect(f); f.connect(v); v.connect(MASTER); s.start(); }
+      v.gain.setTargetAtTime(g, AC.currentTime, 0.05);
+      if (fr) f.frequency.setTargetAtTime(fr, AC.currentTime, 0.05);
+    }
+  };
+}
+let lastBuzz = 0;
+function buzz(ms, force) {
+  if (BOT) return; const n = performance.now();
+  if (!force && n - lastBuzz < 70) return; lastBuzz = n;
+  try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {}
+}
+
+// ── 그리기 조각 ──
+const FONT = 'system-ui,"Malgun Gothic","Apple SD Gothic Neo",sans-serif';
+function T(s, x, y, size = 20, col = C.cream, al = 'center', wt = 700, base = 'middle') {
+  ctx.font = `${wt} ${size}px ${FONT}`; ctx.fillStyle = col; ctx.textAlign = al; ctx.textBaseline = base; ctx.fillText(s, x, y);
+}
+function TS(s, x, y, size = 24, col = C.cream, al = 'center', wt = 900) {   // 외곽선 있는 안내 글자
+  ctx.font = `${wt} ${size}px ${FONT}`; ctx.textAlign = al; ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round'; ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(11,24,32,0.9)'; ctx.strokeText(s, x, y);
+  ctx.fillStyle = col; ctx.fillText(s, x, y);
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
+function panel(x, y, w, h, fill = C.cream, stroke = C.ink, r = 16) { rr(x, y, w, h, r); ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = stroke; ctx.stroke(); }
+function button(id, label, x, y, w, h, col = C.gold, size = 24) {
+  btns.push({ id, x, y, w, h });
+  rr(x, y + 5, w, h, 14); ctx.fillStyle = C.ink; ctx.fill();
+  panel(x, y, w, h, col, C.ink, 14); T(label, x + w / 2, y + h / 2 + 1, size, C.ink, 'center', 800);
+}
+function star(x, y, r, on) {
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr_ = i % 2 ? r * 0.45 : r; ctx.lineTo(x + Math.cos(a) * rr_, y + Math.sin(a) * rr_); }
+  ctx.closePath(); ctx.fillStyle = on ? C.gold : '#3A5563'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke();
+}
+function ellipse(x, y, rx, ry, rot = 0) { ctx.beginPath(); ctx.ellipse(x, y, Math.max(0.1, rx), Math.max(0.1, ry), rot, 0, Math.PI * 2); }
+// 글 상자 (여러 줄)
+function lines(arr, x, y, size = 20, col = C.ink, gap = 1.45, al = 'left', wt = 600) { arr.forEach((s, i) => T(s, x, y + i * size * gap, size, col, al, wt)); }
+
+function titleCard(title, sub, howto, levels) {
+  ctx.fillStyle = 'rgba(11,24,32,0.72)'; ctx.fillRect(0, 0, W, H);
+  panel(70, 110, 660, 580);
+  T(title, W / 2, 175, 40, C.ink, 'center', 900);
+  T(sub, W / 2, 222, 19, '#5B6F78', 'center', 600);
+  lines(howto, 115, 290, 21, C.ink, 1.6);
+  if (levels) levels.forEach((l, i) => button(l.id, l.label, 115 + i * 196, 590, 176, 70, l.col || C.gold, 22));
+  else button('start', '시작', W / 2 - 110, 590, 220, 70);
+}
+function resultCard(title, stars, rows, comment, col = C.ink, opt) {
+  ctx.fillStyle = 'rgba(11,24,32,0.72)'; ctx.fillRect(0, 0, W, H);
+  panel(90, 100, 620, 600);
+  T(title, W / 2, 160, 36, col, 'center', 900);
+  for (let i = 0; i < 3; i++) star(W / 2 - 70 + i * 70, 222, 26, i < stars);
+  rows.forEach(([k, v], i) => { T(k, 140, 300 + i * 44, 22, '#3A4E57', 'left', 600); T(String(v), 660, 300 + i * 44, 24, C.ink, 'right', 800); });
+  if (comment) lines(Array.isArray(comment) ? comment : [comment], W / 2, 300 + rows.length * 44 + 26, 19, '#5B6F78', 1.45, 'center', 600);
+  if (opt && opt.next) {
+    button('retry', '다시', W / 2 - 280, 600, 170, 66);
+    button('next', '다음 스테이지', W / 2 - 95, 600, 220, 66, C.green, 22);
+    button('title', '목록', W / 2 + 140, 600, 140, 66, C.cream);
+  } else {
+    button('retry', '다시 하기', W / 2 - 250, 600, 230, 66);
+    button('title', '처음으로', W / 2 + 20, 600, 230, 66, C.cream);
+  }
+}
+
+// ── 스테이지 · 난이도 ──
+const TIERS = ['입문', '보통', '장인'], TIER_COL = [C.green, C.gold, '#F08A5D'];
+const SAVE = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (_) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} },
+};
+const Q_STAGE = QS.get('stage') ? +QS.get('stage') - 1 : null, Q_TIER = QS.get('tier') ? +QS.get('tier') - 1 : null;
+function bestStars(key, i, t) { const b = SAVE.get(key, {}); return b[i + '_' + t] || 0; }
+function saveStars(key, i, t, s) { const b = SAVE.get(key, {}); if ((b[i + '_' + t] || 0) < s) { b[i + '_' + t] = s; SAVE.set(key, b); } }
+// 스테이지 목록 화면: 버튼 id = tier0..2, stage0..n
+function stageMenu(o) {
+  ctx.fillStyle = 'rgba(11,24,32,0.78)'; ctx.fillRect(0, 0, W, H);
+  panel(50, 40, 700, 720);
+  T(o.title, W / 2, 92, 38, C.ink, 'center', 900);
+  T(o.sub, W / 2, 132, 18, '#5B6F78', 'center', 600);
+  lines(o.how, 90, 172, 17, '#2F434C', 1.5, 'left', 600);
+  const ty = 172 + o.how.length * 25 + 8;
+  T('난이도', 90, ty + 26, 18, C.ink, 'left', 800);
+  TIERS.forEach((n, i) => {
+    const on = i === o.tier;
+    button('tier' + i, (on ? '● ' : '') + n, 190 + i * 180, ty, 160, 52, on ? TIER_COL[i] : '#E4DCC8', 20);
+  });
+  T(o.tierNote[o.tier], W / 2, ty + 78, 15, '#5B6F78', 'center', 600);
+  const y0 = ty + 104, gap = Math.min(80, (700 - y0) / o.stages.length);
+  o.stages.forEach((s, i) => {
+    const y = y0 + i * gap, h = gap - 12;
+    btns.push({ id: 'stage' + i, x: 90, y, w: 620, h });
+    rr(90, y + 4, 620, h, 14); ctx.fillStyle = C.ink; ctx.fill();
+    panel(90, y, 620, h, '#FFFDF6', C.ink, 14);
+    T(`${i + 1}`, 122, y + h / 2, 26, C.ink, 'center', 900);
+    T(s.name, 150, y + h / 2 - 11, 20, C.ink, 'left', 800);
+    T(s.tw, 150, y + h / 2 + 13, 14, '#5B6F78', 'left', 600);
+    const b = bestStars(o.key, i, o.tier);
+    for (let k = 0; k < 3; k++) star(620 + k * 30, y + h / 2, 11, k < b);
+  });
+}
+
+// 검증용: 판이 끝나면 결과를 문서 제목과 #out에 남긴다
+// ── 사람 모델 (bot=3) ── [가정] 타깃 실력 3단계. 값의 근거는 README '사람 모델' 절
+// rt 지각→행동 지연(s) · ctl 힘·속도 조절 흔들림(변동계수) · trace 선 따라가기 흔들림(px, PC 마우스 기준)
+// miss 신호 놓침 · imp 참을성(s) · wig 흔들기 요령 사용 비율 · over 물 두 번 붓기 · attn 다른 일 처리 지연 배율
+// anticip 예측 행동 · rush 순간적으로 서두르는 빈도
+const SKILL = {
+  low:  { rt: 0.42, ctl: 0.30, trace: 10, miss: 0.25, imp: 1.6, wig: 0.15, over: 0.40, attn: 1.6, anticip: false, rush: 0.25 },
+  mid:  { rt: 0.30, ctl: 0.20, trace: 7,  miss: 0.12, imp: 2.6, wig: 0.50, over: 0.25, attn: 1.0, anticip: false, rush: 0.12 },
+  high: { rt: 0.22, ctl: 0.11, trace: 4,  miss: 0.04, imp: 4.0, wig: 0.90, over: 0.08, attn: 0.7, anticip: true,  rush: 0.04 },
+};
+const HS = { ...SKILL[QS.get('sk') || 'mid'] };
+const DEV = QS.get('dev') === 'mobile' ? { trace: 2.5, ctl: 1.25 } : { trace: 1, ctl: 1 };   // 손가락은 마우스보다 크게 흔들린다 [가정]
+HS.ctl *= DEV.ctl;
+let HB = {};
+function gauss() { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); }
+function ou(o, dt, tau, sig) { o.v = (o.v || 0) - (o.v || 0) / tau * dt + sig * Math.sqrt(2 * dt / tau) * gauss(); return o.v; }
+function Lag() { const b = []; return { push(t, v) { b.push([t, v]); while (b.length > 2 && b[1][0] <= t - 2) b.shift(); }, get(t) { for (let i = b.length - 1; i >= 0; i--) if (b[i][0] <= t) return b[i][1]; return b.length ? b[0][1] : null; } }; }
+
+let DONE = false, LAST = null;
+function report(obj) { DONE = true; LAST = obj; const s = JSON.stringify(obj); document.title = 'DONE ' + s; const el = document.getElementById('out'); if (el) el.textContent = s; }
+
+// ── 루프 ──
+let last = performance.now(), NOW = 0, FRAMES = 0, PNGF = 0;
+function frame(now) {
+  const dt = BOT ? 1 / 60 : Math.min(0.05, (now - last) / 1000); last = now;
+  for (let i = 0; i < (BOT ? FAST : 1); i++) { NOW += dt; if (BOT && G.bot) G.bot(dt); G.update(dt); }
+  refit();
+  btns = [];
+  ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0);
+  if (!BOT || (FRAMES++ % 30) === 0) G.draw();
+  if (!BOT && QS.get('png') && ++PNGF === 3) document.getElementById('out').setAttribute('data-png', cv.toDataURL('image/png'));   // 검증용 화면 추출
+  if (BOT) setTimeout(() => frame(performance.now()), 0); else requestAnimationFrame(frame);
+}
+function boot() {
+  if (!BOT) { requestAnimationFrame(frame); return; }
+  // 검증 봇: 타이머 없이 한 번에 끝까지 시뮬레이션하고 마지막 화면만 그린다
+  const dt = 1 / 60;
+  const SHOT = +(QS.get('shot') || 0);   // 스크린샷용: 이 시각에서 멈춤
+  const RUNS = +(QS.get('runs') || 1), base = seed, all = [];
+  for (let r = 0; r < RUNS; r++) {
+    if (r > 0) { seed = base + r * 7919; DONE = false; LAST = null; NOW = 0; HB = {}; G.reset(); }
+    let i = 0;
+    for (; i < 60 * 900 && !DONE && !(SHOT && NOW >= SHOT); i++) { NOW += dt; G.bot(dt); G.update(dt); }
+    if (!DONE && !SHOT) report({ timeout: true, steps: i });
+    all.push(LAST);
+  }
+  if (RUNS > 1) document.getElementById('out').textContent = JSON.stringify(all);
+  const fin = () => { fit(); ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0); G.draw(); };
+  fin(); addEventListener('load', fin);
+  if (QS.get('png')) { const o = document.getElementById('out'); o.setAttribute('data-png', cv.toDataURL('image/png')); }
+}
+
+// ── 새벽 경매 감정 ──
+// 참치 꼬리 단면을 보고 값을 짐작해 입찰한다. 색(선명함) · 지방 결 · 야케(잡힐 때 몸부림쳐 살이 상한 흔적).
+// 경쟁 중도매인보다 높게 부르면 산다. 부른 값을 내고, 갈라 보면 진짜 값이 나온다. 오늘 필요한 마리 수는 꼭 채워야 한다.
+const STAGES = [   // [튜닝] 스테이지 테이블 — feat: 달라지는 특징, npc: 경쟁자 감정 오차, budget: 예산(닢), need: 꼭 사야 할 마리, light: 손전등 횟수
+  { name: '색 보기', tw: '선명한 붉은색일수록 좋아요', lots: 3, feat: ['c'], npc: 0.30, budget: 400, need: 1, light: 0 },
+  { name: '지방 결', tw: '배 쪽 흰 결이 촘촘할수록 비싸요', lots: 4, feat: ['c', 'f'], npc: 0.25, budget: 450, need: 1, light: 0 },
+  { name: '야케를 찾아라', tw: '손전등으로 비춰야 보이는 상처', lots: 5, feat: ['c', 'f', 'y'], npc: 0.22, budget: 450, need: 1, light: 4 },
+  { name: '눈 밝은 경쟁자', tw: '경쟁자도 잘 봐요 — 싸게 사기 어려움', lots: 5, feat: ['c', 'f', 'y'], npc: 0.10, budget: 520, need: 2, light: 2 },
+  { name: '빠듯한 예산', tw: '세 마리를 사야 하는데 돈이 모자라요', lots: 6, feat: ['c', 'f', 'y'], npc: 0.18, budget: 360, need: 3, light: 2 },
+];
+const TIER = [   // [튜닝] 난이도 테이블 — guide: 감정 글 표시, chart: 시세표, yakeVis: 손전등 없이 야케가 보이는 정도, dim: 어두움, lightAdd: 손전등 추가
+  { guide: true, chart: true, yakeVis: 0.55, dim: 0, lightAdd: 1, npcAdd: 0.05 },
+  { guide: false, chart: true, yakeVis: 0.22, dim: 0.12, lightAdd: 0, npcAdd: 0 },
+  { guide: false, chart: false, yakeVis: 0.08, dim: 0.28, lightAdd: -1, npcAdd: -0.04 },
+];
+const MIN_P = 40, STEP_P = 5, KEY = 'prep-auction';
+const value = l => Math.round(100 * (0.5 + 0.8 * l.f + 0.5 * l.c) * (l.y ? 0.65 : 1));
+const grade = v => v >= 150 ? '특상' : v >= 115 ? '상' : v >= 85 ? '중' : '하';
+
+let st = 'menu', tier = Q_TIER ?? 0, si = 0, S = null, lots = [], li = 0, money = 0, bought = [], light = 0, lightOn = false, bid = 100, reveal = null, result = null, msgS = '', msgT = 0, t = 0;
+
+function startStage(i, tr) {
+  si = i; tier = tr; S = STAGES[i]; st = 'play'; li = 0; bought = []; reveal = null; result = null; t = 0;
+  money = S.budget; light = Math.max(0, S.light + (S.light ? TIER[tier].lightAdd : 0));
+  let ls = 7 + i * 131; const lr = () => { ls = (ls * 16807) % 2147483647; return ls / 2147483647; };   // 참치는 스테이지마다 고정
+  lots = [];
+  for (let k = 0; k < S.lots; k++) {
+    const l = { c: S.feat.includes('c') ? lr() : 0.5, f: S.feat.includes('f') ? lr() : 0.45, y: S.feat.includes('y') && lr() < 0.4 ? 1 : 0, seed: lr() * 1000 };
+    l.v = value(l);
+    const sd = S.npc + TIER[tier].npcAdd;
+    l.npc = Math.max(MIN_P, Math.round(l.v * (1 + gaussL(lr) * sd) * (0.65 + lr() * 0.15) / STEP_P) * STEP_P);
+    const w = 0.12 * l.v; l.lo = Math.round((l.v - w * (0.4 + lr() * 0.6)) / 5) * 5; l.hi = l.lo + Math.round(2 * w / 5) * 5;   // 입문용 예상 값 범위
+    lots.push(l);
+  }
+  bid = suggest(); lightOn = false;
+}
+function gaussL(r) { let u = 0; while (u === 0) u = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r()); }
+function suggest() { return 100; }
+const lot = () => lots[li];
+const needLeft = () => Math.max(0, S.need - bought.length);
+
+// 참고값: 진짜 값과 경쟁자 값을 다 아는 경우의 최대 이익 (결과 보고에만 씀)
+function oracle() {
+  const n = lots.length; let best = -1e9;
+  for (let m = 0; m < (1 << n); m++) {
+    let cost = 0, gain = 0, cnt = 0;
+    for (let k = 0; k < n; k++) if (m >> k & 1) { const p = lots[k].npc + STEP_P; cost += p; gain += lots[k].v - p; cnt++; }
+    if (cost > S.budget) continue;
+    const sc = gain - Math.max(0, S.need - cnt) * 60;
+    if (sc > best) best = sc;
+  }
+  return best;
+}
+// 별 기준: 진짜 값을 정확히 아는 감정 고수가 사람과 같은 방식(값의 80 %, 급하면 더)으로 부를 때의 점수
+function appraiserPar() {
+  let m = S.budget, got = 0, gain = 0;
+  lots.forEach((l, k) => {
+    const left = lots.length - k, need = Math.max(0, S.need - got), must = need >= left, urgent = need > 0 && left <= need + 1;
+    let b = Math.round(l.v * (must ? 1.0 : urgent ? 0.92 : 0.8) / STEP_P) * STEP_P;
+    b = Math.min(b, m - Math.max(0, (need - 1) * 90));
+    if (b >= MIN_P && b > l.npc && (l.v - b > 0 || must || urgent)) { m -= b; got++; gain += l.v - b; }
+  });
+  return gain - Math.max(0, S.need - got) * 60;
+}
+function placeBid(b) {
+  const l = lot(); if (reveal) return;
+  if (b !== null && b > money) { say('예산보다 높아요'); return; }
+  const win = b !== null && b > l.npc;
+  if (win) { money -= b; bought.push({ v: l.v, p: b }); tone(880, 0.1, 'sine', 0.12); tone(1320, 0.18, 'sine', 0.1); buzz(25, true); }
+  else { tone(330, 0.15, 'triangle', 0.08); }
+  reveal = { win, b, npc: l.npc, v: l.v, t: 0 };
+}
+function nextLot() {
+  reveal = null; lightOn = false; li++;
+  if (li >= lots.length) return finish();
+  bid = Math.min(money, 100);
+}
+function finish() {
+  const gain = bought.reduce((a, x) => a + x.v - x.p, 0), miss = needLeft(), score = gain - miss * 60, par = Math.max(10, appraiserPar()), best = oracle();
+  const stars = score >= par * 0.8 && miss === 0 ? 3 : score >= par * 0.5 && miss === 0 ? 2 : score > 0 ? 1 : 0;
+  result = { gain, miss, score, par, best, stars }; st = 'result'; saveStars(KEY, si, tier, stars);
+  report({ game: 'auction', stage: si + 1, tier: tier + 1, score, par, best, stars, miss, bought: bought.length });
+}
+function say(s) { msgS = s; msgT = 1.6; }
+
+// ── 사람 모델: 단면을 흐릿하게 읽고(오차), 이익을 남기려 조금 낮게 부른다 ──
+function humanEstimate(l) {
+  if (TIER[tier].guide) return Math.round((l.lo + l.hi) / 2 * (1 + gauss() * 0.04 * (HS.ctl / 0.2)));   // 입문: 예상 값 범위를 읽는다
+  const sd = [0.08, 0.15, 0.22][tier] * (HS.ctl / 0.2);
+  const c = clamp(l.c + gauss() * sd, 0, 1), f = clamp(l.f + gauss() * sd, 0, 1);
+  const seeY = l.y && rnd() < (lightOn ? 0.9 : [0.8, 0.45, 0.15][tier]);
+  return value({ c, f, y: seeY ? 1 : 0 });
+}
+
+const G = {
+  reset() { st = 'menu'; },
+  onButton(id) {
+    if (id.startsWith('tier')) tier = +id.slice(4);
+    else if (id.startsWith('stage')) startStage(+id.slice(5), tier);
+    else if (id === 'retry') startStage(si, tier);
+    else if (id === 'next') startStage(Math.min(si + 1, STAGES.length - 1), tier);
+    else if (id === 'title') st = 'menu';
+    else if (id === 'minus') { bid = Math.max(MIN_P, bid - STEP_P); tone(500, 0.03, 'square', 0.03); }
+    else if (id === 'minus10') { bid = Math.max(MIN_P, bid - 20); tone(450, 0.03, 'square', 0.03); }
+    else if (id === 'plus') { bid = Math.min(money, bid + STEP_P); tone(600, 0.03, 'square', 0.03); }
+    else if (id === 'plus10') { bid = Math.min(money, bid + 20); tone(650, 0.03, 'square', 0.03); }
+    else if (id === 'bid') placeBid(bid);
+    else if (id === 'pass') placeBid(null);
+    else if (id === 'light') { if (light > 0 && !lightOn) { light--; lightOn = true; tone(1200, 0.08, 'sine', 0.06); noise(0.06, 0.1, 6000, 3); } }
+    else if (id === 'cont') nextLot();
+  },
+  update(dt) { t += dt; if (msgT > 0) msgT -= dt; if (reveal) reveal.t += dt; },
+  bot(dt) {
+    if (st === 'menu') { startStage(Q_STAGE ?? 0, Q_TIER ?? 0); return; }
+    if (st !== 'play') return;
+    if (reveal) { nextLot(); return; }
+    const l = lot(), lotsLeft = lots.length - li;
+    if (BOT === 1) {   // 다 아는 봇: 오라클과 같은 선택을 근사 — 이익이 나면 사고, 필요 수가 급하면 산다
+      const p = l.npc + STEP_P, must = needLeft() >= lotsLeft;
+      placeBid((l.v - p > 0 || must) && p <= money && money - p >= (needLeft() - 1) * MIN_P ? p : null); return;
+    }
+    if (BOT === 2) { placeBid(needLeft() > 0 && money >= 100 ? 100 : null); return; }
+    // bot3 사람 모델
+    if (light > 0 && !lightOn && S.feat.includes('y')) G.onButton('light');
+    const est = humanEstimate(l), must = needLeft() >= lotsLeft, urgent = needLeft() > 0 && lotsLeft <= needLeft() + 1;
+    let b = Math.round(est * (must ? 1.0 : urgent ? 0.92 : 0.82) / STEP_P) * STEP_P;
+    const reserve = (needLeft() - 1) * 90;   // 남은 필요 마리를 위해 남겨 둘 돈
+    b = Math.min(b, money - Math.max(0, reserve));
+    placeBid(b >= MIN_P && (est - b > 0 || must || urgent) ? b : null);
+  },
+  draw() {
+    ctx.fillStyle = '#0F1D26'; ctx.fillRect(0, 0, W, H);
+    if (st === 'menu') {
+      stageMenu({ title: '새벽 경매 감정', sub: '꼬리 단면을 보고 참치 값을 짐작해 입찰해요', key: KEY, tier, stages: STAGES,
+        how: ['· 선명한 붉은색, 배 쪽의 촘촘한 흰 지방 결 = 비싼 참치', '· 야케(희뿌연 갈색 얼룩)는 값을 반토막 내요 — 손전등으로 확인', '· 경쟁자보다 높게 부르면 사요. 필요한 마리 수는 꼭 채워요'],
+        tierNote: ['감정 글과 시세표가 보여요 · 야케도 꽤 보여요', '시세표만 보여요 · 야케는 손전등으로', '어두운 경매장 · 시세표 없음 · 손전등 1회 적게'] });
+      return;
+    }
+    // 경매장 바닥
+    ctx.fillStyle = '#1B2B33'; ctx.fillRect(0, 140, W, 520);
+    for (let i = 0; i < 8; i++) { ctx.fillStyle = i % 2 ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.05)'; ctx.fillRect(0, 140 + i * 65, W, 65); }
+    if (st !== 'result' && lot()) drawSection(lot(), 300, 380, 170);
+    // 상단
+    panel(20, 14, 760, 112, 'rgba(255,243,220,0.96)');
+    T(`${si + 1}. ${S.name}`, 40, 42, 22, C.ink, 'left', 900);
+    T(`${TIERS[tier]} · ${S.tw}`, 40, 72, 14, '#5B6F78', 'left', 700);
+    T(`참치 ${Math.min(li + 1, lots.length)} / ${lots.length}`, 40, 104, 16, C.ink, 'left', 800);
+    T(`예산 ${money}닢`, 760, 42, 22, money < 100 ? C.red : C.ink, 'right', 900);
+    T(`필요 ${bought.length} / ${S.need}마리`, 760, 72, 16, needLeft() ? '#B5462F' : '#2F7D4A', 'right', 800);
+    if (S.light > 0) T(`손전등 ${light}회`, 760, 104, 15, '#5B6F78', 'right', 800);
+    // 오른쪽: 감정 글 · 시세표
+    if (st === 'play' && lot()) {
+      const tr = TIER[tier], l = lot();
+      panel(500, 160, 270, tr.guide ? 330 : 160, 'rgba(255,251,239,0.95)');
+      let y = 186;
+      if (tr.chart) { T('시세표', 520, y, 16, C.ink, 'left', 900); y += 26; [['특상', '150~'], ['상', '115~149'], ['중', '85~114'], ['하', '~84']].forEach(([g, r]) => { T(g, 530, y, 15, C.ink, 'left', 800); T(r + '닢', 750, y, 15, '#3A4E57', 'right', 700); y += 24; }); }
+      else { T('시세표 없음', 520, y, 15, '#5B6F78', 'left', 800); y += 30; T('눈으로만 판단해요', 520, y, 14, '#5B6F78', 'left', 600); y += 26; }
+      if (tr.guide) {
+        y += 10; T('감정 메모', 520, y, 16, C.ink, 'left', 900); y += 26;
+        const lab = (v, a) => v > 0.66 ? a[0] : v > 0.33 ? a[1] : a[2];
+        T('색: ' + lab(l.c, ['선명함', '보통', '탁함']), 530, y, 15, '#2F434C', 'left', 700); y += 24;
+        T('지방 결: ' + lab(l.f, ['촘촘함', '보통', '드묾']), 530, y, 15, '#2F434C', 'left', 700); y += 24;
+        T(`예상 값: ${l.lo}~${l.hi}닢`, 530, y, 15, '#2F7D4A', 'left', 800); y += 24;
+        if (S.feat.includes('y')) T('야케: ' + (lightOn ? (l.y ? '있음!' : '없음') : '손전등으로 확인'), 530, y, 15, l.y && lightOn ? C.red : '#2F434C', 'left', 700);
+      }
+    }
+    // 입찰 조작
+    if (st === 'play' && !reveal) {
+      panel(20, 612, 760, 172, 'rgba(255,243,220,0.97)');
+      if (light > 0 && !lightOn) button('light', `손전등 비추기`, 40, 630, 200, 56, '#CFE3E8', 18);
+      else if (lightOn) T('손전등 켜짐', 140, 658, 16, '#2F6F8F', 'center', 800);
+      button('minus10', '−20', 300, 630, 70, 56, C.cream, 18); button('minus', '−5', 376, 630, 60, 56, C.cream, 18);
+      T(`${bid}닢`, 500, 658, 30, C.ink, 'center', 900);
+      button('plus', '+5', 564, 630, 60, 56, C.cream, 18); button('plus10', '+20', 630, 630, 70, 56, C.cream, 18);
+      button('pass', '패스', 300, 704, 180, 62, '#E4DCC8', 20); button('bid', `${bid}닢에 입찰`, 496, 704, 264, 62, C.gold, 20);
+      T('부른 값 = 내는 값', 140, 735, 14, '#5B6F78', 'center', 700);
+    }
+    if (reveal) {
+      const r = reveal, l = lot();
+      panel(120, 470, 560, 300, 'rgba(255,251,239,0.98)');
+      T(`경쟁자 ${r.npc}닢 · 나 ${r.b === null ? '패스' : r.b + '닢'}`, W / 2, 506, 20, C.ink, 'center', 800);
+      T(r.win ? '낙찰!' : r.b === null ? '넘겼어요' : '경쟁자가 가져갔어요', W / 2, 548, 30, r.win ? '#2F7D4A' : '#8A6A1E', 'center', 900);
+      T(`갈라 보니 ${grade(r.v)} · ${r.v}닢어치${l.y ? ' (야케)' : ''}`, W / 2, 594, 20, C.ink, 'center', 800);
+      if (r.win) T(`이익 ${r.v - r.b >= 0 ? '+' : ''}${r.v - r.b}닢`, W / 2, 632, 24, r.v - r.b >= 0 ? '#2F7D4A' : C.red, 'center', 900);
+      else if (r.b === null || !r.win) T(r.v - r.npc - STEP_P > 0 ? `${r.npc + STEP_P}닢이면 +${r.v - r.npc - STEP_P} 이익이었어요` : '안 사길 잘했어요', W / 2, 632, 17, '#5B6F78', 'center', 700);
+      button('cont', li + 1 < lots.length ? '다음 참치' : '경매 끝', W / 2 - 120, 680, 240, 62, C.green, 22);
+    }
+    if (msgT > 0) TS(msgS, W / 2, 596, 18, C.gold);
+    if (st === 'result') {
+      const r = result;
+      resultCard(r.stars === 3 ? '눈 밝은 중도매인!' : r.stars === 2 ? '괜찮은 경매' : r.stars === 1 ? '손해는 면했어요' : '비싸게 샀어요', r.stars, [
+        ['이익', `${r.gain >= 0 ? '+' : ''}${r.gain}닢`], ['산 참치', `${bought.length} / 필요 ${S.need}`], ['못 채운 마리 (−60)', r.miss], ['점수', `${r.score} / 감정 고수 ${r.par}`]],
+        r.miss ? '필요한 마리 수를 먼저 채울 돈을 남겨 둬요' : r.stars < 3 ? '탁한 색·드문 결·야케는 값을 크게 깎아요' : '', C.ink, { next: si + 1 < STAGES.length });
+    }
+  }
+};
+function drawSection(l, cx, cy, r) {
+  let s = l.seed; const lr = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  ctx.save();
+  // 껍질
+  ellipse(cx, cy, r + 14, r + 10); ctx.fillStyle = '#26323C'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = C.ink; ctx.stroke();
+  // 살 색: 탁한 갈색 → 선명한 빨강
+  const g = ctx.createRadialGradient(cx, cy - 20, 20, cx, cy, r);
+  g.addColorStop(0, mixc('#8A4A45', '#E0303F', l.c)); g.addColorStop(1, mixc('#5E2E2C', '#A8182A', l.c));
+  ellipse(cx, cy, r, r - 4); ctx.fillStyle = g; ctx.fill();
+  // 근육 결 (방사)
+  ctx.strokeStyle = 'rgba(40,10,10,0.25)'; ctx.lineWidth = 2;
+  for (let k = 0; k < 14; k++) { const a = k / 14 * Math.PI * 2; ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * 22, cy + Math.sin(a) * 22); ctx.lineTo(cx + Math.cos(a) * r * 0.95, cy + Math.sin(a) * r * 0.93); ctx.stroke(); }
+  // 지방 결: 배 쪽(아래)에 흰 곡선
+  ctx.save(); ellipse(cx, cy, r, r - 4); ctx.clip();
+  const nF = Math.round(3 + l.f * 22);
+  for (let k = 0; k < nF; k++) {
+    const a = Math.PI * (0.15 + 0.7 * lr()), rr0 = r * (0.45 + 0.5 * lr()), x = cx + Math.cos(a) * rr0, y = cy + Math.sin(a) * rr0 * 0.95;
+    ctx.strokeStyle = `rgba(255,236,230,${0.35 + l.f * 0.5})`; ctx.lineWidth = 2 + l.f * 3;
+    ctx.beginPath(); ctx.arc(x, y, 14 + lr() * 26, Math.PI * (1.1 + lr() * 0.3), Math.PI * (1.6 + lr() * 0.3)); ctx.stroke();
+  }
+  // 야케: 희뿌연 갈색 얼룩
+  if (l.y) {
+    const vis = lightOn ? 0.75 : TIER[tier].yakeVis;
+    ctx.fillStyle = `rgba(190,150,120,${vis})`;
+    for (let k = 0; k < 6; k++) { ellipse(cx - 40 + lr() * 80, cy - 70 + lr() * 60, 26 + lr() * 24, 18 + lr() * 16, lr() * 3); ctx.fill(); }
+  }
+  ctx.restore();
+  // 뼈
+  ellipse(cx, cy, 20, 20); ctx.fillStyle = '#EDE6DA'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke();
+  for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + 0.3; ctx.strokeStyle = '#EDE6DA'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * 20, cy + Math.sin(a) * 20); ctx.lineTo(cx + Math.cos(a) * 60, cy + Math.sin(a) * 58); ctx.stroke(); }
+  // 경매장 조명
+  const dim = TIER[tier].dim;
+  if (lightOn) { const lg = ctx.createRadialGradient(cx - 30, cy - 30, 10, cx, cy, r * 1.3); lg.addColorStop(0, 'rgba(255,255,230,0.28)'); lg.addColorStop(1, 'rgba(255,255,230,0)'); ellipse(cx, cy, r * 1.3, r * 1.3); ctx.fillStyle = lg; ctx.fill(); }
+  else if (dim) { ellipse(cx, cy, r + 16, r + 12); ctx.fillStyle = `rgba(5,10,15,${dim})`; ctx.fill(); }
+  ctx.restore();
+  T('꼬리 단면', cx, cy - r - 28, 15, C.dim, 'center', 700);
+}
+function mixc(a, b, k) { k = clamp(k, 0, 1); const p = s => [1, 3, 5].map(i => parseInt(s.slice(i, i + 2), 16)); const A = p(a), B = p(b); return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * k)).join(',')})`; }
+if (Q_STAGE !== null && !BOT) startStage(Q_STAGE, Q_TIER ?? 0);
+boot();
+
+</script></body></html>

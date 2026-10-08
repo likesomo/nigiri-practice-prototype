@@ -132,23 +132,83 @@ function titleCard(title, sub, howto, levels) {
   if (levels) levels.forEach((l, i) => button(l.id, l.label, 115 + i * 196, 590, 176, 70, l.col || C.gold, 22));
   else button('start', '시작', W / 2 - 110, 590, 220, 70);
 }
-function resultCard(title, stars, rows, comment, col = C.ink) {
+function resultCard(title, stars, rows, comment, col = C.ink, opt) {
   ctx.fillStyle = 'rgba(11,24,32,0.72)'; ctx.fillRect(0, 0, W, H);
   panel(90, 100, 620, 600);
   T(title, W / 2, 160, 36, col, 'center', 900);
   for (let i = 0; i < 3; i++) star(W / 2 - 70 + i * 70, 222, 26, i < stars);
   rows.forEach(([k, v], i) => { T(k, 140, 300 + i * 44, 22, '#3A4E57', 'left', 600); T(String(v), 660, 300 + i * 44, 24, C.ink, 'right', 800); });
   if (comment) lines(Array.isArray(comment) ? comment : [comment], W / 2, 300 + rows.length * 44 + 26, 19, '#5B6F78', 1.45, 'center', 600);
-  button('retry', '다시 하기', W / 2 - 250, 600, 230, 66);
-  button('title', '처음으로', W / 2 + 20, 600, 230, 66, C.cream);
+  if (opt && opt.next) {
+    button('retry', '다시', W / 2 - 280, 600, 170, 66);
+    button('next', '다음 스테이지', W / 2 - 95, 600, 220, 66, C.green, 22);
+    button('title', '목록', W / 2 + 140, 600, 140, 66, C.cream);
+  } else {
+    button('retry', '다시 하기', W / 2 - 250, 600, 230, 66);
+    button('title', '처음으로', W / 2 + 20, 600, 230, 66, C.cream);
+  }
+}
+
+// ── 스테이지 · 난이도 ──
+const TIERS = ['입문', '보통', '장인'], TIER_COL = [C.green, C.gold, '#F08A5D'];
+const SAVE = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (_) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} },
+};
+const Q_STAGE = QS.get('stage') ? +QS.get('stage') - 1 : null, Q_TIER = QS.get('tier') ? +QS.get('tier') - 1 : null;
+function bestStars(key, i, t) { const b = SAVE.get(key, {}); return b[i + '_' + t] || 0; }
+function saveStars(key, i, t, s) { const b = SAVE.get(key, {}); if ((b[i + '_' + t] || 0) < s) { b[i + '_' + t] = s; SAVE.set(key, b); } }
+// 스테이지 목록 화면: 버튼 id = tier0..2, stage0..n
+function stageMenu(o) {
+  ctx.fillStyle = 'rgba(11,24,32,0.78)'; ctx.fillRect(0, 0, W, H);
+  panel(50, 40, 700, 720);
+  T(o.title, W / 2, 92, 38, C.ink, 'center', 900);
+  T(o.sub, W / 2, 132, 18, '#5B6F78', 'center', 600);
+  lines(o.how, 90, 172, 17, '#2F434C', 1.5, 'left', 600);
+  const ty = 172 + o.how.length * 25 + 8;
+  T('난이도', 90, ty + 26, 18, C.ink, 'left', 800);
+  TIERS.forEach((n, i) => {
+    const on = i === o.tier;
+    button('tier' + i, (on ? '● ' : '') + n, 190 + i * 180, ty, 160, 52, on ? TIER_COL[i] : '#E4DCC8', 20);
+  });
+  T(o.tierNote[o.tier], W / 2, ty + 78, 15, '#5B6F78', 'center', 600);
+  const y0 = ty + 104, gap = Math.min(80, (700 - y0) / o.stages.length);
+  o.stages.forEach((s, i) => {
+    const y = y0 + i * gap, h = gap - 12;
+    btns.push({ id: 'stage' + i, x: 90, y, w: 620, h });
+    rr(90, y + 4, 620, h, 14); ctx.fillStyle = C.ink; ctx.fill();
+    panel(90, y, 620, h, '#FFFDF6', C.ink, 14);
+    T(`${i + 1}`, 122, y + h / 2, 26, C.ink, 'center', 900);
+    T(s.name, 150, y + h / 2 - 11, 20, C.ink, 'left', 800);
+    T(s.tw, 150, y + h / 2 + 13, 14, '#5B6F78', 'left', 600);
+    const b = bestStars(o.key, i, o.tier);
+    for (let k = 0; k < 3; k++) star(620 + k * 30, y + h / 2, 11, k < b);
+  });
 }
 
 // 검증용: 판이 끝나면 결과를 문서 제목과 #out에 남긴다
-let DONE = false;
-function report(obj) { DONE = true; const s = JSON.stringify(obj); document.title = 'DONE ' + s; const el = document.getElementById('out'); if (el) el.textContent = s; }
+// ── 사람 모델 (bot=3) ── [가정] 타깃 실력 3단계. 값의 근거는 README '사람 모델' 절
+// rt 지각→행동 지연(s) · ctl 힘·속도 조절 흔들림(변동계수) · trace 선 따라가기 흔들림(px, PC 마우스 기준)
+// miss 신호 놓침 · imp 참을성(s) · wig 흔들기 요령 사용 비율 · over 물 두 번 붓기 · attn 다른 일 처리 지연 배율
+// anticip 예측 행동 · rush 순간적으로 서두르는 빈도
+const SKILL = {
+  low:  { rt: 0.42, ctl: 0.30, trace: 10, miss: 0.25, imp: 1.6, wig: 0.15, over: 0.40, attn: 1.6, anticip: false, rush: 0.25 },
+  mid:  { rt: 0.30, ctl: 0.20, trace: 7,  miss: 0.12, imp: 2.6, wig: 0.50, over: 0.25, attn: 1.0, anticip: false, rush: 0.12 },
+  high: { rt: 0.22, ctl: 0.11, trace: 4,  miss: 0.04, imp: 4.0, wig: 0.90, over: 0.08, attn: 0.7, anticip: true,  rush: 0.04 },
+};
+const HS = { ...SKILL[QS.get('sk') || 'mid'] };
+const DEV = QS.get('dev') === 'mobile' ? { trace: 2.5, ctl: 1.25 } : { trace: 1, ctl: 1 };   // 손가락은 마우스보다 크게 흔들린다 [가정]
+HS.ctl *= DEV.ctl;
+let HB = {};
+function gauss() { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); }
+function ou(o, dt, tau, sig) { o.v = (o.v || 0) - (o.v || 0) / tau * dt + sig * Math.sqrt(2 * dt / tau) * gauss(); return o.v; }
+function Lag() { const b = []; return { push(t, v) { b.push([t, v]); while (b.length > 2 && b[1][0] <= t - 2) b.shift(); }, get(t) { for (let i = b.length - 1; i >= 0; i--) if (b[i][0] <= t) return b[i][1]; return b.length ? b[0][1] : null; } }; }
+
+let DONE = false, LAST = null;
+function report(obj) { DONE = true; LAST = obj; const s = JSON.stringify(obj); document.title = 'DONE ' + s; const el = document.getElementById('out'); if (el) el.textContent = s; }
 
 // ── 루프 ──
-let last = performance.now(), NOW = 0, FRAMES = 0;
+let last = performance.now(), NOW = 0, FRAMES = 0, PNGF = 0;
 function frame(now) {
   const dt = BOT ? 1 / 60 : Math.min(0.05, (now - last) / 1000); last = now;
   for (let i = 0; i < (BOT ? FAST : 1); i++) { NOW += dt; if (BOT && G.bot) G.bot(dt); G.update(dt); }
@@ -156,15 +216,23 @@ function frame(now) {
   btns = [];
   ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0);
   if (!BOT || (FRAMES++ % 30) === 0) G.draw();
+  if (!BOT && QS.get('png') && ++PNGF === 3) document.getElementById('out').setAttribute('data-png', cv.toDataURL('image/png'));   // 검증용 화면 추출
   if (BOT) setTimeout(() => frame(performance.now()), 0); else requestAnimationFrame(frame);
 }
 function boot() {
   if (!BOT) { requestAnimationFrame(frame); return; }
   // 검증 봇: 타이머 없이 한 번에 끝까지 시뮬레이션하고 마지막 화면만 그린다
-  const dt = 1 / 60; let i = 0;
+  const dt = 1 / 60;
   const SHOT = +(QS.get('shot') || 0);   // 스크린샷용: 이 시각에서 멈춤
-  for (; i < 60 * 900 && !DONE && !(SHOT && NOW >= SHOT); i++) { NOW += dt; G.bot(dt); G.update(dt); }
-  if (!DONE && !SHOT) report({ timeout: true, steps: i });
+  const RUNS = +(QS.get('runs') || 1), base = seed, all = [];
+  for (let r = 0; r < RUNS; r++) {
+    if (r > 0) { seed = base + r * 7919; DONE = false; LAST = null; NOW = 0; HB = {}; G.reset(); }
+    let i = 0;
+    for (; i < 60 * 900 && !DONE && !(SHOT && NOW >= SHOT); i++) { NOW += dt; G.bot(dt); G.update(dt); }
+    if (!DONE && !SHOT) report({ timeout: true, steps: i });
+    all.push(LAST);
+  }
+  if (RUNS > 1) document.getElementById('out').textContent = JSON.stringify(all);
   const fin = () => { fit(); ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0); G.draw(); };
   fin(); addEventListener('load', fin);
   if (QS.get('png')) { const o = document.getElementById('out'); o.setAttribute('data-png', cv.toDataURL('image/png')); }
@@ -187,7 +255,9 @@ let cut, pull, pieces = [], plate = [], fx = [], marks = [], msg = '', msgT = 0,
 const ht = x => lerp(leg.ht[0], leg.ht[1], clamp((x - X0) / (X1 - X0), 0, 1));
 const seam = x => CY - ht(x) * 0.55 + Math.sin((x - X0) / (X1 - X0) * Math.PI * 2) * leg.curve;
 
+let legT0 = 0;
 function startLeg(i) {
+  legT0 = time;
   li = i; leg = LEGS[i]; ph = 'cut'; t = 0; marks = []; pieces = [];
   cut = { on: false, cx: X0 + 10, dmg: 0, lastSnip: X0, crackT: 0, px: 0, py: 0 };
   const att = []; for (let k = 0; k < leg.att; k++) att.push({ x: X0 + 60 + k * (X1 - X0 - 100) / Math.max(1, leg.att - 1), h: 1 });
@@ -224,7 +294,9 @@ const G = {
     else if (ph === 'done') { if (t > 1.3) { if (li + 1 < LEGS.length) startLeg(li + 1); else finish(); } }
   },
 
+  reset() { st = 'title'; },
   bot(dt) {
+    if (BOT === 3) return humanCrab(dt);
     if (st === 'title') { start(); return; }
     if (st !== 'play') return;
     if (ph === 'cut') {
@@ -332,14 +404,42 @@ function updPull(dt) {
     for (let i = 0; i < 10; i++) fx.push({ x: tx - p.m, y: CY, vx: R(-120, 120), vy: R(-200, -40), a: 1, r: R(2, 4), c: '#FFF1EA', rot: 0, vr: R(-6, 6) });
   }
 }
+function humanCrab(dt) {
+  if (st === 'title') { start(); return; }
+  if (st !== 'play') return;
+  if (ph === 'cut') {
+    if (!cut.on) {
+      if (HB.wait === undefined) HB.wait = time + HS.rt; if (time < HB.wait) return; HB.wait = undefined;
+      P.x = cut.cx + gauss() * 3; P.y = seam(cut.cx) + gauss() * 3; P.down = true; G.onDown(P.x, P.y);
+      HB.base = R(220, 380); HB.nS = {}; HB.nY = {}; HB.burst = 0; HB.x = P.x; return;
+    }
+    if (HB.burst > 0) HB.burst -= dt; else if (rnd() < HS.rush * dt * 3) HB.burst = 0.15;   // 순간적으로 서두름
+    const s = HB.base * (1 + ou(HB.nS, dt, 0.5, HS.ctl)) * (HB.burst > 0 ? 2.4 : 1);
+    HB.x = Math.min(X1 + 5, HB.x + Math.max(20, s) * dt);
+    if (HB.x - cut.cx > 35) HB.x = cut.cx - 5;   // 앞서 나갔으면 끊긴 곳으로 돌아간다
+    P.x = HB.x; P.y = seam(clamp(HB.x, X0, X1)) + ou(HB.nY, dt, 0.25, HS.trace * DEV.trace);
+  } else if (ph === 'pull' && !pull.out) {
+    if (!pull.held) {
+      if (HB.wait === undefined) HB.wait = time + HS.rt + R(0.1, 0.4); if (time < HB.wait) return; HB.wait = undefined;
+      P.x = pull.base - pull.m; P.y = CY; P.down = true; G.onDown(P.x, P.y);
+      if (HB.leg !== li) { HB.aim = R(0.45, 0.95); HB.leg = li; HB.useW = rnd() < HS.wig; } else HB.aim = Math.max(0.25, HB.aim - 0.1);   // 끊기면 조심한다
+      HB.nP = {}; HB.nD = {}; HB.lag = Lag(); HB.last = 0; return;
+    }
+    HB.lag.push(time, pull.tau < leg.win[0] ? -1 : pull.tau > leg.win[1] ? 1 : 0);
+    const pz = HB.lag.get(time - HS.rt);
+    if (time - HB.last > HS.rt * 1.2 && pz) { HB.aim = clamp(HB.aim + (pz > 0 ? -R(0.08, 0.16) : R(0.05, 0.1)), 0.2, 1.4); HB.last = time; }
+    const d = pull.m + HB.aim * STRETCH * (1 + ou(HB.nP, dt, 0.4, HS.ctl));
+    P.x = pull.gx - d; P.y = pull.gy + ou(HB.nD, dt, 0.3, HS.trace * 1.5 * DEV.trace) + (HB.useW ? 16 * Math.sin(time * 12) : 0);
+  } else P.down = false;
+}
 function finishLeg() {
   const total = X1 - X0, best = Math.max(...pieces) / total;
-  plate.push({ name: leg.name, pieces: pieces.length, best, dmg: cut.dmg, segs: pieces.map(l => l / total) });
+  plate.push({ t: time - legT0, name: leg.name, pieces: pieces.length, best, dmg: cut.dmg, segs: pieces.map(l => l / total) });
   ph = 'done'; t = 0; say(pieces.length === 1 ? '통째로 쏙!' : `${pieces.length}조각으로 나왔어요`, pieces.length === 1 ? C.green : C.gold);
 }
 function finish() {
   st = 'result';
-  report({ game: 'crab', legs: plate.map(p => ({ pieces: p.pieces, best: +p.best.toFixed(2), dmg: +p.dmg.toFixed(2) })), time: +time.toFixed(1) });
+  report({ game: 'crab', legs: plate.map(p => ({ t: +p.t.toFixed(1), pieces: p.pieces, best: +p.best.toFixed(2), dmg: +p.dmg.toFixed(2) })), time: +time.toFixed(1) });
 }
 
 function drawLeg() {

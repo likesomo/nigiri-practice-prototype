@@ -132,23 +132,83 @@ function titleCard(title, sub, howto, levels) {
   if (levels) levels.forEach((l, i) => button(l.id, l.label, 115 + i * 196, 590, 176, 70, l.col || C.gold, 22));
   else button('start', '시작', W / 2 - 110, 590, 220, 70);
 }
-function resultCard(title, stars, rows, comment, col = C.ink) {
+function resultCard(title, stars, rows, comment, col = C.ink, opt) {
   ctx.fillStyle = 'rgba(11,24,32,0.72)'; ctx.fillRect(0, 0, W, H);
   panel(90, 100, 620, 600);
   T(title, W / 2, 160, 36, col, 'center', 900);
   for (let i = 0; i < 3; i++) star(W / 2 - 70 + i * 70, 222, 26, i < stars);
   rows.forEach(([k, v], i) => { T(k, 140, 300 + i * 44, 22, '#3A4E57', 'left', 600); T(String(v), 660, 300 + i * 44, 24, C.ink, 'right', 800); });
   if (comment) lines(Array.isArray(comment) ? comment : [comment], W / 2, 300 + rows.length * 44 + 26, 19, '#5B6F78', 1.45, 'center', 600);
-  button('retry', '다시 하기', W / 2 - 250, 600, 230, 66);
-  button('title', '처음으로', W / 2 + 20, 600, 230, 66, C.cream);
+  if (opt && opt.next) {
+    button('retry', '다시', W / 2 - 280, 600, 170, 66);
+    button('next', '다음 스테이지', W / 2 - 95, 600, 220, 66, C.green, 22);
+    button('title', '목록', W / 2 + 140, 600, 140, 66, C.cream);
+  } else {
+    button('retry', '다시 하기', W / 2 - 250, 600, 230, 66);
+    button('title', '처음으로', W / 2 + 20, 600, 230, 66, C.cream);
+  }
+}
+
+// ── 스테이지 · 난이도 ──
+const TIERS = ['입문', '보통', '장인'], TIER_COL = [C.green, C.gold, '#F08A5D'];
+const SAVE = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (_) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} },
+};
+const Q_STAGE = QS.get('stage') ? +QS.get('stage') - 1 : null, Q_TIER = QS.get('tier') ? +QS.get('tier') - 1 : null;
+function bestStars(key, i, t) { const b = SAVE.get(key, {}); return b[i + '_' + t] || 0; }
+function saveStars(key, i, t, s) { const b = SAVE.get(key, {}); if ((b[i + '_' + t] || 0) < s) { b[i + '_' + t] = s; SAVE.set(key, b); } }
+// 스테이지 목록 화면: 버튼 id = tier0..2, stage0..n
+function stageMenu(o) {
+  ctx.fillStyle = 'rgba(11,24,32,0.78)'; ctx.fillRect(0, 0, W, H);
+  panel(50, 40, 700, 720);
+  T(o.title, W / 2, 92, 38, C.ink, 'center', 900);
+  T(o.sub, W / 2, 132, 18, '#5B6F78', 'center', 600);
+  lines(o.how, 90, 172, 17, '#2F434C', 1.5, 'left', 600);
+  const ty = 172 + o.how.length * 25 + 8;
+  T('난이도', 90, ty + 26, 18, C.ink, 'left', 800);
+  TIERS.forEach((n, i) => {
+    const on = i === o.tier;
+    button('tier' + i, (on ? '● ' : '') + n, 190 + i * 180, ty, 160, 52, on ? TIER_COL[i] : '#E4DCC8', 20);
+  });
+  T(o.tierNote[o.tier], W / 2, ty + 78, 15, '#5B6F78', 'center', 600);
+  const y0 = ty + 104, gap = Math.min(80, (700 - y0) / o.stages.length);
+  o.stages.forEach((s, i) => {
+    const y = y0 + i * gap, h = gap - 12;
+    btns.push({ id: 'stage' + i, x: 90, y, w: 620, h });
+    rr(90, y + 4, 620, h, 14); ctx.fillStyle = C.ink; ctx.fill();
+    panel(90, y, 620, h, '#FFFDF6', C.ink, 14);
+    T(`${i + 1}`, 122, y + h / 2, 26, C.ink, 'center', 900);
+    T(s.name, 150, y + h / 2 - 11, 20, C.ink, 'left', 800);
+    T(s.tw, 150, y + h / 2 + 13, 14, '#5B6F78', 'left', 600);
+    const b = bestStars(o.key, i, o.tier);
+    for (let k = 0; k < 3; k++) star(620 + k * 30, y + h / 2, 11, k < b);
+  });
 }
 
 // 검증용: 판이 끝나면 결과를 문서 제목과 #out에 남긴다
-let DONE = false;
-function report(obj) { DONE = true; const s = JSON.stringify(obj); document.title = 'DONE ' + s; const el = document.getElementById('out'); if (el) el.textContent = s; }
+// ── 사람 모델 (bot=3) ── [가정] 타깃 실력 3단계. 값의 근거는 README '사람 모델' 절
+// rt 지각→행동 지연(s) · ctl 힘·속도 조절 흔들림(변동계수) · trace 선 따라가기 흔들림(px, PC 마우스 기준)
+// miss 신호 놓침 · imp 참을성(s) · wig 흔들기 요령 사용 비율 · over 물 두 번 붓기 · attn 다른 일 처리 지연 배율
+// anticip 예측 행동 · rush 순간적으로 서두르는 빈도
+const SKILL = {
+  low:  { rt: 0.42, ctl: 0.30, trace: 10, miss: 0.25, imp: 1.6, wig: 0.15, over: 0.40, attn: 1.6, anticip: false, rush: 0.25 },
+  mid:  { rt: 0.30, ctl: 0.20, trace: 7,  miss: 0.12, imp: 2.6, wig: 0.50, over: 0.25, attn: 1.0, anticip: false, rush: 0.12 },
+  high: { rt: 0.22, ctl: 0.11, trace: 4,  miss: 0.04, imp: 4.0, wig: 0.90, over: 0.08, attn: 0.7, anticip: true,  rush: 0.04 },
+};
+const HS = { ...SKILL[QS.get('sk') || 'mid'] };
+const DEV = QS.get('dev') === 'mobile' ? { trace: 2.5, ctl: 1.25 } : { trace: 1, ctl: 1 };   // 손가락은 마우스보다 크게 흔들린다 [가정]
+HS.ctl *= DEV.ctl;
+let HB = {};
+function gauss() { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); }
+function ou(o, dt, tau, sig) { o.v = (o.v || 0) - (o.v || 0) / tau * dt + sig * Math.sqrt(2 * dt / tau) * gauss(); return o.v; }
+function Lag() { const b = []; return { push(t, v) { b.push([t, v]); while (b.length > 2 && b[1][0] <= t - 2) b.shift(); }, get(t) { for (let i = b.length - 1; i >= 0; i--) if (b[i][0] <= t) return b[i][1]; return b.length ? b[0][1] : null; } }; }
+
+let DONE = false, LAST = null;
+function report(obj) { DONE = true; LAST = obj; const s = JSON.stringify(obj); document.title = 'DONE ' + s; const el = document.getElementById('out'); if (el) el.textContent = s; }
 
 // ── 루프 ──
-let last = performance.now(), NOW = 0, FRAMES = 0;
+let last = performance.now(), NOW = 0, FRAMES = 0, PNGF = 0;
 function frame(now) {
   const dt = BOT ? 1 / 60 : Math.min(0.05, (now - last) / 1000); last = now;
   for (let i = 0; i < (BOT ? FAST : 1); i++) { NOW += dt; if (BOT && G.bot) G.bot(dt); G.update(dt); }
@@ -156,15 +216,23 @@ function frame(now) {
   btns = [];
   ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0);
   if (!BOT || (FRAMES++ % 30) === 0) G.draw();
+  if (!BOT && QS.get('png') && ++PNGF === 3) document.getElementById('out').setAttribute('data-png', cv.toDataURL('image/png'));   // 검증용 화면 추출
   if (BOT) setTimeout(() => frame(performance.now()), 0); else requestAnimationFrame(frame);
 }
 function boot() {
   if (!BOT) { requestAnimationFrame(frame); return; }
   // 검증 봇: 타이머 없이 한 번에 끝까지 시뮬레이션하고 마지막 화면만 그린다
-  const dt = 1 / 60; let i = 0;
+  const dt = 1 / 60;
   const SHOT = +(QS.get('shot') || 0);   // 스크린샷용: 이 시각에서 멈춤
-  for (; i < 60 * 900 && !DONE && !(SHOT && NOW >= SHOT); i++) { NOW += dt; G.bot(dt); G.update(dt); }
-  if (!DONE && !SHOT) report({ timeout: true, steps: i });
+  const RUNS = +(QS.get('runs') || 1), base = seed, all = [];
+  for (let r = 0; r < RUNS; r++) {
+    if (r > 0) { seed = base + r * 7919; DONE = false; LAST = null; NOW = 0; HB = {}; G.reset(); }
+    let i = 0;
+    for (; i < 60 * 900 && !DONE && !(SHOT && NOW >= SHOT); i++) { NOW += dt; G.bot(dt); G.update(dt); }
+    if (!DONE && !SHOT) report({ timeout: true, steps: i });
+    all.push(LAST);
+  }
+  if (RUNS > 1) document.getElementById('out').textContent = JSON.stringify(all);
   const fin = () => { fit(); ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0); G.draw(); };
   fin(); addEventListener('load', fin);
   if (QS.get('png')) { const o = document.getElementById('out'); o.setAttribute('data-png', cv.toDataURL('image/png')); }
@@ -173,11 +241,25 @@ function boot() {
 // ── 복어 독 제거 ──
 // 칼은 누른 순간이 아니라 D초 뒤에 닿는다 (시간차 입력). 복어는 가끔 움찔하는데, 그 전에 눈을 굴리고 지느러미를 떤다.
 // 칼이 닿는 순간 움찔하면 칼이 미끄러진다 → 초록 점은 지저분한 칼질, 빨간 점(독 장기 옆)은 독이 번진다.
-const LV = {   // [튜닝] 난이도 테이블
-  1: { name: '입문', lead: 1.0, gap: 2.8, minGap: 1.6, fake: 0, decay: 0.40, sweat: true },
-  2: { name: '보통', lead: 0.8, gap: 2.2, minGap: 1.3, fake: 0.2, decay: 0.45, sweat: false },
-  3: { name: '장인', lead: 0.6, gap: 1.7, minGap: 1.0, fake: 0.35, decay: 0.50, sweat: false },
+const LV = {   // [튜닝] 난이도 테이블 — 2026-10-08 사람 모델 실험값(중간 실력 합격 93 / 53 / 13 %)
+  1: { name: '입문', lead: 1.4, gap: 4.4, minGap: 2.6, fake: 0, decay: 0.40, sweat: true },
+  2: { name: '보통', lead: 1.2, gap: 3.6, minGap: 2.2, fake: 0.2, decay: 0.45, sweat: false },
+  3: { name: '장인', lead: 1.0, gap: 3.0, minGap: 1.8, fake: 0.35, decay: 0.50, sweat: false },
 };
+const PERS = {   // [튜닝] 움찔 성격 — regular: 간격 일정 · burst: 움찔 직후 한 번 더 · fakeAdd: 가짜 신호 추가
+  regular: { regular: true, burst: 0, fakeAdd: 0, name: '차분함' },
+  burst: { burst: 0.4, fakeAdd: 0, name: '몰아치기' },
+  shy: { burst: 0, fakeAdd: 0.3, name: '겁쟁이' },
+  mix: { burst: 0.25, fakeAdd: 0.15, name: '예측 불가' },
+};
+const STAGES = [   // [튜닝] 스테이지 = 복어 종 · 성격 · 독 지도(red: 단계별로 빨간 점이 되는 점 번호). 독 부위 배치는 게임용
+  { name: '자주복', tw: '기본 손질 · 움찔 간격이 일정해요', pers: 'regular', red: {} },
+  { name: '까치복', tw: '껍질에도 독 — 껍질 칼집에 빨간 점', pers: 'regular', red: { 1: [1, 3] } },
+  { name: '졸복', tw: '움찔한 직후 한 번 더 움찔해요', pers: 'burst', red: { 2: [0, 4] } },
+  { name: '황복', tw: '겁이 많아 가짜 신호가 잦아요', pers: 'shy', red: { 1: [2] } },
+  { name: '큰 참복 · 면허 시험', tw: '모든 것이 섞여요', pers: 'mix', red: { 1: [1, 3], 2: [0, 4] } },
+];
+const KEY = 'prep-fugu';
 const D = 0.7, CUT = 0.22, FX = 390, FY = 430;
 const ORG = [
   { id: 'liver', name: '간', x: -40, y: 42, rx: 70, ry: 32, col: '#7A2433' },
@@ -195,32 +277,47 @@ const STEPS = [
     pts: [[-112, 42, 1, 'liver'], [32, 42, 1, 'liver'], [38, 52, 1, 'ovary'], [118, 52, 1, 'ovary'], [-152, -66, 1, 'eye'], [-152, -14, 1, 'eye']] },
 ];
 
-let st = 'title', lv = LV[1], lvN = 1, time = 0, stepI = 0, pts = [], knife = null, tw = null, fake = null;
+let st = 'title', lv = LV[1], lvN = 1, tier = Q_TIER ?? (QS.get('lv') ? +QS.get('lv') - 1 : 0), si = 0, SP = STAGES[0], pers = PERS.regular, time = 0, stepI = 0, pts = [], knife = null, tws = [], fakes = [], burstNext = false;
 let acc = 0, messy = 0, stains = [], fx = [], gone = {}, flying = [], binned = [], msg = '', msgT = 0, msgCol = C.cream, stepT = 0, wasTw = false;
 
-function sched(after) {
-  const gap = Math.max(lv.minGap, R(0.6, 1.4) * lv.gap);
-  tw = { start: after + gap, dur: R(0.45, 0.7), str: R(0.55, 1) }; fake = null;
-  if (rnd() < lv.fake && gap > lv.lead + 1.3) { const fs = after + R(0.3, gap - lv.lead - 1.0); fake = { start: fs, end: fs + lv.lead * R(0.6, 0.9) }; }
+// 움찔 일정은 미리 만들어 둔다 (봇이 미래를 볼 수 있게 — 플레이어에게는 신호로만 보인다)
+function genUntil(T) {
+  let t = tws.length ? tws[tws.length - 1].start + tws[tws.length - 1].dur : 0.5;
+  while (t < T) {
+    let gap;
+    if (burstNext) { gap = R(0.7, 0.95); burstNext = false; }
+    else gap = pers.regular ? lv.gap * R(0.85, 1.15) : Math.max(lv.minGap, R(0.6, 1.4) * lv.gap);
+    const w = { start: t + gap, dur: R(0.45, 0.7), str: R(0.55, 1) };
+    if (rnd() < lv.fake + pers.fakeAdd && gap > lv.lead + 1.3) { const fs = t + R(0.3, gap - lv.lead - 1.0); fakes.push({ start: fs, end: fs + lv.lead * R(0.6, 0.9) }); }
+    tws.push(w); if (rnd() < pers.burst) burstNext = true;
+    t = w.start + w.dur;
+  }
 }
-const tellOn = t => (t >= tw.start - lv.lead && t < tw.start) || (fake && t >= fake.start && t < fake.end);
-const twAmt = t => t >= tw.start && t < tw.start + tw.dur ? tw.str * Math.sin(Math.PI * (t - tw.start) / tw.dur) : 0;
+const tellOn = t => tws.some(w => t >= w.start - lv.lead && t < w.start) || fakes.some(f => t >= f.start && t < f.end);
+const twAmt = t => { let a = 0; for (const w of tws) if (t >= w.start && t < w.start + w.dur) a = Math.max(a, w.str * Math.sin(Math.PI * (t - w.start) / w.dur)); return a; };
+const nextTw = t => tws.find(w => w.start + w.dur > t);
 const fresh = () => Math.max(0, 100 - time * lv.decay);
 
-function loadStep(i) { stepI = i; stepT = 0; pts = STEPS[i].pts.map(([x, y, red, tag]) => ({ x: FX + x, y: FY + y, red: !!red, tag, done: false, res: '' })); say(STEPS[i].name + ' — ' + STEPS[i].tip, C.cream, 3.2); }
+function loadStep(i) { stepI = i; stepT = 0; const fr = SP.red[i] || []; pts = STEPS[i].pts.map(([x, y, red, tag], j) => ({ x: FX + x, y: FY + y, red: !!red || fr.includes(j), tag, done: false, res: '' })); say(STEPS[i].name + ' — ' + STEPS[i].tip, C.cream, 3.2); }
+function startStage(i, t) { si = i; tier = t; SP = STAGES[i]; pers = PERS[SP.pers]; start(t + 1); }
 function start(n) {
-  lvN = n || lvN; lv = LV[lvN]; time = 0; acc = 0; messy = 0; stains = []; fx = []; gone = {}; flying = []; binned = []; knife = null;
-  sched(0.5); loadStep(0); st = 'play';
+  lvN = n || lvN; lv = { ...LV[lvN] }; tws = []; fakes = []; burstNext = false;
+  if (QS.get('lead')) lv.lead = +QS.get('lead');   // 튜닝 실험용 덮어쓰기
+  if (QS.get('gap')) { lv.gap = +QS.get('gap'); lv.minGap = Math.max(lv.minGap, lv.gap * 0.6); }
+  time = 0; acc = 0; messy = 0; stains = []; fx = []; gone = {}; flying = []; binned = []; knife = null;
+  genUntil(20); loadStep(0); st = 'play';
 }
 function say(s, col = C.cream, d = 1.6) { msg = s; msgT = d; msgCol = col; }
 
 const G = {
   onButton(id) {
-    if (id.startsWith('lv')) start(+id.slice(2));
-    else if (id === 'retry') start();
+    if (id.startsWith('tier')) tier = +id.slice(4);
+    else if (id.startsWith('stage')) startStage(+id.slice(5), tier);
+    else if (id === 'retry') startStage(si, tier);
+    else if (id === 'next') startStage(Math.min(si + 1, STAGES.length - 1), tier);
     else if (id === 'title') st = 'title';
   },
-  onKey(c) { if (st !== 'play' && c === 'Space') start(); },
+  onKey(c) { if (st === 'result' && c === 'Space') startStage(si, tier); },
   onDown(x, y) {
     if (st !== 'play') return;
     let best = null, bd = 40;
@@ -239,9 +336,9 @@ const G = {
     if (msgT > 0) msgT -= dt;
     if (st !== 'play') return;
     time += dt; stepT += dt;
-    if (time >= tw.start + tw.dur) sched(tw.start + tw.dur);
+    genUntil(time + 12); if (tws.length > 40) tws = tws.filter(w => w.start + w.dur > time - 3); if (fakes.length > 20) fakes = fakes.filter(f => f.end > time - 3);
     const a = twAmt(time);
-    if (a > 0 && !wasTw) { tone(110, 0.35, 'sine', 0.22, 70); noise(0.25, 0.2, 400, 0.8); buzz(Math.round(30 + 50 * tw.str), true); }
+    if (a > 0 && !wasTw) { tone(110, 0.35, 'sine', 0.22, 70); noise(0.25, 0.2, 400, 0.8); buzz(Math.round(30 + 50 * (nextTw(time) || { str: 1 }).str), true); }
     wasTw = a > 0;
     if (tellOn(time) && rnd() < dt * 6) buzz(4);
     if (knife) {
@@ -254,13 +351,15 @@ const G = {
     }
   },
 
+  reset() { st = 'title'; },
   bot(dt) {
-    if (st === 'title') { start(+(QS.get('lv') || 1)); return; }
+    if (BOT === 3) return humanFugu(dt);
+    if (st === 'title') { startStage(Q_STAGE ?? 0, tier); return; }
     if (st !== 'play' || knife) return;
     const p = pts.find(q => !q.done); if (!p) return;
     if (BOT === 2) { commit(p); return; }
     const land = time + D, end = land + CUT;
-    const safe = end < tw.start - 0.04 || (land > tw.start + tw.dur + 0.02 && D + CUT < lv.minGap);
+    const safe = !tws.some(w => w.start < end + 0.04 && w.start + w.dur > land - 0.02);
     if (safe) commit(p);
   },
 
@@ -279,25 +378,21 @@ const G = {
       // HUD
       panel(30, 20, 520, 70, 'rgba(255,243,220,0.95)');
       T(`${stepI + 1} / ${STEPS.length}  ${STEPS[stepI].name}`, 50, 44, 21, C.ink, 'left', 800);
-      T(`면허 시험 · ${lv.name}`, 50, 72, 15, '#5B6F78', 'left', 700);
+      T(`${si + 1}. ${SP.name} (${pers.name}) · ${lv.name}`, 50, 72, 15, '#5B6F78', 'left', 700);
       T(`신선도 ${fresh().toFixed(0)}`, 530, 44, 18, fresh() > 60 ? '#2F7D4A' : '#B5462F', 'right', 800);
       T(`독 사고 ${acc} · 지저분 ${messy}`, 530, 72, 15, acc ? C.red : '#5B6F78', 'right', 800);
       if (msgT > 0) TS(msg, W / 2, 140, msg.length > 30 ? 19 : 24, msgCol);
       drawTimeline();
     }
-    if (st === 'title') titleCard('복어 독 제거', '복어의 반응을 보며, 칼이 닿을 순간을 미리 계산해요',
-      ['· 점을 누르면 칼이 0.7초 뒤에 닿아요 (되돌릴 수 없어요)',
-       '· 복어는 가끔 움찔해요. 그 전에 눈을 굴리고 지느러미를 떨어요',
-       '· 칼이 닿는 순간 움찔하면 칼이 미끄러져요',
-       '   초록 점 = 지저분해짐 · 빨간 점 = 독이 번짐(불합격)',
-       '· 기다리면 신선도가 떨어져요. 움찔이 끝나기 직전에 누르면 고수'],
-      [{ id: 'lv1', label: '입문', col: C.green }, { id: 'lv2', label: '보통' }, { id: 'lv3', label: '장인', col: '#F08A5D' }]);
+    if (st === 'title') stageMenu({ title: '복어 독 제거', sub: '복어의 반응을 보며, 칼이 닿을 순간을 미리 계산해요', key: KEY, tier, stages: STAGES,
+      how: ['· 점을 누르면 칼이 0.7초 뒤에 닿아요 (되돌릴 수 없어요)', '· 움찔하기 전에 눈을 굴리고 지느러미를 떨어요 — 그때는 기다려요', '· 빨간 점(독 장기 옆)에서 미끄러지면 불합격'],
+      tierNote: ['신호가 1.4초 전에 와요 · 땀방울 표시 · 움찔이 드물어요', '신호 1.2초 전 · 가짜 신호가 섞여요', '신호 1.0초 전 · 움찔이 잦고 가짜 신호도 많아요'] });
     if (st === 'result') {
       const pass = acc === 0, f = fresh();
       const stars = !pass ? 0 : messy <= 1 && f >= 75 ? 3 : messy <= 3 && f >= 55 ? 2 : 1;
       resultCard(pass ? (stars === 3 ? '합격 · 장인의 손' : '합격') : '불합격 — 독이 번졌어요', stars, [
-        ['난이도', lv.name], ['독 사고', acc], ['지저분한 칼질', messy], ['신선도', f.toFixed(0)], ['걸린 시간', time.toFixed(1) + '초']],
-        pass ? (messy > 1 ? '눈을 굴리기 시작하면 손을 멈춰요' : '') : ['빨간 점은 복어가 조용할 때만.', '칼이 0.7초 뒤에 닿는다는 걸 기억해요'], pass ? C.ink : C.red);
+        ['복어 · 난이도', `${SP.name} · ${lv.name}`], ['독 사고', acc], ['지저분한 칼질', messy], ['신선도', f.toFixed(0)], ['걸린 시간', time.toFixed(1) + '초']],
+        pass ? (messy > 1 ? '눈을 굴리기 시작하면 손을 멈춰요' : '') : ['빨간 점은 복어가 조용할 때만.', '칼이 0.7초 뒤에 닿는다는 걸 기억해요'], pass ? C.ink : C.red, { next: pass && si + 1 < STAGES.length });
     }
   }
 };
@@ -327,9 +422,28 @@ function resolve() {
     const o = p.tag; if (pts.filter(q => q.tag === o).every(q => q.done)) { gone[o] = true; flying.push({ o, t: 0 }); }
   } else if (p.tag) gone[p.tag] = true;
 }
+function humanFugu(dt) {
+  if (st === 'title') { startStage(Q_STAGE ?? 0, tier); return; }
+  if (st !== 'play') return;
+  if (!HB.init) HB = { init: 1, lagT: Lag(), lagW: Lag(), key: null, missed: false, waitFrom: time, lastEnd: -9, relief: R(0.15, 0.5), seen: false };
+  const nw = nextTw(time), af = fakes.find(f => f.end > time), key = (nw ? nw.start : 0) + (af && af.start <= time + 0.01 ? af.start * 7 : 0);
+  if (key !== HB.key) { HB.key = key; HB.missed = rnd() < HS.miss * (lv.sweat ? 0.5 : 1) * (lvN === 3 ? 1.5 : 1); }   // 신호 하나마다 놓칠지 굴림
+  HB.lagT.push(time, tellOn(time) && !HB.missed); HB.lagW.push(time, twAmt(time) > 0);
+  const tS = HB.lagT.get(time - HS.rt), wS = HB.lagW.get(time - HS.rt);
+  if (wS && !HB.seen) HB.seen = true;
+  if (!wS && HB.seen) { HB.seen = false; HB.lastEnd = time; HB.relief = R(0.15, 0.5); }
+  if (knife) { HB.waitFrom = time; return; }
+  const p = pts.find(q => !q.done); if (!p) return;
+  let go = false;
+  if (HS.anticip && wS) go = true;                                        // 움찔을 보자마자 미리 보낸다 (고수)
+  else if (!tS && !wS && time - HB.lastEnd > HB.relief) go = rnd() < dt * 3; // 조용해 보이면 누른다
+  if (!go && time - HB.waitFrom > HS.imp) go = true;                       // 오래 못 기다린다
+  if (go) { commit(p); HB.waitFrom = time; }
+}
 function finish() {
   st = 'result';
-  report({ game: 'fugu', lv: lvN, acc, messy, fresh: +fresh().toFixed(1), time: +time.toFixed(1) });
+  { const f = fresh(), stars = acc ? 0 : messy <= 1 && f >= 75 ? 3 : messy <= 3 && f >= 55 ? 2 : 1; saveStars(KEY, si, tier, stars); }
+  report({ game: 'fugu', stage: si + 1, lv: lvN, acc, messy, fresh: +fresh().toFixed(1), time: +time.toFixed(1) });
 }
 
 function drawFugu() {
@@ -427,6 +541,7 @@ function drawBin() {
   ctx.strokeStyle = '#E7C15A'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x + 70, y + 66, 10, Math.PI, 0); ctx.stroke(); ctx.fillStyle = '#E7C15A'; rr(x + 56, y + 66, 28, 22, 4); ctx.fill();
   binned.forEach((o, i) => { const g = ORG.find(q => q.id === o); ellipse(x + 22 + i * 10, y + 86, 8, 6); ctx.fillStyle = g.col; ctx.fill(); });
 }
+if (Q_STAGE !== null && !BOT) startStage(Q_STAGE, tier);
 boot();
 
 </script></body></html>

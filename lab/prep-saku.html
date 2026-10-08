@@ -1,0 +1,474 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>사쿠 나누기</title>
+<style>html,body{margin:0;height:100%;background:#132430;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+body{display:flex;align-items:center;justify-content:center}canvas{display:block;touch-action:none}
+#back{position:fixed;left:10px;top:8px;font:600 13px system-ui,'Malgun Gothic',sans-serif;color:#9DB4B6;text-decoration:none;z-index:2}#out{display:none}</style>
+</head><body><a id="back" href="./">← 실험실</a><canvas id="c"></canvas><pre id="out"></pre>
+<script>
+'use strict';
+window.onerror = (m, s, l, c) => { const o = document.getElementById('out'); if (o) o.textContent = 'ERR ' + m + ' @' + l + ':' + c; };
+// ── 공통 뼈대: 화면 맞춤 · 입력 · 소리 · 진동 · UI 조각 · 봇/검증 훅 ──
+const W = 800, H = 800;
+const QS = new URLSearchParams(location.search);
+const BOT = +(QS.get('bot') || 0);            // 1 = 잘하는 봇, 2 = 서툰 봇 (검증용)
+const FAST = Math.max(1, +(QS.get('fast') || 1));
+let seed = +(QS.get('seed') || (Date.now() % 1e9));
+function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+const R = (a, b) => a + (b - a) * rnd();
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, t) => a + (b - a) * t;
+const C = { bg: '#132430', bg2: '#1B3442', cream: '#FFF3DC', gold: '#F7B94E', red: '#E5533D', teal: '#3FA7A0', green: '#7BC96F', wood: '#C98B4F', wood2: '#A86F3B', ink: '#0B1820', dim: '#9DB4B6' };
+
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let DPR = 1, SC = 1;
+function fit() {
+  DPR = Math.min(2, devicePixelRatio || 1);
+  const de = document.documentElement, s = Math.floor(Math.min(innerWidth || de.clientWidth, innerHeight || de.clientHeight)) || 800;
+  SC = s / W; cv.style.width = s + 'px'; cv.style.height = s + 'px';
+  cv.width = Math.round(s * DPR); cv.height = Math.round(s * DPR);
+}
+addEventListener('resize', fit); addEventListener('load', fit); fit();
+let lastFit = '';
+function refit() { const k = innerWidth + 'x' + innerHeight; if (k !== lastFit) { lastFit = k; fit(); } }
+
+// ── 입력 ──
+const P = { x: W / 2, y: H / 2, down: false, id: null };
+let btns = [];
+function toL(e) { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; }
+cv.addEventListener('pointerdown', e => {
+  ac(); e.preventDefault();
+  const [x, y] = toL(e);
+  for (const b of btns) if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) { G.onButton && G.onButton(b.id); return; }
+  if (BOT) return;
+  if (P.down) return;               // 두 번째 손가락은 버튼만
+  try { cv.setPointerCapture(e.pointerId); } catch (_) {}
+  P.x = x; P.y = y; P.down = true; P.id = e.pointerId;
+  G.onDown && G.onDown(x, y);
+});
+cv.addEventListener('pointermove', e => {
+  if (BOT || e.pointerId !== P.id) return;
+  const [x, y] = toL(e); P.x = x; P.y = y; G.onMove && G.onMove(x, y);
+});
+function up(e) { if (BOT || e.pointerId !== P.id) return; P.down = false; P.id = null; G.onUp && G.onUp(); }
+cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+addEventListener('keydown', e => { ac(); G.onKey && G.onKey(e.code); });
+
+// ── 소리 (WebAudio 합성, 외부 파일 없음) ──
+let AC = null, MASTER = null, NB = null;
+function ac() {
+  if (BOT) return null;
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); MASTER = AC.createGain(); MASTER.gain.value = 0.55; MASTER.connect(AC.destination); } catch (_) { return null; } }
+  if (AC.state === 'suspended') AC.resume();
+  return AC;
+}
+const live = () => AC && AC.state === 'running';
+function tone(f, d = 0.1, type = 'sine', g = 0.2, f2 = 0) {
+  if (!live()) return;
+  const t = AC.currentTime, o = AC.createOscillator(), v = AC.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t);
+  if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+  v.gain.setValueAtTime(g, t); v.gain.exponentialRampToValueAtTime(0.001, t + d);
+  o.connect(v); v.connect(MASTER); o.start(t); o.stop(t + d + 0.02);
+}
+function nbuf() { if (!NB) { NB = AC.createBuffer(1, AC.sampleRate, AC.sampleRate); const d = NB.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; } return NB; }
+function noise(d = 0.1, g = 0.2, freq = 1200, q = 1, type = 'bandpass') {
+  if (!live()) return;
+  const t = AC.currentTime, s = AC.createBufferSource(), f = AC.createBiquadFilter(), v = AC.createGain();
+  s.buffer = nbuf(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+  v.gain.setValueAtTime(g, t); v.gain.exponentialRampToValueAtTime(0.001, t + d);
+  s.connect(f); f.connect(v); v.connect(MASTER); s.start(t, Math.random() * 0.5); s.stop(t + d + 0.02);
+}
+function loopNoise(freq = 900, q = 0.8) {   // 문지르기처럼 계속 나는 소리
+  let s = null, v = null, f = null;
+  return {
+    set(g, fr) {
+      if (!live()) return;
+      if (!s) { s = AC.createBufferSource(); s.buffer = nbuf(); s.loop = true; f = AC.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q; v = AC.createGain(); v.gain.value = 0; s.connect(f); f.connect(v); v.connect(MASTER); s.start(); }
+      v.gain.setTargetAtTime(g, AC.currentTime, 0.05);
+      if (fr) f.frequency.setTargetAtTime(fr, AC.currentTime, 0.05);
+    }
+  };
+}
+let lastBuzz = 0;
+function buzz(ms, force) {
+  if (BOT) return; const n = performance.now();
+  if (!force && n - lastBuzz < 70) return; lastBuzz = n;
+  try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {}
+}
+
+// ── 그리기 조각 ──
+const FONT = 'system-ui,"Malgun Gothic","Apple SD Gothic Neo",sans-serif';
+function T(s, x, y, size = 20, col = C.cream, al = 'center', wt = 700, base = 'middle') {
+  ctx.font = `${wt} ${size}px ${FONT}`; ctx.fillStyle = col; ctx.textAlign = al; ctx.textBaseline = base; ctx.fillText(s, x, y);
+}
+function TS(s, x, y, size = 24, col = C.cream, al = 'center', wt = 900) {   // 외곽선 있는 안내 글자
+  ctx.font = `${wt} ${size}px ${FONT}`; ctx.textAlign = al; ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round'; ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(11,24,32,0.9)'; ctx.strokeText(s, x, y);
+  ctx.fillStyle = col; ctx.fillText(s, x, y);
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
+function panel(x, y, w, h, fill = C.cream, stroke = C.ink, r = 16) { rr(x, y, w, h, r); ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = stroke; ctx.stroke(); }
+function button(id, label, x, y, w, h, col = C.gold, size = 24) {
+  btns.push({ id, x, y, w, h });
+  rr(x, y + 5, w, h, 14); ctx.fillStyle = C.ink; ctx.fill();
+  panel(x, y, w, h, col, C.ink, 14); T(label, x + w / 2, y + h / 2 + 1, size, C.ink, 'center', 800);
+}
+function star(x, y, r, on) {
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr_ = i % 2 ? r * 0.45 : r; ctx.lineTo(x + Math.cos(a) * rr_, y + Math.sin(a) * rr_); }
+  ctx.closePath(); ctx.fillStyle = on ? C.gold : '#3A5563'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = C.ink; ctx.stroke();
+}
+function ellipse(x, y, rx, ry, rot = 0) { ctx.beginPath(); ctx.ellipse(x, y, Math.max(0.1, rx), Math.max(0.1, ry), rot, 0, Math.PI * 2); }
+// 글 상자 (여러 줄)
+function lines(arr, x, y, size = 20, col = C.ink, gap = 1.45, al = 'left', wt = 600) { arr.forEach((s, i) => T(s, x, y + i * size * gap, size, col, al, wt)); }
+
+function titleCard(title, sub, howto, levels) {
+  ctx.fillStyle = 'rgba(11,24,32,0.72)'; ctx.fillRect(0, 0, W, H);
+  panel(70, 110, 660, 580);
+  T(title, W / 2, 175, 40, C.ink, 'center', 900);
+  T(sub, W / 2, 222, 19, '#5B6F78', 'center', 600);
+  lines(howto, 115, 290, 21, C.ink, 1.6);
+  if (levels) levels.forEach((l, i) => button(l.id, l.label, 115 + i * 196, 590, 176, 70, l.col || C.gold, 22));
+  else button('start', '시작', W / 2 - 110, 590, 220, 70);
+}
+function resultCard(title, stars, rows, comment, col = C.ink, opt) {
+  ctx.fillStyle = 'rgba(11,24,32,0.72)'; ctx.fillRect(0, 0, W, H);
+  panel(90, 100, 620, 600);
+  T(title, W / 2, 160, 36, col, 'center', 900);
+  for (let i = 0; i < 3; i++) star(W / 2 - 70 + i * 70, 222, 26, i < stars);
+  rows.forEach(([k, v], i) => { T(k, 140, 300 + i * 44, 22, '#3A4E57', 'left', 600); T(String(v), 660, 300 + i * 44, 24, C.ink, 'right', 800); });
+  if (comment) lines(Array.isArray(comment) ? comment : [comment], W / 2, 300 + rows.length * 44 + 26, 19, '#5B6F78', 1.45, 'center', 600);
+  if (opt && opt.next) {
+    button('retry', '다시', W / 2 - 280, 600, 170, 66);
+    button('next', '다음 스테이지', W / 2 - 95, 600, 220, 66, C.green, 22);
+    button('title', '목록', W / 2 + 140, 600, 140, 66, C.cream);
+  } else {
+    button('retry', '다시 하기', W / 2 - 250, 600, 230, 66);
+    button('title', '처음으로', W / 2 + 20, 600, 230, 66, C.cream);
+  }
+}
+
+// ── 스테이지 · 난이도 ──
+const TIERS = ['입문', '보통', '장인'], TIER_COL = [C.green, C.gold, '#F08A5D'];
+const SAVE = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (_) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} },
+};
+const Q_STAGE = QS.get('stage') ? +QS.get('stage') - 1 : null, Q_TIER = QS.get('tier') ? +QS.get('tier') - 1 : null;
+function bestStars(key, i, t) { const b = SAVE.get(key, {}); return b[i + '_' + t] || 0; }
+function saveStars(key, i, t, s) { const b = SAVE.get(key, {}); if ((b[i + '_' + t] || 0) < s) { b[i + '_' + t] = s; SAVE.set(key, b); } }
+// 스테이지 목록 화면: 버튼 id = tier0..2, stage0..n
+function stageMenu(o) {
+  ctx.fillStyle = 'rgba(11,24,32,0.78)'; ctx.fillRect(0, 0, W, H);
+  panel(50, 40, 700, 720);
+  T(o.title, W / 2, 92, 38, C.ink, 'center', 900);
+  T(o.sub, W / 2, 132, 18, '#5B6F78', 'center', 600);
+  lines(o.how, 90, 172, 17, '#2F434C', 1.5, 'left', 600);
+  const ty = 172 + o.how.length * 25 + 8;
+  T('난이도', 90, ty + 26, 18, C.ink, 'left', 800);
+  TIERS.forEach((n, i) => {
+    const on = i === o.tier;
+    button('tier' + i, (on ? '● ' : '') + n, 190 + i * 180, ty, 160, 52, on ? TIER_COL[i] : '#E4DCC8', 20);
+  });
+  T(o.tierNote[o.tier], W / 2, ty + 78, 15, '#5B6F78', 'center', 600);
+  const y0 = ty + 104, gap = Math.min(80, (700 - y0) / o.stages.length);
+  o.stages.forEach((s, i) => {
+    const y = y0 + i * gap, h = gap - 12;
+    btns.push({ id: 'stage' + i, x: 90, y, w: 620, h });
+    rr(90, y + 4, 620, h, 14); ctx.fillStyle = C.ink; ctx.fill();
+    panel(90, y, 620, h, '#FFFDF6', C.ink, 14);
+    T(`${i + 1}`, 122, y + h / 2, 26, C.ink, 'center', 900);
+    T(s.name, 150, y + h / 2 - 11, 20, C.ink, 'left', 800);
+    T(s.tw, 150, y + h / 2 + 13, 14, '#5B6F78', 'left', 600);
+    const b = bestStars(o.key, i, o.tier);
+    for (let k = 0; k < 3; k++) star(620 + k * 30, y + h / 2, 11, k < b);
+  });
+}
+
+// 검증용: 판이 끝나면 결과를 문서 제목과 #out에 남긴다
+// ── 사람 모델 (bot=3) ── [가정] 타깃 실력 3단계. 값의 근거는 README '사람 모델' 절
+// rt 지각→행동 지연(s) · ctl 힘·속도 조절 흔들림(변동계수) · trace 선 따라가기 흔들림(px, PC 마우스 기준)
+// miss 신호 놓침 · imp 참을성(s) · wig 흔들기 요령 사용 비율 · over 물 두 번 붓기 · attn 다른 일 처리 지연 배율
+// anticip 예측 행동 · rush 순간적으로 서두르는 빈도
+const SKILL = {
+  low:  { rt: 0.42, ctl: 0.30, trace: 10, miss: 0.25, imp: 1.6, wig: 0.15, over: 0.40, attn: 1.6, anticip: false, rush: 0.25 },
+  mid:  { rt: 0.30, ctl: 0.20, trace: 7,  miss: 0.12, imp: 2.6, wig: 0.50, over: 0.25, attn: 1.0, anticip: false, rush: 0.12 },
+  high: { rt: 0.22, ctl: 0.11, trace: 4,  miss: 0.04, imp: 4.0, wig: 0.90, over: 0.08, attn: 0.7, anticip: true,  rush: 0.04 },
+};
+const HS = { ...SKILL[QS.get('sk') || 'mid'] };
+const DEV = QS.get('dev') === 'mobile' ? { trace: 2.5, ctl: 1.25 } : { trace: 1, ctl: 1 };   // 손가락은 마우스보다 크게 흔들린다 [가정]
+HS.ctl *= DEV.ctl;
+let HB = {};
+function gauss() { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); }
+function ou(o, dt, tau, sig) { o.v = (o.v || 0) - (o.v || 0) / tau * dt + sig * Math.sqrt(2 * dt / tau) * gauss(); return o.v; }
+function Lag() { const b = []; return { push(t, v) { b.push([t, v]); while (b.length > 2 && b[1][0] <= t - 2) b.shift(); }, get(t) { for (let i = b.length - 1; i >= 0; i--) if (b[i][0] <= t) return b[i][1]; return b.length ? b[0][1] : null; } }; }
+
+let DONE = false, LAST = null;
+function report(obj) { DONE = true; LAST = obj; const s = JSON.stringify(obj); document.title = 'DONE ' + s; const el = document.getElementById('out'); if (el) el.textContent = s; }
+
+// ── 루프 ──
+let last = performance.now(), NOW = 0, FRAMES = 0, PNGF = 0;
+function frame(now) {
+  const dt = BOT ? 1 / 60 : Math.min(0.05, (now - last) / 1000); last = now;
+  for (let i = 0; i < (BOT ? FAST : 1); i++) { NOW += dt; if (BOT && G.bot) G.bot(dt); G.update(dt); }
+  refit();
+  btns = [];
+  ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0);
+  if (!BOT || (FRAMES++ % 30) === 0) G.draw();
+  if (!BOT && QS.get('png') && ++PNGF === 3) document.getElementById('out').setAttribute('data-png', cv.toDataURL('image/png'));   // 검증용 화면 추출
+  if (BOT) setTimeout(() => frame(performance.now()), 0); else requestAnimationFrame(frame);
+}
+function boot() {
+  if (!BOT) { requestAnimationFrame(frame); return; }
+  // 검증 봇: 타이머 없이 한 번에 끝까지 시뮬레이션하고 마지막 화면만 그린다
+  const dt = 1 / 60;
+  const SHOT = +(QS.get('shot') || 0);   // 스크린샷용: 이 시각에서 멈춤
+  const RUNS = +(QS.get('runs') || 1), base = seed, all = [];
+  for (let r = 0; r < RUNS; r++) {
+    if (r > 0) { seed = base + r * 7919; DONE = false; LAST = null; NOW = 0; HB = {}; G.reset(); }
+    let i = 0;
+    for (; i < 60 * 900 && !DONE && !(SHOT && NOW >= SHOT); i++) { NOW += dt; G.bot(dt); G.update(dt); }
+    if (!DONE && !SHOT) report({ timeout: true, steps: i });
+    all.push(LAST);
+  }
+  if (RUNS > 1) document.getElementById('out').textContent = JSON.stringify(all);
+  const fin = () => { fit(); ctx.setTransform(DPR * SC, 0, 0, DPR * SC, 0, 0); G.draw(); };
+  fin(); addEventListener('load', fin);
+  if (QS.get('png')) { const o = document.getElementById('out'); o.setAttribute('data-png', cv.toDataURL('image/png')); }
+}
+
+// ── 사쿠 나누기 퍼즐 ──
+// 생선 덩어리를 칼질 횟수 안에서 잘라 사쿠(한 부위로만 된 직사각형 블록)를 만든다.
+// 한 칼 = 지금 조각을 끝에서 끝까지 곧게 가르기. 부위가 섞이거나 작거나 힘줄이 낀 조각은 네기토로(칸당 1점)가 된다.
+const PART = {   // [튜닝] 부위 테이블 — v: 사쿠일 때 칸당 값
+  O: { name: '오토로', v: 5, col: '#F3B5A6', lo: '#D98A80', mar: 0.85 },
+  C: { name: '주토로', v: 3, col: '#E0605C', lo: '#C55A55', mar: 0.4 },
+  A: { name: '아카미', v: 2, col: '#A61F2E', lo: '#B03A40', mar: 0 },
+  H: { name: '연어 뱃살', v: 4, col: '#F7A06E', lo: '#E98E64', mar: 0.75 },
+  L: { name: '연어 등살', v: 2, col: '#EE7440', lo: '#E07E50', mar: 0.15 },
+  S: { name: '힘줄', v: 0, col: '#F4ECE4', lo: '#EAD9CF', sinew: true },
+};
+const STAGES = [   // [튜닝] 스테이지 테이블 — k: 보통 기준 칼질 수, grain: 'x'면 사쿠가 가로로 길어야 함(아니면 ×0.5)
+  { name: '참치 등살 블록', tw: '부위 경계를 따라 자르기', k: 2, min: 4, grid: ['CCAAAA', 'CCAAAA', 'CCAAAA', '..AAAA'] },
+  { name: '참치 뱃살', tw: '비스듬한 경계 — 무엇을 버릴까', k: 3, min: 4, grid: ['OOOCCCAA', 'OOOCCCAA', 'OOOCCCAA', 'OOCCCAAA', 'OOCCCAAA'] },
+  { name: '힘줄 낀 뱃살', tw: '힘줄을 도려내야 사쿠가 된다', k: 4, min: 4, grid: ['OOOOSCCC', 'OOOOSCCC', 'OOSSSCCC', 'OOOCCCAA', 'OOOCCCAA'] },
+  { name: '연어 필렛', tw: '결 방향: 사쿠는 가로로 길게', k: 4, min: 4, grain: 'x', grid: ['..LLLLL..', '.LLLLLLL.', 'LLLLLLLLL', 'HHHHHHHH.', '.HHHHHH..'] },
+  { name: '참치 큰 블록', tw: '모든 것이 섞인 시험', k: 5, min: 4, grid: ['OOOOOCCCCA', 'OOOOSCCCCA', 'OOOSSCCCAA', 'OOOCCCCAAA', '.OOCCCAAAA', '..OCCAAAA.'] },
+];
+const TIER_K = [2, 1, 0];          // 보통 k에 더하는 칼질 수: 입문 +2, 보통 +1, 장인 +0
+const KEY = 'prep-saku';
+
+let st = 'menu', tier = Q_TIER ?? 0, si = 0, S = null, pieces = [], hist = [], cutsLeft = 0, drag = null, best = 0, plan = null, fx = [], resT = 0, result = null;
+let cell = 60, ox = 0, oy = 0;
+
+// ── 규칙 ──
+function cellAt(x, y) { return S.grid[y][x]; }
+function evalRect(r) {
+  let kind = null, ok = true, meat = 0;
+  for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.w; x++) {
+    const c = cellAt(x, y);
+    if (c === '.') { ok = false; continue; }
+    if (PART[c].sinew) { ok = false; continue; }
+    meat++;
+    if (kind === null) kind = c; else if (kind !== c) ok = false;
+  }
+  const area = r.w * r.h;
+  if (ok && kind && area >= S.min && Math.min(r.w, r.h) >= 2) {
+    const grainOk = S.grain !== 'x' || r.w >= r.h;
+    return { saku: true, kind, val: PART[kind].v * area * (grainOk ? 1 : 0.5), grainOk, meat };
+  }
+  return { saku: false, kind, val: meat, meat, why: !kind ? '빈 곳' : meat < area ? (hasSinew(r) ? '힘줄' : '빈 곳 포함') : !ok ? '부위 섞임' : '너무 작음' };
+}
+function hasSinew(r) { for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.w; x++) { const c = cellAt(x, y); if (c !== '.' && PART[c].sinew) return true; } return false; }
+const total = ps => ps.reduce((a, r) => a + evalRect(r).val, 0);
+
+// ── 최적해 (메모이즈 DP): f(사각형, 남은 칼질) ──
+function solve(k) {
+  const memo = new Map();
+  function f(r, k) {
+    const key = r.x + ',' + r.y + ',' + r.w + ',' + r.h + ',' + k;
+    if (memo.has(key)) return memo.get(key);
+    let bestV = evalRect(r).val, bestP = null;
+    if (k > 0) {
+      for (let c = 1; c < r.w; c++) for (let k1 = 0; k1 < k; k1++) {
+        const a = { x: r.x, y: r.y, w: c, h: r.h }, b = { x: r.x + c, y: r.y, w: r.w - c, h: r.h };
+        const v = f(a, k1).v + f(b, k - 1 - k1).v;
+        if (v > bestV + 1e-9) { bestV = v; bestP = { dir: 'v', at: r.x + c, k1, a, b }; }
+      }
+      for (let c = 1; c < r.h; c++) for (let k1 = 0; k1 < k; k1++) {
+        const a = { x: r.x, y: r.y, w: r.w, h: c }, b = { x: r.x, y: r.y + c, w: r.w, h: r.h - c };
+        const v = f(a, k1).v + f(b, k - 1 - k1).v;
+        if (v > bestV + 1e-9) { bestV = v; bestP = { dir: 'h', at: r.y + c, k1, a, b }; }
+      }
+    }
+    const res = { v: bestV, p: bestP };
+    memo.set(key, res); return res;
+  }
+  const root = { x: 0, y: 0, w: S.grid[0].length, h: S.grid.length };
+  const out = f(root, k);
+  // 칼질 순서 복원
+  const cuts = [];
+  (function walk(r, k) { const n = f(r, k); if (!n.p) return; cuts.push({ r, dir: n.p.dir, at: n.p.at }); walk(n.p.a, n.p.k1); walk(n.p.b, k - 1 - n.p.k1); })(root, k);
+  return { v: out.v, cuts };
+}
+function greedy(k) {   // 비교용: 매번 당장 이득이 가장 큰 칼질 하나
+  let ps = [{ x: 0, y: 0, w: S.grid[0].length, h: S.grid.length }];
+  for (let i = 0; i < k; i++) {
+    let bv = total(ps), bp = null;
+    ps.forEach((r, idx) => {
+      for (let c = 1; c < r.w; c++) { const t = ps.slice(); t.splice(idx, 1, { x: r.x, y: r.y, w: c, h: r.h }, { x: r.x + c, y: r.y, w: r.w - c, h: r.h }); const v = total(t); if (v > bv) { bv = v; bp = t; } }
+      for (let c = 1; c < r.h; c++) { const t = ps.slice(); t.splice(idx, 1, { x: r.x, y: r.y, w: r.w, h: c }, { x: r.x, y: r.y + c, w: r.w, h: r.h - c }); const v = total(t); if (v > bv) { bv = v; bp = t; } }
+    });
+    if (!bp) break; ps = bp;
+  }
+  return total(ps);
+}
+
+function startStage(i, t) {
+  si = i; tier = t; S = STAGES[i]; st = 'play'; fx = []; drag = null; result = null;
+  pieces = [{ x: 0, y: 0, w: S.grid[0].length, h: S.grid.length }]; hist = [];
+  cutsLeft = S.k + TIER_K[tier];
+  plan = solve(cutsLeft); best = plan.v;
+  const cols = S.grid[0].length, rows = S.grid.length;
+  cell = Math.floor(Math.min(620 / cols, 380 / rows)); ox = Math.round(W / 2 - cols * cell / 2); oy = Math.round(400 - rows * cell / 2);
+}
+function doCut(r, dir, at) {
+  if (cutsLeft <= 0) return false;
+  const idx = pieces.indexOf(r); if (idx < 0) return false;
+  let a, b;
+  if (dir === 'v') { if (at <= r.x || at >= r.x + r.w) return false; a = { x: r.x, y: r.y, w: at - r.x, h: r.h }; b = { x: at, y: r.y, w: r.x + r.w - at, h: r.h }; }
+  else { if (at <= r.y || at >= r.y + r.h) return false; a = { x: r.x, y: r.y, w: r.w, h: at - r.y }; b = { x: r.x, y: at, w: r.w, h: r.y + r.h - at }; }
+  hist.push(pieces.slice()); pieces.splice(idx, 1, a, b); cutsLeft--;
+  noise(0.09, 0.3, 3600, 2); tone(700, 0.05, 'triangle', 0.06); buzz(15, true);
+  const sx = dir === 'v' ? ox + at * cell : ox + (r.x + r.w / 2) * cell, sy = dir === 'h' ? oy + at * cell : oy + (r.y + r.h / 2) * cell;
+  fx.push({ x: sx, y: sy, dir, len: (dir === 'v' ? r.h : r.w) * cell, a: 1 });
+  return true;
+}
+function finish() {
+  const v = total(pieces), ratio = best ? v / best : 1, stars = ratio >= 0.95 ? 3 : ratio >= 0.8 ? 2 : ratio >= 0.6 ? 1 : 0;
+  const sakus = pieces.map(evalRect).filter(e => e.saku);
+  result = { v, best, ratio, stars, saku: sakus.length, neg: pieces.map(evalRect).filter(e => !e.saku).reduce((a, e) => a + e.meat, 0), used: S.k + TIER_K[tier] - cutsLeft };
+  saveStars(KEY, si, tier, stars); st = 'result'; resT = 0;
+  tone(523, 0.12, 'sine', 0.12); setTimeout(() => tone(stars >= 2 ? 784 : 392, 0.25, 'sine', 0.12), 120);
+  report({ game: 'saku', stage: si + 1, tier: tier + 1, v, best, ratio: +ratio.toFixed(3), greedy: greedy(S.k + TIER_K[tier]), stars });
+}
+
+// 화면 좌표 → 조각 · 칼선
+function pieceAt(x, y) { return pieces.find(r => { const g = gapOf(r), x0 = ox + r.x * cell + g.x, y0 = oy + r.y * cell + g.y; return x >= x0 && x < x0 + r.w * cell && y >= y0 && y < y0 + r.h * cell; }); }
+function cutFromDrag(d) {
+  const dx = P.x - d.x0, dy = P.y - d.y0; if (Math.hypot(dx, dy) < 18) return null;
+  const r = d.r, dir = Math.abs(dy) > Math.abs(dx) ? 'v' : 'h';
+  const g = gapOf(r), mid = dir === 'v' ? ((d.x0 + P.x) / 2 - ox - g.x) / cell : ((d.y0 + P.y) / 2 - oy - g.y) / cell;
+  const at = clamp(Math.round(mid), dir === 'v' ? r.x + 1 : r.y + 1, dir === 'v' ? r.x + r.w - 1 : r.y + r.h - 1);
+  if ((dir === 'v' && r.w < 2) || (dir === 'h' && r.h < 2)) return null;
+  return { dir, at };
+}
+
+const G = {
+  reset() { st = 'menu'; },
+  onButton(id) {
+    if (id.startsWith('tier')) tier = +id.slice(4);
+    else if (id.startsWith('stage')) startStage(+id.slice(5), tier);
+    else if (id === 'retry') startStage(si, tier);
+    else if (id === 'next') startStage(Math.min(si + 1, STAGES.length - 1), tier);
+    else if (id === 'title') st = 'menu';
+    else if (id === 'undo' && hist.length) { pieces = hist.pop(); cutsLeft++; tone(400, 0.06, 'sine', 0.06); }
+    else if (id === 'reset') startStage(si, tier);
+    else if (id === 'done') finish();
+  },
+  onDown(x, y) { if (st !== 'play') return; const r = pieceAt(x, y); if (r) drag = { r, x0: x, y0: y }; },
+  onUp() {
+    if (!drag) return; const c = cutFromDrag(drag);
+    if (c) { if (cutsLeft <= 0) { msg('칼질을 다 썼어요 — 되돌리거나 완성해요'); } else doCut(drag.r, c.dir, c.at); }
+    drag = null;
+  },
+  update(dt) { for (const f of fx) f.a -= dt * 2; fx = fx.filter(f => f.a > 0); if (msgT > 0) msgT -= dt; resT += dt; },
+  bot(dt) {
+    if (st === 'menu') { startStage(Q_STAGE ?? 0, Q_TIER ?? 0); return; }
+    if (st !== 'play') return;
+    if (BOT === 1) {   // 최적해를 그대로 실행
+      for (const c of plan.cuts) { const r = pieces.find(p => p.x === c.r.x && p.y === c.r.y && p.w === c.r.w && p.h === c.r.h); if (r) doCut(r, c.dir, c.at); }
+    } else {           // 욕심쟁이: 당장 이득만
+      for (let i = 0; i < 20 && cutsLeft > 0; i++) {
+        let bv = total(pieces), bc = null;
+        for (const r of pieces) { for (let c = r.x + 1; c < r.x + r.w; c++) { const t = pieces.filter(p => p !== r).concat([{ x: r.x, y: r.y, w: c - r.x, h: r.h }, { x: c, y: r.y, w: r.x + r.w - c, h: r.h }]); const v = total(t); if (v > bv) { bv = v; bc = [r, 'v', c]; } }
+          for (let c = r.y + 1; c < r.y + r.h; c++) { const t = pieces.filter(p => p !== r).concat([{ x: r.x, y: r.y, w: r.w, h: c - r.y }, { x: r.x, y: c, w: r.w, h: r.y + r.h - c }]); const v = total(t); if (v > bv) { bv = v; bc = [r, 'h', c]; } } }
+        if (!bc) break; doCut(...bc);
+      }
+    }
+    finish();
+  },
+  draw() {
+    ctx.fillStyle = '#1D2F3A'; ctx.fillRect(0, 0, W, H);
+    if (st === 'menu') {
+      stageMenu({ title: '사쿠 나누기', sub: '생선 덩어리를 잘라 사쿠를 최대한 값지게', key: KEY, tier, stages: STAGES,
+        how: ['· 조각 위를 세로/가로로 끌면 그 방향으로 끝까지 잘라요', '· 한 부위로만 된 2×2 이상 직사각형 = 사쿠 (부위 값 × 칸 수)', '· 섞이거나 작거나 힘줄이 끼면 네기토로 (칸당 1점)'],
+        tierNote: ['칼질 +2회 · 조각마다 값이 바로 보여요', '칼질 +1회 · 사쿠인지 아닌지만 보여요', '최소 칼질 · 부위 색이 흐리고 표시가 없어요'] });
+      return;
+    }
+    // 도마
+    panel(30, 150, 740, 500, '#E8CFA0', C.ink, 24);
+    const live = tier === 0, mark = tier <= 1;
+    for (const r of pieces) drawPiece(r, live, mark);
+    // 칼선 미리보기
+    if (drag && st === 'play') {
+      const c = cutFromDrag(drag); if (c) {
+        const r = drag.r; ctx.setLineDash([10, 8]); ctx.lineWidth = 5; ctx.strokeStyle = cutsLeft > 0 ? C.red : '#888';
+        ctx.beginPath();
+        if (c.dir === 'v') { ctx.moveTo(ox + c.at * cell + gapOf(r).x, oy + r.y * cell + gapOf(r).y - 10); ctx.lineTo(ox + c.at * cell + gapOf(r).x, oy + (r.y + r.h) * cell + gapOf(r).y + 10); }
+        else { ctx.moveTo(ox + r.x * cell + gapOf(r).x - 10, oy + c.at * cell + gapOf(r).y); ctx.lineTo(ox + (r.x + r.w) * cell + gapOf(r).x + 10, oy + c.at * cell + gapOf(r).y); }
+        ctx.stroke(); ctx.setLineDash([]);
+      }
+    }
+    for (const f of fx) { ctx.strokeStyle = `rgba(255,255,255,${f.a})`; ctx.lineWidth = 6; ctx.beginPath(); if (f.dir === 'v') { ctx.moveTo(f.x, f.y - f.len / 2); ctx.lineTo(f.x, f.y + f.len / 2); } else { ctx.moveTo(f.x - f.len / 2, f.y); ctx.lineTo(f.x + f.len / 2, f.y); } ctx.stroke(); }
+    // HUD
+    panel(30, 18, 740, 116, 'rgba(255,243,220,0.96)');
+    T(`${si + 1}. ${S.name}`, 52, 46, 22, C.ink, 'left', 900);
+    T(`${TIERS[tier]} · ${S.tw}`, 52, 76, 15, '#5B6F78', 'left', 700);
+    T('칼질', 52, 110, 15, C.ink, 'left', 800);
+    for (let i = 0; i < S.k + TIER_K[tier]; i++) drawKnifeIcon(100 + i * 30, 110, i < cutsLeft);
+    const v = total(pieces);
+    if (live) { T(`지금 ${v}점`, 748, 46, 22, C.ink, 'right', 900); T(`최고 가능 ${best}점`, 748, 76, 15, '#5B6F78', 'right', 700); }
+    else T(tier === 1 ? `지금 ${v}점` : '', 748, 46, 22, C.ink, 'right', 900);
+    // 부위 범례
+    const used = [...new Set(S.grid.join('').replace(/\./g, ''))];
+    used.forEach((c, i) => { const x = 330 + i * 106; rr(x, 98, 22, 22, 5); ctx.fillStyle = tier === 2 ? PART[c].lo : PART[c].col; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = C.ink; ctx.stroke(); T(PART[c].name + (PART[c].v ? ' ' + PART[c].v : ''), x + 28, 110, 13, C.ink, 'left', 700); });
+    if (st === 'play') {
+      button('undo', '되돌리기', 40, 676, 170, 64, C.cream, 21);
+      button('reset', '처음부터', 225, 676, 170, 64, C.cream, 21);
+      button('done', '완성', 560, 676, 200, 64, C.green, 24);
+      if (msgT > 0) TS(msgS, W / 2, 630, 18, C.gold);
+    }
+    if (st === 'result') {
+      const r = result;
+      resultCard(r.stars === 3 ? '장인의 사쿠!' : r.stars === 2 ? '좋은 사쿠' : r.stars === 1 ? '아깝게 버렸어요' : '다시 해 봐요', r.stars, [
+        ['점수', `${r.v} / 최고 ${r.best}`], ['사쿠', `${r.saku}개`], ['네기토로로 간 칸', r.neg], ['쓴 칼질', r.used]],
+        r.stars < 3 ? '되돌리기로 다른 순서를 시험해 봐요' : '', C.ink, { next: si + 1 < STAGES.length });
+    }
+  }
+};
+let msgS = '', msgT = 0; function msg(s) { msgS = s; msgT = 1.6; }
+function gapOf(r) { return { x: r.x * 4 - (S.grid[0].length * 2), y: r.y * 4 - S.grid.length * 2 }; }
+function drawPiece(r, live, mark) {
+  const g = gapOf(r), x0 = ox + r.x * cell + g.x, y0 = oy + r.y * cell + g.y, e = evalRect(r);
+  for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.w; x++) {
+    const c = cellAt(x, y); if (c === '.') continue;
+    const p = PART[c], px = ox + x * cell + g.x, py = oy + y * cell + g.y;
+    ctx.fillStyle = tier === 2 ? p.lo : p.col; ctx.fillRect(px, py, cell + 0.5, cell + 0.5);
+    if (p.mar) { ctx.strokeStyle = `rgba(255,248,240,${0.25 + p.mar * 0.5})`; ctx.lineWidth = 2; for (let k = 0; k < 2 + p.mar * 4; k++) { const yy = py + (k + 0.5) * cell / (2 + p.mar * 4); ctx.beginPath(); ctx.moveTo(px + 4, yy + Math.sin(x + k) * 3); ctx.quadraticCurveTo(px + cell / 2, yy - 5 + ((x * 7 + y * 3 + k) % 9), px + cell - 4, yy + Math.cos(y + k) * 3); ctx.stroke(); } }
+    if (p.sinew) { ctx.strokeStyle = '#C9B8AA'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(px + 6, py + cell - 6); ctx.lineTo(px + cell - 6, py + 6); ctx.stroke(); }
+    if (S.grain === 'x') { ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1.5; for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.moveTo(px + 3, py + k * cell / 4); ctx.lineTo(px + cell - 3, py + k * cell / 4); ctx.stroke(); } }
+  }
+  rr(x0, y0, r.w * cell, r.h * cell, 6); ctx.lineWidth = 4; ctx.strokeStyle = C.ink; ctx.stroke();
+  if (mark) {
+    const bx = x0 + r.w * cell / 2, by = y0 + r.h * cell / 2;
+    const lab = e.saku ? (live ? `사쿠 +${e.val}` : '사쿠') + (e.grainOk === false ? ' (결↕)' : '') : e.meat ? (live ? `네기토로 +${e.val}` : '네기토로') : '';
+    if (lab) { ctx.font = `800 15px ${FONT}`; const w = ctx.measureText(lab).width + 16; rr(bx - w / 2, by - 13, w, 26, 13); ctx.fillStyle = e.saku ? 'rgba(47,125,74,0.92)' : 'rgba(60,70,78,0.85)'; ctx.fill(); T(lab, bx, by + 1, 15, '#fff', 'center', 800); }
+  }
+}
+function drawKnifeIcon(x, y, on) { ctx.save(); ctx.translate(x, y); ctx.rotate(-0.6); ctx.fillStyle = on ? '#DDE4E8' : '#6B7A80'; ctx.fillRect(-10, -3, 16, 6); ctx.fillStyle = on ? '#5B3A22' : '#444'; ctx.fillRect(6, -3, 8, 6); ctx.restore(); }
+if (Q_STAGE !== null && !BOT) startStage(Q_STAGE, Q_TIER ?? 0);
+boot();
+
+</script></body></html>
