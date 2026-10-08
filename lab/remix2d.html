@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>니기리 리믹스 · 박을 타는 손놀림</title>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>니기리 리믹스 · 오늘의 횟감</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#1c1915;color:#f2e6cc;font-family:'Malgun Gothic',sans-serif;overflow:hidden}button{font:inherit;cursor:pointer;color:inherit}button:focus-visible{outline:3px solid #d8a445;outline-offset:5px}[hidden]{display:none!important}#screen{position:absolute;width:1920px;height:1080px;transform-origin:top left;background:radial-gradient(ellipse at 50% 46%,#2f5f66,#1c1915 72%)}.eyebrow{color:#c58f4a;font-size:16px;letter-spacing:5px}.hudLabel{position:absolute;top:42px;padding:20px 26px;border:1px solid #8a837755;border-radius:16px;background:#1c1915}.hudLabel small{display:block;color:#f2e6cc;font-size:16px;margin-bottom:12px}#selection{left:60px;width:320px;height:144px}#selection button{border:0;background:none;font-size:23px;padding:5px 12px}#keys{right:60px;width:380px;height:144px;font-size:18px;line-height:1.9}#counter{position:absolute;top:46px;left:660px;width:600px;text-align:center;font-size:18px;color:#f2e6cc}#lights{position:absolute;top:118px;left:520px;width:880px;height:62px;display:flex;gap:18px;justify-content:center}.light{width:84px;height:58px;border-radius:12px;border:1px solid #8a8377;color:#8a8377;display:grid;place-items:center;font-size:23px;background:#1c1915}.light.next{background:#8a8377;color:#f2e6cc}.light.active{background:#f2e6cc;color:#1c1915;box-shadow:0 0 30px #d8a44544}#stage{position:absolute;left:360px;top:200px;width:1200px;height:700px;border-radius:160px;background:radial-gradient(ellipse,#8a837722,transparent 70%)}#riceCanvas{width:1200px;height:700px}#cue{position:absolute;top:25px;left:350px;width:500px;text-align:center;color:#f2e6cc;font-size:44px;letter-spacing:4px;pointer-events:none}#count{position:absolute;top:126px;left:450px;width:300px;text-align:center;font-size:64px;color:#f2e6cc;pointer-events:none}#plate{position:absolute;left:450px;top:626px;width:300px;height:70px;border:3px solid #f2e6cc;border-radius:50%;background:radial-gradient(ellipse,#8a8377,#2f5f66);box-shadow:0 14px 0 #1c191566;color:#f2e6cc;font-size:20px;padding-top:20px}#plate:active{filter:brightness(1.25)}#strip{position:absolute;left:520px;top:912px;width:880px;height:48px;display:flex;justify-content:center;gap:18px}.stamp{width:84px;text-align:center;font-size:27px;color:#f2e6cc}.stamp small{font-size:12px;display:block;color:#f2e6cc}#legend{position:absolute;top:968px;left:560px;width:800px;text-align:center;color:#8a8377;font-size:15px}#hint{position:absolute;top:1010px;left:260px;width:1400px;text-align:center;font-size:25px;color:#f2e6cc}.overlay{position:absolute;inset:0;background:#1c1915f5;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5}h1{font-weight:400;font-size:76px;margin:20px 0;letter-spacing:10px}.lead{font-size:23px;color:#f2e6cc;line-height:1.8}.primary{border:1px solid #d8a445;border-radius:40px;padding:18px 65px;background:#d8a445;color:#1c1915;font-size:26px;margin-top:32px}#titleArt{width:620px;height:280px}#result{position:absolute;left:470px;top:275px;width:980px;height:540px;border:1px solid #8a8377;border-radius:24px;background:#f2e6cc;color:#2f5f66;z-index:4;text-align:center;box-shadow:0 30px 90px #1c191580}#grade{font-size:58px;display:inline-block;border:5px double #2f5f66;border-radius:18px;padding:6px 32px;margin-top:25px;transform:rotate(-4deg)}#perfect{font-size:20px;height:30px;margin-top:12px;color:#7a4a22}#resultCanvas{display:block;margin:auto;width:840px;height:230px}#worst{font-size:22px;margin:14px}#summary{z-index:6}#summary h1{font-size:58px}#totals{display:flex;gap:60px;margin:25px;font-size:24px}#totals b{display:block;font-size:54px;color:#f2e6cc;text-align:center}#ratio{font-size:25px;margin:20px}#causes{display:flex;gap:30px;color:#f2e6cc;font-size:21px}#pause{z-index:9;font-size:48px}#pause small{font-size:22px;margin-top:20px}
 #ladder{position:absolute;left:810px;top:82px;width:300px;display:flex;gap:10px;justify-content:center}#ladder span{width:36px;height:23px;border-radius:5px;background:#2f5f66;color:#8a8377;text-align:center}#ladder .on{background:#f2e6cc;color:#1c1915}#progress{position:absolute;left:470px;top:838px;width:980px;text-align:center;font-size:22px;color:#f2e6cc;z-index:4}#levelNotice{position:absolute;left:540px;top:410px;width:840px;padding:70px 20px;text-align:center;background:#f2e6cc;color:#2f5f66;border-radius:24px;font-size:43px;z-index:5}#levelSummary{font-size:21px;margin-top:28px;color:#f2e6cc}#presets{display:flex;gap:16px;margin-top:20px}#presets button{border:1px solid #8a8377;border-radius:18px;padding:12px 30px;background:#2f5f66;font-size:22px}#presets button[aria-pressed="true"]{background:#d8a445;color:#1c1915}#sets{display:flex;gap:16px;margin-top:18px}#sets button{border:1px solid #8a8377;border-radius:18px;padding:14px 24px;background:#2f5f66;font-size:22px}#telegraph{position:absolute;top:190px;left:460px;width:1000px;text-align:center;color:#f2e6cc;font-size:25px;z-index:2}#modifierResult{font-size:19px;margin:8px 20px;color:#7a4a22}#modifierSummary{display:block;max-height:320px;overflow:auto;flex-shrink:0;border-collapse:collapse;width:760px;font-size:18px;margin-top:18px}#modifierSummary td,#modifierSummary th{padding:5px 18px;border-bottom:1px solid #8a8377;text-align:left}#summary h1{margin:8px 0;font-size:44px}#summary #totals{margin:12px}#summary #ratio{margin:8px}#summary #levelSummary{margin-top:12px}#summary .primary{margin-top:18px;padding:10px 60px}#tableError{z-index:20;padding:80px;font-size:22px}#tableError pre{max-width:1600px;max-height:700px;overflow:auto;white-space:pre-wrap} .light.rest{background:#2f5f66;color:#f2e6cc}.light.tempo{border-color:#d8a445}.light.offbeat:after{content:'·';color:#f2e6cc;position:absolute;margin-left:102px}#lights.muted{visibility:hidden}#skillStamp{position:absolute;right:60px;top:210px;width:290px;min-height:86px;border:3px double #d8a445;border-radius:20px;background:#2f5f66;color:#f2e6cc;font-size:22px;padding:15px;z-index:4}#skillStamp:disabled{opacity:.55}#comboText{position:absolute;left:720px;top:16px;width:480px;text-align:center;color:#f2e6cc}#stampBoard{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;width:1120px;margin-top:16px}#stampBoard span{border:1px solid #8a8377;padding:7px;color:#8a8377;text-align:center;font-size:14px}#stampBoard .earned{color:#f2e6cc;border-color:#d8a445}#bestLine,#tomorrow{margin-top:16px;font-size:19px;color:#f2e6cc}#titleArt{height:160px;width:354px}#title h1{font-size:60px;margin:10px}#title .primary{margin-top:18px;padding:12px 65px}#sets button:disabled{opacity:.4}#envTitle{font-size:18px;color:#f2e6cc;margin:8px}#envHud{position:absolute;right:65px;top:315px;font-size:18px;color:#f2e6cc}#envNext{position:absolute;top:880px;left:470px;width:980px;text-align:center;font-size:21px}#conditionResult{font-size:16px;margin:4px}#telegraph{font-size:23px}#lights .light{flex-shrink:1;min-width:48px}#lights{gap:8px}#lights .light{display:flex;flex-direction:column;justify-content:center;font-size:17px;line-height:1.25}#lights .light strong{font-size:20px;white-space:nowrap;font-weight:400}
@@ -1429,10 +1429,12 @@ window.__pt=api;
 return api;})();
 /*PATAPON-END*/
 /*REMIX-LOGIC-BEGIN*/
-/* T68-a 「니기리 리믹스」 판정·악보 논리(DOM·오디오 없음 — 노드 단위 테스트가 이 구간만 잘라 실행한다).
+/* T68-a → T69-a 「니기리 리믹스」 판정·악보 논리(DOM·오디오 없음 — 노드 단위 테스트가 이 구간만 잘라 실행한다).
    동사 5개 = 요리 동작 5개: 굴리기(회전 스피너) · 던지고 받기(토스 & 캐치) · 양손 폴리리듬(받치기 + 당김음) · 프리스타일(즉흥 콜 & 리스폰스) · 변주 타기(스윙·하프·더블·셋잇단·브레이크·가속).
+   T69-a: 판 = 횟감. 기믹 하나씩(광어 굴리기 → 연어 토스 → 새우 두 손 → 아나고 즉흥 → 도미 변주) 쉬운 것부터, 그다음 조합(성게 2 → 연어알 3 → 참치 대뱃살 전부 + 가속).
+   앞 판을 통과(등급 「한 번 더」가 아님)해야 다음 판이 열린다(RemixProgress). 마지막 착에서 그 판 이름의 네타가 밥 위에 앉는다(FinaleTable · 등급이 위치·윤기·스승 반응을 정함).
    시간 단위: 곡 시각 t(초, 0 = 카운트인 첫 박) · 박 B(실수, 마디 = 4박). 판정 기준 시각은 모두 timeOf(B) 하나에서 나오고, 오디오 예약도 같은 함수로 만든다(박 ↔ 판정 기준 일치).
-   표: RemixTable · FeelTable · VerbTable · KeySoundTable · CallTable · RemixStageTable · RemixScoreTable · CatLineTable · BotTable  [튜닝] */
+   표: RemixTable · FeelTable · VerbTable · KeySoundTable · CallTable · NetaTable · RemixStageTable · RemixScoreTable · CatLineTable · FinaleTable · BotTable  [튜닝] */
 const RemixLogic=(()=>{
 /* 전역 규칙. spin: sampleDiv = 한 박에 위상 표본 몇 번 · lagSec = 표본을 이만큼 늦게 채점(키보드 사이 보간이 끝나도록) · stallGapSec = 입력 간격이 이보다 길면 멈춘 것으로 봄
    perfectMs/zeroMs = 위상 오차(시간 환산)가 perfect 이하면 1, zero 이상이면 0 · speedTol/speedSpan = |log2(속도비)|가 tol 이하면 1, tol+span에서 0 · flat/scatter = 속도비가 이보다 크면 납작 / 작으면 흩어짐
@@ -1441,8 +1443,9 @@ const RemixTable={lookaheadSec:.25,leadInSec:.7,endTailSec:1.2,
  spin:{sampleDiv:8,lagSec:.6,stallGapSec:1.0,perfectMs:80,zeroMs:300,speedTol:.1,speedSpan:.55,flatRatio:1.3,scatterRatio:.72,minRadius:40,speedWinSec:.3,pruneSec:6},
  free:{assignEarlyMs:70,pocketPerfectMs:25,pocketZeroMs:80,densityMin:2,densityMax:12,simPeak:.6,w:{pocket:.45,diversity:.35,response:.2},repeatJ:.85,repeatFactor:.7,spam:{frac:.8,count:6,factor:.6},answerLeadSec:.35},
  poly:{leftW:.55,rightW:.45,sigmaRef:240,sigmaCap:.25,tiltPerMs:.25,tiltMissDeg:8,tiltMax:24,recent:4},
- toss:{hMin:40,hSpan:560,hTau:.9},
+ toss:{hMin:40,hSpan:360,hTau:.9},/* T69-a: 스승이 무대 위 가운데에 서므로 가장 높은 포물선을 400 px로 낮춤(높을수록 늦게 떨어지는 단조성은 그대로) */
  transition:{windowBeats:2,warnBeats:4},
+ mkDrum:{strong:1,weak:.55,strongHz:128,weakHz:176},/* 전통 고양이 북 세기(마디 첫 박 / 나머지 정박) */
  grade:[[85,'금'],[70,'은'],[55,'동'],[0,'한 번 더']]};
 /* 느낌(음악 변주). swing = 8분 뒷박 위치(.5 = 곧게) · grid = 프리스타일 한 마디 칸 수 · revBeats = 굴리기 한 바퀴가 몇 박 · drums = 한 마디 패턴(X 강 · x 보통 · o 약) */
 const FeelTable={
@@ -1471,48 +1474,85 @@ const CallTable={
  c2:{steps:[[0,'kkuk'],[3,'tok'],[4,'chak'],[7,'tok'],[8,'kkuk'],[10,'kkuk'],[12,'chak'],[14,'sseuk']]},
  c3:{steps:[[0,'kkuk'],[3,'tak'],[6,'kkuk'],[8,'chak'],[11,'tak'],[14,'chak']]},
  c4:{steps:[[0,'kkuk'],[2,'tok'],[4,'chak'],[7,'kkuk'],[9,'tak'],[10,'kkuk'],[12,'chak'],[13,'tok'],[15,'sseuk']]}};
-/* 판. sections 순서대로 이어 붙인다. bars(프리스타일은 roles 길이) · feel · bpm/bpmTo(가속) · 동사별 값:
-   spin.graceBeats = 첫 몇 박은 채점 안 함 · toss.tosses = [던지는 박, 떨어지는 박](구간 안 상대 박, 스윙이면 .5가 밀림) · poly.right = 한 마디 안 오른손 박 · rightFromBar = 이 마디부터 오른손(앞 마디는 고양이 시범)
-   free.roles = call(고양이 콜) · play(반쵸 즉흥) · mix(고양이가 반쵸 리듬을 섞어 돌려줌 = 다음 콜) · answer(고양이 대답) · place.at = 놓을 박
-   win = 판정 창(ms) · guide = full(한 줄 안내 + 회전 유령 점 + 브레이크 손가락) / lite(한 줄만) */
+/* 횟감(판 이름 = 그 판 마지막에 밥 위에 올라가는 네타). kind = nigiri(밥 위에 한 점) | gunkan(김 띠 안에 담김) */
+const NetaTable={
+ gwangeo:{name:'광어',kind:'nigiri'},yeoneo:{name:'연어',kind:'nigiri'},saeu:{name:'새우',kind:'nigiri'},anago:{name:'아나고',kind:'nigiri'},
+ domi:{name:'도미',kind:'nigiri'},seongge:{name:'성게',kind:'gunkan'},yeoneoal:{name:'연어알',kind:'gunkan'},daebaetsal:{name:'참치 대뱃살',kind:'nigiri'}};
+/* 판. 쉬운 것부터: 기믹 하나씩(1~5) → 조합(6 = 둘, 7 = 셋, 8 = 전부 + 가속). sections 순서대로 이어 붙인다. bars(프리스타일은 roles 길이) · feel · bpm/bpmTo(가속) · tier = 기믹 판 안 단계(1 쉬움 · 2 조금 어려움)
+   동사별 값: spin.graceBeats = 첫 몇 박은 채점 안 함 · toss.tosses = [던지는 박, 떨어지는 박](구간 안 상대 박, 스윙이면 .5가 밀림) · poly.left = 한 마디 안 왼손 펄스 박(기본 0·1·2·3) · poly.right = 한 마디 안 오른손 박 · rightFromBar = 이 마디부터 오른손(앞 마디는 고양이 시범)
+   free.roles = call(힙합 고양이 콜) · play(반쵸 즉흥) · mix(전통 고양이가 반쵸 리듬을 섞어 돌려줌 = 다음 콜) · answer(전통 고양이 대답) · place.at = 놓을 박
+   scoreVerbs = 이 판에서 점수를 매기는 동작(검수표 줄) · verbNames = 이 판에서만 쓰는 동작 이름 · stars = 난이도(1~5) · win = 판정 창(ms) · guide = full(한 줄 안내 + 회전 유령 점 + 브레이크 손가락 셈) / lite(한 줄만) */
+const WIN={easy:{perfectMs:75,okMs:160,catchPerfectMs:80,catchOkMs:170},mid:{perfectMs:65,okMs:140,catchPerfectMs:70,catchOkMs:150},hard:{perfectMs:60,okMs:130,catchPerfectMs:65,catchOkMs:140},boss:{perfectMs:50,okMs:110,catchPerfectMs:55,catchOkMs:120}};
+const Q4=[0,1,2,3],H2=[0,2],E8=[0,.5,1,1.5,2,2.5,3,3.5],SH=[0,2/3,1,5/3,2,8/3,3,11/3];
 const RemixStageTable=[
- {id:'1',name:'첫 판 · 리믹스 맛보기',sub:'다섯 가지 손놀림을 1분 안에 다 맛봐요',bpm:80,guide:'full',win:{perfectMs:75,okMs:160,catchPerfectMs:80,catchOkMs:170},finale:'이게 니기리 리믹스예요!',
+ {id:'1',neta:'gwangeo',name:'광어',gimmick:'굴리기',kind:'solo',stars:1,sub:'원을 그려 밥을 굴려요 · 하프타임(2박에 한 바퀴) → 1박에 한 바퀴',bpm:80,guide:'full',win:WIN.easy,scoreVerbs:['spin'],finale:'광어 한 점, 착!',
   sections:[
    {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
-   {verb:'spin',bars:2,feel:'half',line:'원을 그려 밥을 굴려요 · 마우스 드래그 또는 ↑→↓←',graceBeats:2},
-   {verb:'spin',bars:2,feel:'straight',line:'두 배로! 1박에 한 바퀴'},
-   {verb:'toss',bars:2,feel:'straight',line:'떨어지는 순간 스페이스로 받아요',tosses:[[0,1],[2,3],[4,6],[6,7]]},
-   {verb:'toss',bars:2,feel:'swing',line:'스윙! 뒷박이 살짝 늦게 떨어져요',tosses:[[0,1.5],[2,3.5],[4,5.5],[6,7]]},
-   {verb:'poly',bars:4,feel:'straight',line:'왼손 A는 박마다 톡 · 오른손 L은 고양이 따라',right:[1.5,3.5],rightFromBar:1},
-   {verb:'free',feel:'straight',call:'c1',roles:['call','play','play','answer'],line:'자유롭게! A톡 S탁 D쓱 K꾹 L착'},
-   {verb:'poly',bars:1,feel:'straight',line:'왼손 A로 박을 지켜요',right:[],leftOnly:true},
-   {verb:'poly',bars:1,feel:'break',line:'브레이크! 소리 없이 A로 박 유지',right:[],leftOnly:true},
-   {verb:'place',bars:1,feel:'straight',line:'돌아와요! 첫 박에 스페이스로 착',at:[0]}]},
- {id:'2',name:'판 2 · 스윙 토스',sub:'스윙·셋잇단으로 나는 네타와 빨라지는 회전',bpm:88,guide:'lite',win:{perfectMs:60,okMs:130,catchPerfectMs:65,catchOkMs:140},finale:'출렁이는 박을 탔어요!',
+   {verb:'spin',bars:6,feel:'half',tier:1,line:'원을 그려 밥을 굴려요 · 마우스 드래그 또는 ↑→↓← · 2박에 한 바퀴',graceBeats:2},
+   {verb:'spin',bars:4,feel:'straight',tier:2,line:'2단계! 두 배로 · 1박에 한 바퀴'},
+   {verb:'spin',bars:2,feel:'half',tier:2,line:'다시 느긋하게 · 2박에 한 바퀴'},
+   {verb:'spin',bars:6,feel:'straight',tier:2,line:'1박에 한 바퀴 · 끝까지 박마다 위로'},
+   {verb:'place',bars:1,feel:'straight',line:'첫 박에 스페이스 · 광어를 올려요!',at:[0]}]},
+ {id:'2',neta:'yeoneo',name:'연어',gimmick:'던지고 받기',kind:'solo',stars:1,sub:'포물선만 보고 받아요 · 1박·2박 비행 → 스윙(뒷박이 살짝 늦게)',bpm:84,guide:'full',win:WIN.easy,scoreVerbs:['toss'],finale:'연어 한 점, 착!',
+  sections:[
+   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
+   {verb:'toss',bars:5,feel:'straight',tier:1,line:'떨어지는 순간 스페이스로 받아요 · 높을수록 늦게 떨어져요',tosses:[[0,1],[2,3],[4,6],[6,7],[8,9],[10,12],[12,13],[14,16],[16,17],[18,19]]},
+   {verb:'toss',bars:4,feel:'straight',tier:1,line:'1박 · 2박이 섞여요',tosses:[[0,1],[1,3],[3,4],[4,5],[5,7],[7,8],[8,10],[10,11],[11,12],[12,14],[14,15]]},
+   {verb:'toss',bars:5,feel:'swing',tier:2,line:'2단계! 스윙 · 뒷박이 살짝 늦게 떨어져요',tosses:[[0,1.5],[2,3.5],[4,5.5],[6,7],[8,9.5],[10,11.5],[12,13],[14,15.5],[16,17.5],[18,19]]},
+   {verb:'toss',bars:4,feel:'swing',tier:2,line:'스윙 토스 · 짧게 길게',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5],[8,9.5],[10,11],[11,12.5],[13,14.5],[14.5,15.5]]},
+   {verb:'place',bars:1,feel:'swing',line:'첫 박에 스페이스 · 연어를 올려요!',at:[0]}]},
+ {id:'3',neta:'saeu',name:'새우',gimmick:'양손 폴리',kind:'solo',stars:2,sub:'왼손 A는 박마다 · 오른손 L은 2박마다 → 당김음 · 3-3-2',bpm:80,guide:'full',win:WIN.easy,scoreVerbs:['poly'],finale:'새우 한 점, 착!',
+  sections:[
+   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
+   {verb:'poly',bars:2,feel:'straight',tier:1,line:'왼손 A로 박마다 톡 · 밥을 받쳐요',right:[],leftOnly:true},
+   {verb:'poly',bars:5,feel:'straight',tier:1,line:'오른손 L은 2박마다 · 첫 마디는 고양이 시범',right:[0,2],rightFromBar:1},
+   {verb:'poly',bars:5,feel:'straight',tier:2,line:'2단계! 오른손은 뒷박 · 당김음',right:[1.5,3.5],rightFromBar:1},
+   {verb:'poly',bars:4,feel:'straight',tier:2,line:'3-3-2 · 오른손이 엇갈려요',right:[0,1.5,3],rightFromBar:0},
+   {verb:'poly',bars:1,feel:'straight',tier:2,line:'왼손만 남아요 · 박 지키기',right:[],leftOnly:true},
+   {verb:'place',bars:1,feel:'straight',line:'첫 박에 스페이스 · 새우를 올려요!',at:[0]}]},
+ {id:'4',neta:'anago',name:'아나고',gimmick:'즉흥',kind:'solo',stars:2,sub:'고양이 콜을 듣고 내 리듬으로 대답 → 길게 주고받기',bpm:80,guide:'full',win:WIN.easy,scoreVerbs:['free'],finale:'아나고 한 점, 착!',
+  sections:[
+   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
+   {verb:'free',feel:'straight',tier:1,call:'c1',roles:['call','play','play','answer'],line:'콜을 듣고 내 리듬으로 · A톡 S탁 D쓱 K꾹 L착'},
+   {verb:'free',feel:'straight',tier:1,call:'c3',roles:['call','play','play','answer'],line:'콜을 살짝 바꿔 대답하면 더 좋아요'},
+   {verb:'free',feel:'straight',tier:2,call:'c2',roles:['call','play','play','answer'],line:'2단계! 엇박 콜 · 여러 소리를 섞어요'},
+   {verb:'free',feel:'straight',tier:2,call:'c4',roles:['call','play','play','mix','play','play','answer'],line:'길게 주고받기 · 고양이가 내 리듬을 섞어 돌려줘요'},
+   {verb:'place',bars:1,feel:'straight',line:'첫 박에 스페이스 · 아나고를 올려요!',at:[0]}]},
+ {id:'5',neta:'domi',name:'도미',gimmick:'변주 타기',kind:'solo',stars:3,sub:'A 하나로 박을 짚어요 · 하프·브레이크 → 더블·스윙·셋잇단',bpm:84,guide:'full',win:WIN.easy,scoreVerbs:['poly','vary'],verbNames:{poly:'박 짚기'},finale:'도미 한 점, 착!',
+  sections:[
+   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
+   {verb:'poly',bars:2,feel:'straight',tier:1,left:Q4,right:[],leftOnly:true,line:'박마다 A · 음악이 바뀌면 손도 바꿔요'},
+   {verb:'poly',bars:2,feel:'half',tier:1,left:H2,right:[],leftOnly:true,line:'하프타임 · 2박마다 A'},
+   {verb:'poly',bars:2,feel:'straight',tier:1,left:Q4,right:[],leftOnly:true,line:'다시 박마다 A'},
+   {verb:'poly',bars:1,feel:'break',tier:1,left:Q4,right:[],leftOnly:true,line:'브레이크! 소리 없이 박마다 A'},
+   {verb:'poly',bars:1,feel:'straight',tier:1,left:Q4,right:[],leftOnly:true,line:'돌아와요 · 첫 박!'},
+   {verb:'poly',bars:3,feel:'double',tier:2,left:E8,right:[],leftOnly:true,line:'2단계! 더블타임 · 반 박마다 A'},
+   {verb:'poly',bars:3,feel:'swing',tier:2,left:E8,right:[],leftOnly:true,line:'스윙 · 뒷박 A가 살짝 늦게'},
+   {verb:'poly',bars:3,feel:'triplet',tier:2,left:SH,right:[],leftOnly:true,line:'셋잇단 · 길게-짧게 A'},
+   {verb:'poly',bars:1,feel:'break',tier:2,left:Q4,right:[],leftOnly:true,line:'마지막 브레이크!'},
+   {verb:'place',bars:1,feel:'straight',line:'돌아와요! 첫 박에 스페이스 · 도미를 올려요!',at:[0]}]},
+ {id:'6',neta:'seongge',name:'성게',gimmick:'굴리기 + 토스',kind:'combo',stars:3,sub:'두 기믹을 번갈아 · 굴리다가 받고, 받다가 굴려요',bpm:88,guide:'lite',win:WIN.mid,scoreVerbs:['spin','toss'],finale:'성게 군함, 착!',
   sections:[
    {verb:'count',bars:1,feel:'count'},
-   {verb:'spin',bars:2,feel:'straight',line:'1박에 한 바퀴',graceBeats:1},
-   {verb:'spin',bars:2,feel:'straight',bpmTo:100,line:'빨라져요! 회전도 같이'},
-   {verb:'toss',bars:4,feel:'swing',line:'스윙 토스 · 높이를 봐요',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5],[8,9.5],[10,11],[11,12.5],[13,14.5],[14.5,15.5]]},
-   {verb:'toss',bars:4,feel:'triplet',line:'셋잇단 토스 · 셋으로 쪼개요',tosses:[[0,1],[1,1+2/3],[2,2+1/3],[3,4],[4,5+1/3],[6,6+2/3],[7,8],[8,9+2/3],[10,10+1/3],[10+2/3,11+1/3],[12,13],[13+1/3,14],[14,15+2/3]]},
-   {verb:'poly',bars:4,feel:'swing',line:'왼손 A 박마다 · 오른손 L 스윙 당김음',right:[.5,1.5,3.5],rightFromBar:1},
-   {verb:'free',feel:'swing',call:'c2',roles:['call','play','play','answer'],line:'스윙 즉흥!'},
-   {verb:'spin',bars:2,feel:'half',line:'하프타임 · 2박에 한 바퀴'},
-   {verb:'spin',bars:1,feel:'break',line:'브레이크! 소리 없이 계속 굴려요'},
-   {verb:'place',bars:1,feel:'swing',line:'첫 박에 착',at:[0]}]},
- {id:'3',name:'판 3 · 두 손 폴리',sub:'3 대 4 폴리리듬 · 브레이크 두 번 · 더블타임',bpm:92,guide:'lite',win:{perfectMs:55,okMs:120,catchPerfectMs:60,catchOkMs:130},finale:'두 손이 따로 놀았어요!',
+   {verb:'spin',bars:2,feel:'straight',line:'굴려요 · 1박에 한 바퀴',graceBeats:1},
+   {verb:'toss',bars:3,feel:'straight',line:'받아요 · 1박 · 2박',tosses:[[0,1],[2,3],[4,6],[6,7],[8,10],[10,11]]},
+   {verb:'spin',bars:2,feel:'half',line:'하프타임 굴리기 · 2박에 한 바퀴'},
+   {verb:'toss',bars:3,feel:'swing',line:'스윙 토스',tosses:[[0,1.5],[2,3.5],[4,5.5],[6,7],[8,9.5],[10,11.5]]},
+   {verb:'spin',bars:2,feel:'straight',line:'다시 1박에 한 바퀴'},
+   {verb:'toss',bars:3,feel:'swing',line:'짧게 길게 · 스윙',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5],[8,9.5],[10,10.5],[10.5,11.5]]},
+   {verb:'spin',bars:3,feel:'straight',line:'끝까지 굴려요'},
+   {verb:'place',bars:1,feel:'straight',line:'첫 박에 착 · 성게를 올려요!',at:[0]}]},
+ {id:'7',neta:'yeoneoal',name:'연어알',gimmick:'두 손 + 토스 + 즉흥',kind:'combo',stars:4,sub:'세 기믹 · 3 대 4 폴리 · 더블타임 토스 · 즉흥 두 번',bpm:92,guide:'lite',win:WIN.hard,scoreVerbs:['poly','toss','free'],finale:'연어알 군함, 착!',
   sections:[
    {verb:'count',bars:1,feel:'count'},
+   {verb:'poly',bars:2,feel:'straight',line:'두 손 · 오른손 L은 뒷박',right:[1.5,3.5],rightFromBar:0},
+   {verb:'toss',bars:2,feel:'straight',line:'받아요',tosses:[[0,1],[1,2],[2,4],[4,5],[5,6],[6,7]]},
+   {verb:'free',feel:'straight',call:'c1',roles:['call','play','play','answer'],line:'즉흥!'},
    {verb:'poly',bars:4,feel:'straight',line:'3 대 4 · 오른손 L이 한 마디에 셋',right:[0,4/3,8/3],rightFromBar:1},
-   {verb:'poly',bars:1,feel:'break',line:'브레이크! 왼손만 소리 없이',right:[],leftOnly:true},
-   {verb:'poly',bars:2,feel:'straight',line:'3-3-2 · 오른손 L',right:[0,1.5,3],rightFromBar:0},
    {verb:'toss',bars:4,feel:'double',line:'더블타임 · 짧게 자주 떨어져요',tosses:[[0,.5],[1,1.5],[2,3],[3,3.5],[4,4.5],[4.5,5],[6,7],[7,7.5],[8,8.5],[9,9.5],[10,11],[11.5,12],[12,12.5],[13,14],[14,14.5],[15,15.5]]},
-   {verb:'spin',bars:2,feel:'double',line:'더블타임에도 1박에 한 바퀴',graceBeats:1},
-   {verb:'poly',bars:1,feel:'straight',line:'왼손 A',right:[],leftOnly:true},
-   {verb:'poly',bars:1,feel:'break',line:'두 번째 브레이크!',right:[],leftOnly:true},
-   {verb:'free',feel:'straight',call:'c3',roles:['call','play','play','answer'],line:'즉흥!'},
-   {verb:'place',bars:1,feel:'straight',line:'첫 박에 착',at:[0]}]},
- {id:'4',name:'판 4 · 리믹스 보스',sub:'전부 섞이고 점점 빨라져요 · 긴 프리스타일',bpm:96,guide:'lite',win:{perfectMs:50,okMs:110,catchPerfectMs:55,catchOkMs:120},finale:'오늘의 리믹스 완성!',
+   {verb:'free',feel:'straight',call:'c3',roles:['call','play','play','answer'],line:'마지막 즉흥'},
+   {verb:'place',bars:1,feel:'straight',line:'첫 박에 착 · 연어알을 올려요!',at:[0]}]},
+ {id:'8',neta:'daebaetsal',name:'참치 대뱃살',gimmick:'전부 + 가속',kind:'boss',stars:5,sub:'다섯 기믹이 다 섞이고 점점 빨라져요(96 → 120) · 긴 즉흥',bpm:96,guide:'lite',win:WIN.boss,scoreVerbs:['spin','toss','poly','free','vary'],finale:'참치 대뱃살, 착!',
   sections:[
    {verb:'count',bars:1,feel:'count'},
    {verb:'spin',bars:2,feel:'swing',line:'스윙 굴리기',graceBeats:1},
@@ -1526,7 +1566,7 @@ const RemixStageTable=[
    {verb:'spin',bars:2,feel:'straight',bpmTo:120,line:'더 빨라져요! 굴리기'},
    {verb:'toss',bars:2,feel:'swing',line:'스윙 토스',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5]]},
    {verb:'poly',bars:1,feel:'break',line:'마지막 브레이크!',right:[],leftOnly:true},
-   {verb:'place',bars:1,feel:'straight',line:'첫 박에 착',at:[0]}]}];
+   {verb:'place',bars:1,feel:'straight',line:'첫 박에 착 · 대뱃살을 올려요!',at:[0]}]}];
 /* 점수: 박 판정 딱/좋아요/놓침 · 동사 점수 = 0~100 · 합계 = 등장한 동사 평균(변주 포함) */
 const RemixScoreTable={perfect:1,ok:.6,miss:0,verbWeights:{spin:1,toss:1,poly:1,free:1,vary:1}};
 /* 결과 화면 고양이 코멘트(가장 잘한 동사 칭찬 + 가장 약한 동사 요령) */
@@ -1534,7 +1574,17 @@ const CatLineTable={
  best:{spin:'회전이 박이랑 딱 붙었어요!',toss:'받는 손이 정확해요!',poly:'두 손이 따로 놀아요, 드러머 같아요!',free:'즉흥이 멋져요, 제가 따라 했어요!',vary:'변주를 잘 탔어요!'},
  tip:{spin:'원은 박마다 위를 지나게 그려요',toss:'높이 뜰수록 늦게 떨어져요 · 그림자를 봐요',poly:'왼손은 메트로놈처럼, 오른손만 춤춰요',free:'여러 소리를 섞고 고양이 리듬을 살짝 바꿔 봐요',vary:'브레이크 땐 마음속으로 하나 둘 셋 넷'},
  spam:'같은 키만 반복했죠? 고양이가 하품해요',
- perfect:'완벽해요! 다음 판으로 가요'};
+ perfect:'완벽해요! 다음 판으로 가요',
+ retry:'손이 아직 박을 쫓아가요 · 천천히 다시 해 봐요'};/* T69-a: 가장 높은 동작도 70 미만이면 칭찬 대신 */
+/* T69-a 마무리 표: 등급별 네타 위치(dx px · rot 도, 착 오차 부호 쪽으로)·윤기(0~1)·스승 반응(nod 끄덕 · hmm 눈썹 · shake 고개 젓기)·한 줄 평(스승 말투).
+   errDxPerMs = 착 오차 1 ms당 밀림(px, ±errDxMax) · placeGloss = 착 판정이 윤기에 곱하는 값 · miss = 착을 놓쳤을 때(늦게 털썩 — 더 비뚤고 낮게) */
+const FinaleTable={
+ grades:{'금':{dx:0,rot:0,gloss:1,react:'nod',line:'쥐는 손이 살아 있구나'},
+  '은':{dx:7,rot:3,gloss:.72,react:'nod',line:'좋구나. 박에 조금만 더 붙여 보거라'},
+  '동':{dx:16,rot:7,gloss:.45,react:'hmm',line:'손이 박을 쫓아가기 바쁘구나'},
+  '한 번 더':{dx:30,rot:13,gloss:.2,react:'shake',line:'다시. 박부터 몸에 새기거라'}},
+ errDxPerMs:.1,errDxMax:14,placeGloss:{perfect:1,ok:.85,miss:.6},
+ miss:{dx:22,rot:9,dy:6,line:'착이 늦었구나. 네타가 미끄러졌다'}};
 /* 봇(검증용). sigma = 박 오차 표준편차(ms) · spin: input = mouse|arrows, phaseMs = 일정한 위상 어긋남, wobble = 속도 흔들림(라디안 진폭), wobbleSec = 주기 · skip = 놓칠 확률 · free: style = vary|random|spam · drift = 브레이크 중 박 늘어짐(비율) */
 const BotTable={
  skilled:{sigma:12,catchSigma:12,skip:0,spin:{input:'mouse',phaseMs:0,wobble:.05,wobbleSec:3,jitter:.01},free:{style:'vary',sigma:12},drift:0},
@@ -1566,7 +1616,7 @@ function buildChart(stageId){const S=stageRow(stageId);if(!S)throw Error('no sta
  const W=S.win;
  for(const s of secs){const f=feelOf(s);C.lines.push({t:timeOf(s.b0),sec:s.i,verb:s.verb,line:s.line||'',feel:s.feel});
   if(s.verb==='toss')for(const [k,[a,l]] of (s.tosses||[]).entries()){const tT=timeOf(s.b0+a),tL=timeOf(s.b0+l),T=tL-tT,h=RemixTable.toss.hMin+RemixTable.toss.hSpan*(1-Math.exp(-((T/RemixTable.toss.hTau)**2)));C.tosses.push({id:C.tosses.length,sec:s.i,bToss:s.b0+a,bLand:s.b0+l,tToss:tT,tLand:tL,flightBeats:l-a,flightSec:T,h,obj:k%2?'rice':'neta',side:k%2?1:-1,feel:f});}
-  if(s.verb==='poly'){for(let b=s.b0;b<s.b1;b++)C.pulses.push({id:C.pulses.length,sec:s.i,b,t:timeOf(b),inBreak:s.feel==='break'});
+  if(s.verb==='poly'){for(let k=0;k<s.bars;k++)for(const p of s.left||[0,1,2,3]){const b=s.b0+4*k+p;C.pulses.push({id:C.pulses.length,sec:s.i,b,t:timeOf(b),inBreak:s.feel==='break'});}
    if(!s.leftOnly)for(let k=0;k<s.bars;k++)for(const p of s.right||[]){const B=s.b0+4*k+p,row={id:0,sec:s.i,b:B,t:timeOf(B),inBreak:s.feel==='break'};if(k>=(s.rightFromBar??0)){row.id=C.rights.length;C.rights.push(row);}else C.previews.push(row);}}
   if(s.verb==='place')for(const a of s.at||[0])C.places.push({id:C.places.length,sec:s.i,b:s.b0+a,t:timeOf(s.b0+a)});
   if(s.verb==='spin'){const div=RemixTable.spin.sampleDiv,rev=FeelTable[f].revBeats;for(let k=Math.round((s.graceBeats??1)*div);k<(s.b1-s.b0)*div;k++){const B=s.b0+k/div;C.spinSamples.push({id:C.spinSamples.length,sec:s.i,b:B,t:linTime(B),rev});}}
@@ -1585,7 +1635,9 @@ function buildAudio(C){const A=C.audio,chords=['i','VI','iv','v'],roots=[0,-4,5,
   for(const [inst,pat] of Object.entries(F.drums||{})){const n=pat.length;for(let j=0;j<n;j++){const ch=pat[j];if(ch==='.')continue;const B=B0+4*j/n,vel=ch==='X'?1:ch==='x'?.78:.5;A.push({t:C.timeOf(B),b:B,inst,vel,kind:'drum',anchor:Number.isInteger(B)});}}
   if(f!=='break'&&f!=='count'){for(const [st,len] of F.bass){const B=B0+st*4/(F.grid);A.push({t:C.timeOf(B),b:B,inst:'bass',vel:.9,o:{semi:roots[barNo%4],lenSec:len*C.beatDur(Math.floor(B))*.9},kind:'bass'});}
    A.push({t:C.timeOf(B0),b:B0,inst:'chord',vel:.9,o:{chord:chords[barNo%4]},kind:'chord'});}
-  if(f==='count')A.push({t:C.timeOf(B0),b:B0,inst:'ting',vel:.8,kind:'count'});}}
+  if(f==='count')A.push({t:C.timeOf(B0),b:B0,inst:'ting',vel:.8,kind:'count'});
+  /* T69-a 전통 마네키네코의 북: 정박마다 앞발로 짚음(마디 첫 박 강) — 브레이크·카운트·즉흥(고양이끼리 콜·응답 중)은 쉼 */
+  if(f!=='break'&&f!=='count'&&s.verb!=='free')for(let j=0;j<4;j++)A.push({t:C.timeOf(B0+j),b:B0+j,inst:'tom',vel:j?RemixTable.mkDrum.weak:RemixTable.mkDrum.strong,kind:'mk',o:{hz:j?RemixTable.mkDrum.weakHz:RemixTable.mkDrum.strongHz}});}}
  for(const tr of C.transitions){A.push({t:C.timeOf(tr.b-2),b:tr.b-2,inst:'scratch',vel:.8,kind:'warn'});if(tr.kind==='return'||tr.kind!=='break'&&C.secAt(tr.b-1).feel==='break')A.push({t:tr.t,b:tr.b,inst:'crash',vel:1,kind:'crash'});}
  if(C.secs[1])A.push({t:C.timeOf(C.secs[1].b0),b:C.secs[1].b0,inst:'crash',vel:.8,kind:'crash'});
  for(const x of C.tosses)A.push({t:x.tToss,b:x.bToss,word:'hwik',vel:.55+.45*Math.min(1,x.h/500),kind:'toss',toss:x.id});
@@ -1607,7 +1659,7 @@ function input(run,ev){const C=run.C,W=C.stage.win,t=ev.t;
  const k=ev.key;
  if(k==='Up'||k==='Right'||k==='Down'||k==='Left'){const q={Up:0,Right:1,Down:2,Left:3}[k],S=run.spin,last=S.path.length?S.path[S.path.length-1].th:0;let d=(((q*TAU/4-last)%TAU)+TAU)%TAU;if(d>Math.PI+1e-9)d-=TAU;const th=last+d;/* 가까운 쪽으로(반시계 키 = 뒤로), 맞은편 = 앞으로 반 바퀴 */pushPath(run,t,th,'key');return {kind:'spin'};}
  if(k==='Space'){const c=nearest(run.tosses,t,'tLand',W.catchOkMs);if(c){const err=(t-c.tLand)*1000;c.res={err,g:grade(err,W.catchPerfectMs,W.catchOkMs),t};fx(run,{type:'catch',id:c.id,g:c.res.g,err,t});return {kind:'catch',g:c.res.g,err};}
-  const p=nearest(run.places,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};fx(run,{type:'place',id:p.id,g:p.res.g,err,t});return {kind:'place',g:p.res.g,err};}
+  const p=nearest(run.places,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};if(!run.finale)run.finale=finaleOf(run,p);fx(run,{type:'place',id:p.id,g:p.res.g,err,t,finale:run.finale});return {kind:'place',g:p.res.g,err};}
   run.stray++;fx(run,{type:'whiff',t});return {kind:'stray'};}
  if(k==='A'){const p=nearest(run.pulses,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};fx(run,{type:'pulse',id:p.id,g:p.res.g,err,t});return {kind:'pulse',g:p.res.g,err};}}
  if(k==='L'){const p=nearest(run.rights,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};fx(run,{type:'right',id:p.id,g:p.res.g,err,t});return {kind:'right',g:p.res.g,err};}}
@@ -1648,7 +1700,7 @@ function patternOf(run,id){const b=run.free.bars[id];return b?(b.role==='call'?b
 /* 시간 진행: 놓친 토스·펄스·오른손·놓기 확정, 회전 표본(늦춰서), 프리스타일 마디 채점, 고양이 섞기 */
 function update(run,t){const C=run.C,W=C.stage.win,R=RemixTable;run.t=t;
  for(const x of run.tosses)if(!x.res&&t>x.tLand+W.catchOkMs/1000){x.res={err:null,g:'miss',t};fx(run,{type:'drop',id:x.id,g:'miss',t});}
- for(const [list,type] of [[run.pulses,'pulse'],[run.rights,'right'],[run.places,'place']])for(const x of list)if(!x.res&&t>x.t+W.okMs/1000){x.res={err:null,g:'miss',t};fx(run,{type,id:x.id,g:'miss',t});}
+ for(const [list,type] of [[run.pulses,'pulse'],[run.rights,'right'],[run.places,'place']])for(const x of list)if(!x.res&&t>x.t+W.okMs/1000){x.res={err:null,g:'miss',t};if(type==='place'&&!run.finale)run.finale=finaleOf(run,x);fx(run,{type,id:x.id,g:'miss',t,finale:type==='place'?run.finale:undefined});}
  const S=run.spin;while(S.next<C.spinSamples.length&&C.spinSamples[S.next].t<=t-R.spin.lagSec){const r=spinSample(run,C.spinSamples[S.next++]);S.samples.push(r);if(r.state==='flat')S.flat++;if(r.state==='scatter')S.scatter++;}
  if(S.path.length>400){const cut=t-R.spin.pruneSec;let n=0;while(n<S.path.length-2&&S.path[n+1].t<cut)n++;if(n>0)S.path.splice(0,n);}
  const bars=run.free.bars;for(const bar of bars){if(bar.role==='play'&&bar.score==null&&t>=bar.t1+.1){const prev=[...bars].reverse().find(b=>b.role==='play'&&b.id<bar.id&&b.score);bar.score=scoreFreeBar(bar.hits,bar.steps,patternOf(run,bar.callRef),prev?prev.score.pattern:null);fx(run,{type:'freeBar',bar:bar.id,score:bar.score,t});}
@@ -1659,18 +1711,30 @@ function update(run,t){const C=run.C,W=C.stage.win,R=RemixTable;run.t=t;
  if(t>=C.end+RemixTable.endTailSec&&!run.done){run.done=true;run.result=results(run);fx(run,{type:'done',t});}}
 
 /* 결과: 동사별 0~100 */
-function results(run){const C=run.C,out={verbs:{},detail:{}},has=v=>C.secs.some(s=>s.verb===v);
+function results(run){const C=run.C,out={verbs:{},detail:{}},SV=C.stage.scoreVerbs,has=v=>(!SV||SV.includes(v))&&C.secs.some(s=>s.verb===v);/* T69-a: 판마다 검수할 동작만(scoreVerbs) */
  if(has('spin')){const q=run.spin.samples.map(s=>s.q);out.verbs.spin=Math.round(mean(q)*100);const er=run.spin.samples.filter(s=>s.errMs!=null).map(s=>Math.abs(s.errMs));out.detail.spin={samples:q.length,meanAbsErrMs:Math.round(mean(er)),flat:run.spin.flat,scatter:run.spin.scatter,meanRatio:+mean(run.spin.samples.map(s=>s.ratio)).toFixed(3)};}
  if(has('toss')){const g=run.tosses.map(x=>gval(x.res?.g||'miss'));out.verbs.toss=Math.round(mean(g)*100);const n=k=>run.tosses.filter(x=>x.res?.g===k).length;out.detail.toss={n:run.tosses.length,perfect:n('perfect'),ok:n('ok'),miss:n('miss')};}
  if(has('poly')){const L=run.pulses,Rr=run.rights,lg=mean(L.map(p=>gval(p.res?.g||'miss'))),errs=L.filter(p=>p.res&&p.res.err!=null).map(p=>p.res.err),sd=std(errs),left=lg*(1-Math.min(RemixTable.poly.sigmaCap,sd/RemixTable.poly.sigmaRef)),right=Rr.length?mean(Rr.map(p=>gval(p.res?.g||'miss'))):left;
   out.verbs.poly=Math.round((RemixTable.poly.leftW*left+RemixTable.poly.rightW*right)*100);out.detail.poly={left:Math.round(left*100),right:Math.round(right*100),leftSigmaMs:Math.round(sd),pulses:L.length,rights:Rr.length,leftMiss:L.filter(p=>p.res?.g==='miss').length,rightMiss:Rr.filter(p=>p.res?.g==='miss').length};}
  if(has('free')){const bars=run.free.bars.filter(b=>b.role==='play'),sc=bars.map(b=>b.score||scoreFreeBar(b.hits,b.steps,patternOf(run,b.callRef),null));out.verbs.free=Math.round(mean(sc.map(s=>s.score))*100);
   out.detail.free={bars:sc.length,groove:Math.round(mean(sc.map(s=>s.pocket))*100),diversity:Math.round(mean(sc.map(s=>s.diversity))*100),response:Math.round(mean(sc.map(s=>s.response))*100),hits:sc.reduce((a,s)=>a+s.n,0),spam:sc.some(s=>s.flags.includes('spam')),repeat:sc.filter(s=>s.flags.includes('repeat')).length,variation:sc.filter(s=>s.flags.includes('variation')).length};}
- const tr=transitionScores(run);if(tr.length){out.verbs.vary=Math.round(mean(tr.map(x=>x.q))*100);out.detail.vary={transitions:tr};}
+ const tr=!SV||SV.includes('vary')?transitionScores(run):[];if(tr.length){out.verbs.vary=Math.round(mean(tr.map(x=>x.q))*100);out.detail.vary={transitions:tr};}
  const keys=Object.keys(out.verbs);out.total=Math.round(mean(keys.map(k=>out.verbs[k])));out.grade=RemixTable.grade.find(([m])=>out.total>=m)[1];
  const sorted=[...keys].sort((a,b)=>out.verbs[b]-out.verbs[a]);out.best=sorted[0];out.worst=sorted[sorted.length-1];
- out.comment=[CatLineTable.best[out.best],out.detail.free?.spam?CatLineTable.spam:out.verbs[out.worst]>=90?CatLineTable.perfect:CatLineTable.tip[out.worst]];
- out.places=run.places.map(p=>p.res?.g||'miss');out.stray=run.stray;return out;}
+ out.comment=[out.verbs[out.best]>=70?CatLineTable.best[out.best]:CatLineTable.retry,out.detail.free?.spam?CatLineTable.spam:out.verbs[out.worst]>=90?CatLineTable.perfect:CatLineTable.tip[out.worst]];
+ out.places=run.places.map(p=>p.res?.g||'miss');out.stray=run.stray;out.pass=out.grade!==RemixTable.grade[RemixTable.grade.length-1][1];if(run.finale)out.finale=run.finale;return out;}
+/* ── T69-a 마무리: 마지막 착에서 그 판 네타가 밥 위에 앉는다. 등급(그때까지의 검수 결과)이 위치·윤기·스승 반응을 정하고, 착 타이밍(오차 부호)이 미끄러지는 방향을 정한다 ── */
+function flushSpin(run,t){const S=run.spin,C=run.C;while(S.next<C.spinSamples.length&&C.spinSamples[S.next].t<=t){const r=spinSample(run,C.spinSamples[S.next++]);S.samples.push(r);if(r.state==='flat')S.flat++;if(r.state==='scatter')S.scatter++;}}
+function finaleOf(run,p){const F=FinaleTable,C=run.C;flushSpin(run,p.t);const R=results(run),G=F.grades[R.grade],res=p.res||{g:'miss',err:null},miss=res.g==='miss',dir=res.err==null?1:res.err<0?-1:1,errMs=res.err??0;
+ const dx=dir*(G.dx+(miss?F.miss.dx:0))+clamp(errMs*F.errDxPerMs,-F.errDxMax,F.errDxMax)*(miss?0:1),rot=dir*(G.rot+(miss?F.miss.rot:0)),gloss=+(G.gloss*F.placeGloss[res.g]).toFixed(3);
+ const react=miss&&G.react==='nod'?'hmm':G.react;
+ return {grade:R.grade,total:R.total,placeG:res.g,err:res.err,dx:+dx.toFixed(2),dy:miss?F.miss.dy:0,rot:+rot.toFixed(2),gloss,react,line:miss?F.miss.line:G.line,neta:C.stage.neta,sound:miss?'dull':'chak',t:res.t??p.t+C.stage.win.okMs/1000};}
+/* ── T69-a 해금: 앞 판을 통과(「한 번 더」가 아님)하면 다음 판이 열린다. 상태 = {best:{판:{grade,total,pass}}} ── */
+const RemixProgress={
+ order:()=>RemixStageTable.map(s=>s.id),
+ unlocked(state,id){const ids=RemixStageTable.map(s=>s.id),i=ids.indexOf(String(id));if(i<0)return false;if(i===0)return true;return !!state?.best?.[ids[i-1]]?.pass;},
+ record(state,id,result){const best={...(state?.best||{})},old=best[id];const row={grade:result.grade,total:result.total,pass:!!result.pass};if(!old||row.total>old.total)best[id]={...row,pass:row.pass||!!old?.pass};else if(row.pass&&!old.pass)best[id]={...old,pass:true};return {...(state||{}),best};},
+ next(state){const ids=RemixStageTable.map(s=>s.id);return ids.find(id=>RemixProgress.unlocked(state,id)&&!state?.best?.[id]?.pass)||ids[0];}};
 /* 변주 복귀: 경계 시각부터 windowBeats 박 안의 모든 판정 품질 평균(브레이크 = 소리 없는 구간 안 펄스·회전 포함) */
 function transitionScores(run){const C=run.C,out=[];for(const tr of C.transitions){const a=tr.t-.05,sec=C.secAt(tr.b),span=sec.feel==='break'?(sec.b1-sec.b0):RemixTable.transition.windowBeats,b=C.timeOf(tr.b+span)+.001,q=[];
  for(const x of run.tosses)if(x.tLand>=a&&x.tLand<b)q.push(gval(x.res?.g||'miss'));for(const L of [run.pulses,run.rights,run.places])for(const x of L)if(x.t>=a&&x.t<b)q.push(gval(x.res?.g||'miss'));
@@ -1700,38 +1764,149 @@ function botEvents(C,kind,seed=1){const B=BotTable[kind],r=rngOf(seed*7919+kind.
  ev.sort((a,b)=>a.t-b.t);return ev;}
 /* 가상 시계로 한 판 끝까지(오디오·화면 없음) */
 function simRun(stageId,kind,seed=1,dt=1/120){const C=buildChart(stageId),run=makeRun(C),ev=botEvents(C,kind,seed);let i=0;for(let t=-.5;!run.done;t+=dt){while(i<ev.length&&ev[i].t<=t)input(run,ev[i++]);update(run,t);if(t>C.end+10)break;}return {run,result:run.result};}
-return {RemixTable,FeelTable,VerbTable,KeySoundTable,SoundKey,CallTable,RemixStageTable,RemixScoreTable,CatLineTable,BotTable,
+return {RemixTable,FeelTable,VerbTable,KeySoundTable,SoundKey,CallTable,NetaTable,RemixStageTable,RemixScoreTable,CatLineTable,FinaleTable,RemixProgress,BotTable,finaleOf,flushSpin,stageRow,
  buildChart,makeRun,input,update,results,thetaAt,spinSample,scoreFreeBar,jaccard,mixPattern,transitionScores,botEvents,simRun,grade,mapFrac,feelOf,rngOf};})();
 /*REMIX-LOGIC-END*/
 /*REMIX-BEGIN*/
-/* T68-a 「니기리 리믹스」 화면·소리·입력(remix2d.html 전용 — index.html·index2d.html·groove2d.html·training2d.html·patapon2d.html 미적용).
-   기본으로 전체 화면을 덮는 리믹스 메뉴(판 4개)가 뜨고, 「옛 판」을 펼쳐야 기존 손 문장·그루브 화면으로 간다. ?remix=0 → 이 블록이 아무것도 만들지 않음(patapon2d와 같은 동작).
-   기존 블록과 닿는 곳: CORE의 audio(AudioContext)·unlockAudio() · GROOVE G.ext(voice·makeBus·catSvg·noiseBuf) · PATAPON api.ext(wordVoice·manekiSvg) · VIEW2D가 그린 #roomBackdrop(배경 그림 재사용).
-   입력은 창 캡처 단계에서 먼저 받아 리믹스가 켜져 있으면 기존 블록으로 넘기지 않는다.
+/* T68-a → T69-a 「니기리 리믹스」 화면·소리·입력(remix2d.html 전용 — index.html·index2d.html·groove2d.html·training2d.html·patapon2d.html 미적용).
+   메뉴 = 횟감 카드 8장(그 판에서 올라가는 네타 그림 · 기믹 아이콘 · 난이도 별 · 잠금). 앞 판을 통과하면 다음 카드가 열린다(브라우저 저장, ?rall=1 = 모두 열기, ?rreset=1 = 처음부터).
+   무대 3분할: 가운데 위 = 스승(검수 — 딱이면 끄덕 · 실수면 눈썹 · 마지막 착에서 확대 시선과 한 줄 평) · 왼쪽 = 힙합 마네키네코(킥·스네어에 앞발 손짓, 예고판·카운트·브레이크 손가락 셈, 즉흥 콜)
+   · 오른쪽 = 전통 마네키네코(정박마다 북채로 북을 짚음 — 실제 북 소리, 즉흥 대답). 마지막 착 = 그 판 네타가 위에서 미끄러져 와 밥 위에 딱 앉음(등급 → 위치·윤기·스승 반응). 결과 = 스승의 검수표(동작별 점수 + 도장 + 완성 한 점).
+   세 인물·말풍선은 판정 원·회전 원·토스 궤적·손을 가리지 않는다(api.occlusion()이 그 프레임에 그려진 놀이 요소 사각형과 겹친 면적을 잰다). prefers-reduced-motion이면 흔들림·확대·미끄러짐을 줄인다.
+   기존 블록과 닿는 곳: CORE의 audio(AudioContext)·unlockAudio() · GROOVE G.ext(voice·makeBus·noiseBuf) · PATAPON api.ext(wordVoice) · VIEW2D가 그린 #roomBackdrop(배경 그림 재사용).
+   입력은 창 캡처 단계에서 먼저 받아 리믹스가 켜져 있으면 기존 블록으로 넘기지 않는다. ?remix=0 → 이 블록이 아무것도 만들지 않음(patapon2d와 같은 동작).
    시계: 곡 시각 = 성능 시계 + (오디오 출력 시각 − 성능 시각, getOutputTimestamp 지수 평균) − t0. 소리 예약 = t0 + 악보 시각(같은 timeOf) → 들리는 박 = 판정 기준 박.
-   표: RemixUITable · RemixAudioTable  [튜닝] */
+   표: RemixUITable · RemixAudioTable · CastTable · NetaArtTable  [튜닝] */
 const Remix=(()=>{
 const ON=query.get('remix')!=='0',L=RemixLogic;
+/* 화면 배치(논리 1920×1080). 가운데 위 스승(chars.master) 아래로 안내 줄(hud.line.y) → 그 아래가 놀이 영역. 왼쪽 340 px = 힙합 고양이 · 오른쪽 340 px = 전통 고양이 */
 const RemixUITable={
- spin:{cx:960,cy:600,ring:230,rice:{w:200,h:136}},
- toss:{handX:1100,handY:790,fromDX:430,objR:34},
- poly:{lx:760,ly:770,rx:1190,ry:720,ring:{x:1190,y:350,r:112}},
- free:{padY:880,padW:150,padGap:22,strip:{x:470,y:316,w:980,h:58,gap:22}},
- place:{x:960,y:760,r0:260},
- meters:{x:28,y:846,w:420,row:40},
- colors:{ink:'#0A1017',navy:'#132430',cream:'#FFF3DC',sub:'#9DB4B6',gold:'#F7B94E',sky:'#74C9E6',good:'#7FCB5B',warn:'#F0A93C',bad:'#E8503C',rice:'#F6EEDD',grain:'#E7DCC4',neta:'#F08A5D',netaLine:'#FFE3D2',hand:'#E9C7A6',handDk:'#B98D6C'},
+ spin:{cx:960,cy:650,ring:200,rice:{w:190,h:130}},
+ toss:{handX:960,handY:830,fromDX:400,objR:34},
+ poly:{lx:760,ly:790,rx:1190,ry:745,ring:{x:1300,y:510,r:100},lane:{w:480,dy:150}},
+ free:{padY:870,padW:150,padGap:22,line:{y:410},strip:{x:470,y:446,w:980,h:58,gap:22},rice:{x:960,y:700},score:{x:1170,y:650},popY:800},
+ place:{x:960,y:800,from:{x:620,y:520},hoverDy:-120,landDy:-38,textY:430,r0:250},
+ meters:{x:28,w:420,row:40,bottom:1052},
+ hud:{bar:{x:478,y:14,w:964,h:30},line:{y:356,size:30}},
+ warn:{x:22,y:112,w:356,h:118},
+ chars:{master:{x:820,y:58,w:280,h:250},hh:{x:24,y:292,w:340,h:410},td:{x:1556,y:292,w:340,h:410}},
+ bubbles:{master:{left:1118,top:118},hh:{left:40,top:234},td:{right:24,top:234}},
+ marks:{x:1160,y:236,rowX:1132,rowY:292,rowStep:26,rowN:8},
+ colors:{ink:'#0A1017',navy:'#132430',cream:'#FFF3DC',sub:'#9DB4B6',gold:'#F7B94E',sky:'#74C9E6',good:'#7FCB5B',warn:'#F0A93C',bad:'#E8503C',rice:'#F6EEDD',grain:'#E7DCC4',neta:'#F08A5D',netaLine:'#FFE3D2',hand:'#E9C7A6',handDk:'#B98D6C',paper:'#F4EAD5',paperInk:'#2A2118',stamp:'#C8352C',nori:'#1D2A23'},
  judge:{perfect:['딱!','#7FCB5B'],ok:['좋아요','#F7B94E'],miss:['놓쳤어요','#E8503C']},
+ marksOf:{perfect:['○','#7FCB5B'],ok:['△','#F7B94E'],miss:['×','#E8503C']},
  pads:['A','S','D','K','L'],sndColor:{tok:'#74C9E6',tak:'#F7B94E',sseuk:'#7FCB5B',kkuk:'#E8503C',chak:'#FFF3DC'},
- menuVerbs:{'1':['굴리기','토스','폴리','즉흥','브레이크'],'2':['스윙','셋잇단','가속','하프타임','브레이크'],'3':['3 대 4','브레이크 ×2','더블타임','3-3-2'],'4':['전부 섞기','긴 즉흥','가속 96→120','보스']}};
-const RemixAudioTable={busGain:.55,wordGain:.95,liveWordGain:.85,spinNoise:{hz:[900,2600],q:.9,gainMax:.09,tau:.04},topTick:{word:'tokA',gain:.45},catch:{perfect:{word:'chak',gain:.9},ok:{word:'tak',gain:.7}},drop:{word:'dull',gain:1},whiff:{word:'hwik',gain:.25},place:{word:'chak',inst:'crash'},lookaheadSec:.25,intervalMs:25,maxLateSec:.05,logMax:6000};
+ kindName:{solo:'기믹 판',combo:'조합 판',boss:'마지막 판'},tierName:{1:'1단계 · 쉬움',2:'2단계 · 조금 어려워요'}};
+const RemixAudioTable={busGain:.55,wordGain:.95,liveWordGain:.85,spinNoise:{hz:[900,2600],q:.9,gainMax:.09,tau:.04},topTick:{word:'tokA',gain:.45},catch:{perfect:{word:'chak',gain:.9},ok:{word:'tak',gain:.7}},drop:{word:'dull',gain:1},whiff:{word:'hwik',gain:.25},place:{word:'chak',miss:'dull',gold:{inst:'ting',vel:.9}},lookaheadSec:.25,intervalMs:25,maxLateSec:.05,logMax:6000};
+/* 인물 움직임. nod/shake/brow = 스승 반응 길이(초) · nodGap = 끄덕 사이 최소 간격 · zoom = 마지막 착 확대 배율 · inspectDelay = 착 뒤 검수(윤기·한 줄 평)까지 · spinJudgeEvery = 굴리기는 표본 n개마다 한 번 검수
+   hh: kickTau = 킥·스네어 손짓 감쇠 · beckonDeg = 손짓 각 · td: strikeK = 북 짚기 감쇠(박 분수당) · strikeDeg = 북채 각 · rmScale = 움직임 줄이기에서 남는 비율 */
+const CastTable={master:{nodSec:.35,nodPx:7,shakeSec:1,shakeDeg:9,browSec:.6,nodGap:.45,zoom:1.1,zoomSec:.25,inspectDelay:.45,markSec:.9,spinJudgeEvery:8},hh:{kickTau:.14,beckonDeg:30,bobPx:4},td:{strikeK:7,strikeDeg:-30,restDeg:4},rmScale:.15};
 const C0=RemixUITable.colors;
-const X={active:false,mode:'menu',stageId:null,C:null,run:null,clock:{audio:false,t0:0,off:null,offRaw:0,p0:0},sched:{i:0,d:0},voices:new Set(),stats:{made:0,live:0,maxLive:0,late:0,lateMaxMs:0,scheduled:0},log:[],frames:[],offDev:[],fxi:0,pops:[],bot:null,botI:0,lastNow:0,disp:{th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null},catReact:null,mkReact:null,meters:null,meterAt:-9,started:0};
+const X={active:false,mode:'menu',stageId:null,C:null,run:null,clock:{audio:false,t0:0,off:null,offRaw:0,p0:0},sched:{i:0,d:0},voices:new Set(),stats:{made:0,live:0,maxLive:0,late:0,lateMaxMs:0,scheduled:0},log:[],frames:[],offDev:[],fxi:0,pops:[],bot:null,botI:0,lastNow:0,
+ disp:{th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null},ms:null,marks:[],meters:null,meterAt:-9,started:0,prog:{best:{}},all:false,rm:false,lineW:900,tdHit:-9,hhHit:-9,occ:{max:0,n:0,hits:{}}};
 window.__rxLog=[];const log=(type,d={})=>{window.__rxLog.push({type,at:performance.now(),...d});if(window.__rxLog.length>5000)window.__rxLog.splice(0,1000);};
-let root,stage,cv,ctx,menuEl,resultEl,startEl,backBtn,dj,mk,djBub,mkBub,bus=null,wordOut=null,spinN=null;
+let root,stage,cv,ctx,menuEl,resultEl,startEl,backBtn,msEl,hhEl,tdEl,msBub,hhBub,tdBub,bus=null,wordOut=null,spinN=null;
 const gx=()=>window.__groove?.ext,px=()=>window.__pt?.ext;
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const rmNow=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch{return false;}};
+const josa=(w,a,b)=>{const c=w.charCodeAt(w.length-1)-0xAC00;return c>=0&&c<11172&&c%28?a:b;};
+
+/* ── 횟감 그림(오리지널 단순 SVG, 네타만 · 200×100) ── */
+const SLAB='M16,62 C18,36 58,24 100,24 C144,24 184,34 186,60 C188,76 150,82 100,82 C50,82 14,78 16,62Z';
+const NetaArtTable={
+ gwangeo:`<path d="${SLAB}" fill="#F4EFE7" stroke="#0A1017" stroke-width="4"/><path d="M40,36 Q60,54 52,76 M76,30 Q96,52 88,79 M114,29 Q132,52 126,79 M150,34 Q166,52 162,74" stroke="#EBC8C0" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/><path d="M24,68 C60,76 140,78 180,66" stroke="#E2D3BC" stroke-width="6" fill="none" stroke-linecap="round"/>`,
+ yeoneo:`<path d="${SLAB}" fill="#F28A5B" stroke="#0A1017" stroke-width="4"/><path d="M50,27 Q40,52 52,79 M88,25 Q78,52 90,81 M126,25 Q116,52 128,81 M162,30 Q152,52 164,76" stroke="#FFE1CF" stroke-width="6" fill="none" stroke-linecap="round"/>`,
+ saeu:`<path d="M166,50 L197,32 L190,57 L198,82 L166,70Z" fill="#E8503C" stroke="#0A1017" stroke-width="4" stroke-linejoin="round"/><path d="M14,58 C16,34 50,24 92,26 C130,28 160,36 172,50 C178,58 176,70 166,74 C130,82 60,84 30,78 C18,74 14,68 14,58Z" fill="#FBEDE2" stroke="#0A1017" stroke-width="4"/><path d="M40,31 Q34,54 40,79 M66,28 Q60,54 66,81 M92,27 Q86,54 92,81 M118,29 Q112,54 118,79 M144,34 Q139,54 144,76" stroke="#F26B3A" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M22,56 C70,50 120,50 166,58" stroke="#F7B9A0" stroke-width="3" fill="none"/>`,
+ anago:`<path d="${SLAB}" fill="#A86A3C" stroke="#0A1017" stroke-width="4"/><path d="M22,52 C60,34 140,34 182,50 C150,46 60,46 22,60Z" fill="#6B3D1D" opacity=".75"/><path d="M50,40 l10,30 M86,36 l10,34 M122,36 l10,34 M156,40 l8,28" stroke="#4A2812" stroke-width="5" stroke-linecap="round" opacity=".7"/><path d="M52,33 Q100,25 150,33" stroke="#F3C78F" stroke-width="4" fill="none" opacity=".8" stroke-linecap="round"/>`,
+ domi:`<path d="${SLAB}" fill="#F7E6E2" stroke="#0A1017" stroke-width="4"/><path d="M19,56 C22,36 60,26 100,26 C142,26 180,36 184,54 C150,44 60,42 19,56Z" fill="#D9534A"/><path d="M30,56 C70,48 130,48 178,54" stroke="#C9D3DA" stroke-width="4" fill="none"/><path d="M60,62 Q72,70 66,78 M100,60 Q112,70 106,80 M140,60 Q152,68 146,78" stroke="#F0C9C3" stroke-width="4" fill="none" stroke-linecap="round"/>`,
+ seongge:`${[[52,54,28,15,-20],[82,46,30,16,-8],[118,46,30,16,8],[148,54,28,15,20],[100,60,36,15,0]].map(([x,y,a,b,r])=>`<ellipse cx="${x}" cy="${y}" rx="${a}" ry="${b}" transform="rotate(${r} ${x} ${y})" fill="#F2A93B" stroke="#0A1017" stroke-width="3"/><path d="M${x-a*.6},${y} Q${x},${y-b*.8} ${x+a*.6},${y}" stroke="#D9861E" stroke-width="3" fill="none" transform="rotate(${r} ${x} ${y})"/>`).join('')}`,
+ yeoneoal:`${[[46,58],[66,58],[86,58],[106,58],[126,58],[146,58],[156,46],[56,46],[76,44],[96,44],[116,44],[136,44],[66,32],[86,30],[106,30],[126,32],[96,64],[116,64],[76,64],[136,64]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="11" fill="#F0652B" stroke="#9C2E0E" stroke-width="2"/><circle cx="${x-3.5}" cy="${y-3.5}" r="3.2" fill="#FFD6C2"/>`).join('')}`,
+ daebaetsal:`<path d="${SLAB}" fill="#F5A9B3" stroke="#0A1017" stroke-width="4"/><path d="M30,40 Q50,34 70,42 T110,40 T150,42 T180,44 M24,56 Q46,50 66,58 T106,56 T146,58 T184,58 M32,71 Q52,65 72,73 T112,71 T152,73 T176,71" stroke="#FFF2F4" stroke-width="4" fill="none" stroke-linecap="round" opacity=".9"/>`};
+const netaSvgDoc=id=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="400" height="200">${NetaArtTable[id]||NetaArtTable.yeoneo}</svg>`;
+const NETA_IMG={};function loadNetaImages(){for(const id of Object.keys(NetaArtTable)){const im=new Image();im.decoding='async';im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(netaSvgDoc(id));NETA_IMG[id]=im;}}
+/* 완성 한 점(접시 + 밥/군함 + 네타). o.dx·o.rot = 네타 어긋남 · o.gloss = 윤기(0~1) */
+function sushiSvg(id,o={}){const k=L.NetaTable[id]?.kind||'nigiri',dx=o.dx||0,rot=o.rot||0,gl=o.gloss??1,art=NetaArtTable[id]||'';
+ const shine=gl>0?`<ellipse cx="${92+dx}" cy="${k==='gunkan'?40:44}" rx="40" ry="6" transform="rotate(-6 ${92+dx} 44)" fill="#fff" opacity="${(.55*gl).toFixed(2)}"/>${gl>=.9?`<path d="M178,30 l4,-10 l4,10 l10,4 l-10,4 l-4,10 l-4,-10 l-10,-4Z M62,26 l3,-7 l3,7 l7,3 l-7,3 l-3,7 l-3,-7 l-7,-3Z" fill="#FFF6D8"/>`:''}`:'';
+ const plate=`<ellipse cx="120" cy="134" rx="106" ry="15" fill="#E9E2D2" stroke="#0A1017" stroke-width="4"/>`;
+ if(k==='gunkan')return `<svg viewBox="0 0 240 150" width="100%" height="100%">${plate}<ellipse cx="120" cy="72" rx="66" ry="14" fill="#F6EEDD" stroke="#0A1017" stroke-width="3"/><g transform="translate(${20+dx} 8) rotate(${rot} 100 50)">${art}</g><path d="M54,72 A66,14 0 0 0 186,72 L186,122 A66,14 0 0 1 54,122 Z" fill="${C0.nori}" stroke="#0A1017" stroke-width="4"/><path d="M60,92 C100,100 140,100 180,92" stroke="#2F4436" stroke-width="3" fill="none"/>${shine}</svg>`;
+ return `<svg viewBox="0 0 240 150" width="100%" height="100%">${plate}<ellipse cx="120" cy="102" rx="74" ry="30" fill="#F6EEDD" stroke="#0A1017" stroke-width="4"/>${[[84,108],[104,118],[132,116],[152,106],[118,124],[96,96],[142,96]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="4" fill="#E7DCC4"/>`).join('')}<g transform="translate(${20+dx} 6) rotate(${rot} 100 52)">${art}</g>${shine}</svg>`;}
+
+/* ── 인물 SVG(오리지널). p = id 앞머리(같은 그림을 결과 화면에 한 벌 더 쓸 때 다르게) · e = 처음 표정 ── */
+function masterSvg(p='ms',e={}){const eyes=e.eyes||'narrow',mouth=e.mouth||'flat',sh=(k,v)=>k===v?'':' style="display:none"';
+ return `<svg viewBox="0 0 280 250" width="100%" height="100%" overflow="visible">
+<g id="${p}Body"><path d="M38,214 C40,170 70,148 110,140 L170,140 C210,148 240,170 242,214Z" fill="#F4F1EA" stroke="#0A1017" stroke-width="4"/><path d="M110,140 L140,192 L170,140" fill="#2B3A67" stroke="#0A1017" stroke-width="4" stroke-linejoin="round"/><path d="M114,142 L152,204" stroke="#0A1017" stroke-width="4"/>
+<g id="${p}Arms"><path d="M60,196 C70,176 120,170 196,184 C206,186 208,204 196,206 C140,204 90,212 66,212 C56,212 54,204 60,196Z" fill="#E6E1D6" stroke="#0A1017" stroke-width="4"/><path d="M220,190 C210,172 160,166 84,180 C74,182 72,198 84,200 C140,198 190,206 214,206 C224,206 226,198 220,190Z" fill="#F4F1EA" stroke="#0A1017" stroke-width="4"/><ellipse cx="200" cy="195" rx="15" ry="11" fill="#E9C7A6" stroke="#0A1017" stroke-width="3"/><ellipse cx="80" cy="190" rx="15" ry="11" fill="#E9C7A6" stroke="#0A1017" stroke-width="3"/></g></g>
+<rect x="0" y="212" width="280" height="38" rx="8" fill="#9A6A40" stroke="#0A1017" stroke-width="4"/><rect x="8" y="219" width="264" height="5" rx="2.5" fill="#B98455"/><rect x="104" y="226" width="72" height="20" rx="6" fill="#F4EAD5" stroke="#0A1017" stroke-width="2"/><text x="140" y="241" text-anchor="middle" font-family="Malgun Gothic,sans-serif" font-weight="900" font-size="14" fill="#C8352C">검수</text>
+<g id="${p}Head"><rect x="122" y="116" width="36" height="30" fill="#D9B08C" stroke="#0A1017" stroke-width="4"/><ellipse cx="92" cy="86" rx="10" ry="14" fill="#E9C7A6" stroke="#0A1017" stroke-width="4"/><ellipse cx="188" cy="86" rx="10" ry="14" fill="#E9C7A6" stroke="#0A1017" stroke-width="4"/>
+<ellipse cx="140" cy="80" rx="48" ry="54" fill="#E9C7A6" stroke="#0A1017" stroke-width="4"/><path d="M92,66 C92,30 116,18 140,18 C164,18 188,30 188,66 C180,48 160,42 140,42 C120,42 100,48 92,66Z" fill="#8C969E" stroke="#0A1017" stroke-width="4"/>
+<path d="M90,58 C110,46 170,46 190,58 L190,70 C170,58 110,58 90,70Z" fill="#2B3A67" stroke="#0A1017" stroke-width="3"/><path d="M188,60 l20,-9 l-4,14 l11,6 l-22,1Z" fill="#2B3A67" stroke="#0A1017" stroke-width="3" stroke-linejoin="round"/>
+<g id="${p}BrowL"><path d="M106,72 L132,69" stroke="#5E666C" stroke-width="7" stroke-linecap="round"/></g><g id="${p}BrowR"><path d="M148,69 L174,72" stroke="#5E666C" stroke-width="7" stroke-linecap="round"/></g>
+<g id="${p}EyesNarrow"${sh(eyes,'narrow')}><path d="M110,85 L128,84 M152,84 L170,85" stroke="#0A1017" stroke-width="5" stroke-linecap="round"/></g>
+<g id="${p}EyesOpen"${sh(eyes,'open')}><circle cx="119" cy="85" r="5.5" fill="#0A1017"/><circle cx="161" cy="85" r="5.5" fill="#0A1017"/></g>
+<g id="${p}EyesWide"${sh(eyes,'wide')}><circle cx="119" cy="85" r="8" fill="#fff" stroke="#0A1017" stroke-width="3"/><circle cx="161" cy="85" r="8" fill="#fff" stroke="#0A1017" stroke-width="3"/><circle cx="120" cy="86" r="4" fill="#0A1017"/><circle cx="160" cy="86" r="4" fill="#0A1017"/></g>
+<g id="${p}EyesClosed"${sh(eyes,'closed')}><path d="M110,88 Q119,79 128,88 M152,88 Q161,79 170,88" stroke="#0A1017" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+<path d="M140,90 L134,105 L145,105" stroke="#B98D6C" stroke-width="4" fill="none" stroke-linejoin="round"/><path d="M114,113 C125,104 136,108 140,112 C144,108 155,104 166,113 C155,118 146,117 140,115 C134,117 125,118 114,113Z" fill="#8C969E" stroke="#0A1017" stroke-width="3"/>
+<g id="${p}MouthFlat"${sh(mouth,'flat')}><path d="M128,124 L152,124" stroke="#0A1017" stroke-width="4" stroke-linecap="round"/></g><g id="${p}MouthSmile"${sh(mouth,'smile')}><path d="M126,121 Q140,132 154,121" stroke="#0A1017" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+<g id="${p}MouthFrown"${sh(mouth,'frown')}><path d="M127,128 Q140,118 153,128" stroke="#0A1017" stroke-width="4" fill="none" stroke-linecap="round"/></g><g id="${p}MouthOpen"${sh(mouth,'open')}><ellipse cx="140" cy="124" rx="9" ry="6" fill="#7A2E22" stroke="#0A1017" stroke-width="3"/></g></g></svg>`;}
+function hhSvg(p='hh'){return `<svg viewBox="0 0 340 410" width="100%" height="100%" overflow="visible">
+<rect x="50" y="360" width="240" height="42" rx="14" fill="#2B2F38" stroke="#0A1017" stroke-width="4"/><rect x="62" y="370" width="216" height="6" rx="3" fill="#74C9E6" opacity=".75"/>
+<g id="${p}Body"><path d="M86,366 C70,280 104,214 170,214 C236,214 270,280 254,366Z" fill="#3B404C" stroke="#0A1017" stroke-width="4"/><ellipse cx="170" cy="308" rx="56" ry="50" fill="#F2EEE6"/>
+<ellipse cx="130" cy="354" rx="24" ry="15" fill="#F2EEE6" stroke="#0A1017" stroke-width="4"/><ellipse cx="208" cy="354" rx="24" ry="15" fill="#F2EEE6" stroke="#0A1017" stroke-width="4"/>
+<path d="M122,226 Q170,300 218,226" stroke="#F7B94E" stroke-width="7" fill="none" stroke-dasharray="9 5"/><circle cx="170" cy="270" r="16" fill="#F7B94E" stroke="#0A1017" stroke-width="4"/><path d="M162,270 l8,-8 l8,8 l-8,8Z" fill="#C88A1E"/>
+<path d="M124,222 Q170,246 216,222" stroke="#E8503C" stroke-width="10" fill="none" stroke-linecap="round"/><g id="${p}Bell"><circle cx="170" cy="239" r="11" fill="#F7B94E" stroke="#0A1017" stroke-width="3"/><path d="M161,241 h18" stroke="#0A1017" stroke-width="2"/><circle cx="170" cy="245" r="2.5" fill="#0A1017"/></g></g>
+<g id="${p}Head"><path d="M86,120 C86,38 254,38 254,120" stroke="#1E2A33" stroke-width="12" fill="none"/>
+<g id="${p}EarL"><path d="M96,96 L100,28 L148,70Z" fill="#3B404C" stroke="#0A1017" stroke-width="4"/><path d="M106,86 L108,46 L136,72Z" fill="#F49AA8"/></g><g id="${p}EarR"><path d="M244,96 L240,28 L192,70Z" fill="#3B404C" stroke="#0A1017" stroke-width="4"/><path d="M234,86 L232,46 L204,72Z" fill="#F49AA8"/></g>
+<ellipse cx="170" cy="136" rx="86" ry="70" fill="#3B404C" stroke="#0A1017" stroke-width="4"/><ellipse cx="170" cy="164" rx="46" ry="30" fill="#F2EEE6"/>
+<g id="${p}Cap"><path d="M100,94 C104,40 236,40 240,94Z" fill="#E8503C" stroke="#0A1017" stroke-width="4"/><path d="M100,94 C70,93 50,101 44,112 C80,110 122,104 152,97Z" fill="#B83A2B" stroke="#0A1017" stroke-width="4" stroke-linejoin="round"/><circle cx="170" cy="46" r="6" fill="#B83A2B" stroke="#0A1017" stroke-width="2"/><path d="M152,74 h36" stroke="#F7B94E" stroke-width="7" stroke-linecap="round"/></g>
+<rect x="72" y="112" width="24" height="46" rx="10" fill="#74C9E6" stroke="#0A1017" stroke-width="4"/><rect x="244" y="112" width="24" height="46" rx="10" fill="#74C9E6" stroke="#0A1017" stroke-width="4"/>
+<g id="${p}EyesOpen"><circle cx="138" cy="134" r="9" fill="#0A1017"/><circle cx="202" cy="134" r="9" fill="#0A1017"/><circle cx="141" cy="131" r="3" fill="#fff"/><circle cx="205" cy="131" r="3" fill="#fff"/></g>
+<g id="${p}EyesHappy" style="display:none"><path d="M128,138 Q138,126 148,138 M192,138 Q202,126 212,138" stroke="#0A1017" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+<g id="${p}EyesWide" style="display:none"><circle cx="138" cy="134" r="12" fill="#fff" stroke="#0A1017" stroke-width="3"/><circle cx="202" cy="134" r="12" fill="#fff" stroke="#0A1017" stroke-width="3"/><circle cx="138" cy="134" r="5" fill="#0A1017"/><circle cx="202" cy="134" r="5" fill="#0A1017"/></g>
+<g id="${p}EyesClosed" style="display:none"><path d="M128,136 h20 M192,136 h20" stroke="#0A1017" stroke-width="5" stroke-linecap="round"/></g>
+<path d="M164,152 h12 l-6,7Z" fill="#F49AA8" stroke="#0A1017" stroke-width="2"/><path d="M112,158 l-34,-6 M112,166 l-34,4 M228,158 l34,-6 M228,166 l34,4" stroke="#0A1017" stroke-width="2.5"/>
+<g id="${p}MouthSmile"><path d="M156,166 Q163,174 170,166 Q177,174 184,166" stroke="#0A1017" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+<g id="${p}MouthGrin" style="display:none"><path d="M152,164 Q170,190 188,164Z" fill="#7A2E22" stroke="#0A1017" stroke-width="3.5" stroke-linejoin="round"/></g>
+<g id="${p}MouthO" style="display:none"><ellipse cx="170" cy="172" rx="8" ry="9" fill="#7A2E22" stroke="#0A1017" stroke-width="3"/></g></g>
+<g id="${p}Paw"><rect x="246" y="150" width="34" height="108" rx="17" fill="#3B404C" stroke="#0A1017" stroke-width="4"/><g id="${p}Fingers">${[0,1,2,3].map(i=>`<rect id="${p}F${i+1}" x="${238+i*12}" y="${96-Math.abs(i-1.5)*5}" width="11" height="28" rx="5.5" fill="#F2EEE6" stroke="#0A1017" stroke-width="3" style="display:none"/>`).join('')}</g>
+<circle cx="263" cy="140" r="27" fill="#F2EEE6" stroke="#0A1017" stroke-width="4"/><ellipse cx="263" cy="146" rx="9" ry="7" fill="#F49AA8"/><circle cx="252" cy="131" r="4" fill="#F49AA8"/><circle cx="263" cy="127" r="4" fill="#F49AA8"/><circle cx="274" cy="131" r="4" fill="#F49AA8"/></g></svg>`;}
+function tdSvg(p='td'){return `<svg viewBox="0 0 340 410" width="100%" height="100%" overflow="visible">
+<rect x="40" y="356" width="270" height="46" rx="18" fill="#C8352C" stroke="#0A1017" stroke-width="4"/><rect x="52" y="366" width="246" height="7" rx="3.5" fill="#E8503C"/>${[[46,398],[304,398]].map(([x,y])=>`<path d="M${x},${y} l-8,10 l16,0Z" fill="#F7B94E" stroke="#0A1017" stroke-width="2"/>`).join('')}
+<g id="${p}Body"><path d="M96,366 C80,282 114,216 180,216 C246,216 280,282 264,366Z" fill="#FAF6EE" stroke="#0A1017" stroke-width="4"/><path d="M226,240 C250,256 258,300 252,334 C236,320 228,282 226,240Z" fill="#F2A93B" opacity=".9"/>
+<path d="M106,250 C100,300 98,340 100,366 L138,366 C142,320 152,272 180,236 C208,272 218,320 222,366 L260,366 C262,340 260,300 254,250 C240,228 212,220 180,220 C148,220 120,228 106,250Z" fill="#2B3A67" stroke="#0A1017" stroke-width="4" stroke-linejoin="round"/><circle cx="124" cy="296" r="9" fill="#F4EAD5"/><circle cx="236" cy="296" r="9" fill="#F4EAD5"/><path d="M160,262 l8,14 M200,262 l-8,14" stroke="#F4EAD5" stroke-width="4" stroke-linecap="round"/>
+<path d="M134,226 Q180,252 226,226" stroke="#D0342C" stroke-width="12" fill="none" stroke-linecap="round"/><g id="${p}Bell"><circle cx="180" cy="246" r="13" fill="#F7B94E" stroke="#0A1017" stroke-width="3"/><path d="M169,248 h22" stroke="#0A1017" stroke-width="2"/><circle cx="180" cy="253" r="2.5" fill="#0A1017"/></g>
+<g id="${p}Coin"><ellipse cx="238" cy="314" rx="27" ry="38" fill="#F7C94E" stroke="#0A1017" stroke-width="4"/><ellipse cx="238" cy="314" rx="18" ry="28" fill="none" stroke="#C9962A" stroke-width="3"/><path d="M226,300 h24 M224,314 h28 M226,328 h24" stroke="#C9962A" stroke-width="3"/><path id="${p}Glint" d="M222,286 l5,-9 l5,9 l-5,9Z" fill="#fff" opacity="0"/></g>
+<ellipse cx="222" cy="340" rx="20" ry="14" fill="#FAF6EE" stroke="#0A1017" stroke-width="4"/></g>
+<g id="${p}Drum"><rect x="12" y="292" width="92" height="60" rx="14" fill="#9A5B2E" stroke="#0A1017" stroke-width="4"/><path d="M16,312 h84 M16,334 h84" stroke="#6B3D1D" stroke-width="3"/>${[24,40,58,76,92].map(x=>`<circle cx="${x}" cy="300" r="2.6" fill="#F7B94E"/>`).join('')}<ellipse cx="58" cy="292" rx="46" ry="11" fill="#F2E3C2" stroke="#0A1017" stroke-width="4"/><ellipse id="${p}DrumHit" cx="58" cy="292" rx="46" ry="11" fill="none" stroke="#F7B94E" stroke-width="7" opacity="0"/></g>
+<g id="${p}Head"><g id="${p}EarL"><path d="M106,98 L110,30 L158,72Z" fill="#FAF6EE" stroke="#0A1017" stroke-width="4"/><path d="M116,88 L118,48 L146,74Z" fill="#F49AA8"/></g><g id="${p}EarR"><path d="M254,98 L250,30 L202,72Z" fill="#2B2F38" stroke="#0A1017" stroke-width="4"/><path d="M244,88 L242,48 L214,74Z" fill="#F49AA8"/></g>
+<ellipse cx="180" cy="138" rx="86" ry="70" fill="#FAF6EE" stroke="#0A1017" stroke-width="4"/><path d="M226,86 C246,96 258,116 262,136 C244,128 230,110 222,90Z" fill="#F2A93B"/><path d="M100,118 C104,96 122,86 136,90 C126,104 114,114 100,126Z" fill="#2B2F38"/>
+<circle cx="150" cy="104" r="5" fill="#C8352C"/><circle cx="210" cy="104" r="5" fill="#C8352C"/>
+<g id="${p}EyesClosed"><path d="M136,140 Q148,128 160,140 M200,140 Q212,128 224,140" stroke="#0A1017" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+<g id="${p}EyesOpen" style="display:none"><ellipse cx="148" cy="136" rx="8" ry="10" fill="#0A1017"/><ellipse cx="212" cy="136" rx="8" ry="10" fill="#0A1017"/><circle cx="151" cy="132" r="3" fill="#fff"/><circle cx="215" cy="132" r="3" fill="#fff"/></g>
+<g id="${p}EyesWide" style="display:none"><circle cx="148" cy="136" r="12" fill="#fff" stroke="#0A1017" stroke-width="3"/><circle cx="212" cy="136" r="12" fill="#fff" stroke="#0A1017" stroke-width="3"/><circle cx="148" cy="137" r="5" fill="#0A1017"/><circle cx="212" cy="137" r="5" fill="#0A1017"/></g>
+<path d="M174,154 h12 l-6,7Z" fill="#F49AA8" stroke="#0A1017" stroke-width="2"/><path d="M120,160 l-36,-6 M120,168 l-36,4 M240,160 l36,-6 M240,168 l36,4" stroke="#0A1017" stroke-width="2.5"/>
+<g id="${p}MouthSmile"><path d="M166,168 Q173,176 180,168 Q187,176 194,168" stroke="#0A1017" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+<g id="${p}MouthOpen" style="display:none"><path d="M164,166 Q180,190 196,166Z" fill="#C8352C" stroke="#0A1017" stroke-width="3.5" stroke-linejoin="round"/></g></g>
+<g id="${p}Paw"><rect x="88" y="152" width="34" height="104" rx="17" transform="rotate(-10 105 204)" fill="#2B3A67" stroke="#0A1017" stroke-width="4"/><path d="M98,148 L48,246" stroke="#6B3D1D" stroke-width="8" stroke-linecap="round"/><circle cx="48" cy="246" r="8" fill="#E8D3A8" stroke="#0A1017" stroke-width="3"/>
+<circle cx="98" cy="146" r="25" fill="#FAF6EE" stroke="#0A1017" stroke-width="4"/><ellipse cx="98" cy="151" rx="9" ry="7" fill="#F49AA8"/><circle cx="87" cy="137" r="4" fill="#F49AA8"/><circle cx="98" cy="133" r="4" fill="#F49AA8"/><circle cx="109" cy="137" r="4" fill="#F49AA8"/></g></svg>`;}
+const ICON={spin:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M19,12 A7,7 0 1 1 12,5" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M12,1 l5,4 l-5,4Z" fill="currentColor"/></svg>',
+ toss:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M3,21 Q12,-4 21,21" stroke="currentColor" stroke-width="2.6" fill="none" stroke-dasharray="3 3"/><circle cx="12" cy="8" r="3.6" fill="currentColor"/></svg>',
+ poly:'<svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="9" width="8" height="12" rx="3" fill="currentColor"/><rect x="14" y="4" width="8" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2.6"/></svg>',
+ free:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12,2 l2.6,7.4 l7.4,2.6 l-7.4,2.6 l-2.6,7.4 l-2.6,-7.4 l-7.4,-2.6 l7.4,-2.6Z" fill="currentColor"/></svg>',
+ vary:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M2,12 Q6,4 10,12 T18,12 T24,10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>'};
+const LOCK='<svg viewBox="0 0 24 24" width="44" height="44"><rect x="4" y="10" width="16" height="12" rx="3" fill="#9DB4B6" stroke="#0A1017" stroke-width="2"/><path d="M8,10 V7 a4,4 0 0 1 8,0 V10" stroke="#9DB4B6" stroke-width="3" fill="none"/></svg>';
+const verbName=(S,v)=>S?.verbNames?.[v]||L.VerbTable[v].name;
+const shortName=(S,v)=>S?.verbNames?.[v]||L.VerbTable[v].name.replace('던지고 받기','토스').replace('프리스타일','즉흥').replace('양손 폴리','폴리');
+
+/* ── 진행(해금) ── */
+const PKEY='nigiriRemix.t69a.progress';
+function loadProg(){try{const s=localStorage.getItem(PKEY);const p=s?JSON.parse(s):null;return p&&p.best?p:{best:{}};}catch{return {best:{}};}}
+function saveProg(){try{localStorage.setItem(PKEY,JSON.stringify(X.prog));}catch{}}
+const isOpen=id=>X.all||L.RemixProgress.unlocked(X.prog,id);
+const stageOf=id=>L.RemixStageTable.find(s=>s.id===String(id));
+const nextId=id=>{const i=L.RemixStageTable.findIndex(s=>s.id===String(id));return L.RemixStageTable[i+1]?.id||null;};
 
 /* ── 시계 ── */
-function syncOff(){if(!X.clock.audio||!audio)return;let s;const ts=audio.getOutputTimestamp?audio.getOutputTimestamp():null;let src='ts';if(ts&&ts.performanceTime>0&&ts.contextTime>0)s=ts.contextTime-ts.performanceTime/1000;else{src='fb';s=audio.currentTime-(audio.outputLatency||0)-(audio.baseLatency||0)-performance.now()/1000;}X.clock.offRaw=s;if(X.clock.off==null||X.clock.src!==src){if(X.clock.off!=null)X.clock.flips=(X.clock.flips||0)+1;X.clock.off=s;X.clock.src=src;X.clock.n=0;}else{X.clock.n++;X.clock.off+=(X.clock.n<30?.3:.05)*(s-X.clock.off);}/* 출처가 바뀌면(대체 → 출력 시각) 다시 잡음 · 처음 30 프레임은 빨리 수렴 */if(X.mode==='play'&&X.C&&songNow()>=X.C.timeOf(4)-.5){X.offDev.push((X.clock.off-s)*1000);if(X.offDev.length>20000)X.offDev.splice(0,10000);}}
+function syncOff(){if(!X.clock.audio||!audio)return;let s;const ts=audio.getOutputTimestamp?audio.getOutputTimestamp():null;let src='ts';if(ts&&ts.performanceTime>0&&ts.contextTime>0)s=ts.contextTime-ts.performanceTime/1000;else{src='fb';s=audio.currentTime-(audio.outputLatency||0)-(audio.baseLatency||0)-performance.now()/1000;}X.clock.offRaw=s;if(X.clock.off==null||X.clock.src!==src){if(X.clock.off!=null)X.clock.flips=(X.clock.flips||0)+1;X.clock.off=s;X.clock.src=src;X.clock.n=0;}else{X.clock.n++;X.clock.off+=(X.clock.n<30?.3:.05)*(s-X.clock.off);}if(X.mode==='play'&&X.C&&songNow()>=X.C.timeOf(4)-.5){X.offDev.push((X.clock.off-s)*1000);if(X.offDev.length>20000)X.offDev.splice(0,10000);}}
 function songNow(perf=performance.now()){return X.clock.audio?perf/1000+X.clock.off-X.clock.t0:(perf-X.clock.p0)/1000;}
 
 /* ── 소리 ── */
@@ -1748,174 +1923,260 @@ function stopSpinNoise(){if(!spinN)return;try{spinN.s.stop();}catch{}for(const n
 
 /* ── 입력 ── */
 const KEYMAP={KeyA:'A',KeyS:'S',KeyD:'D',KeyK:'K',KeyL:'L',KeyF:'A',KeyJ:'L',Space:'Space',ArrowUp:'Up',ArrowRight:'Right',ArrowDown:'Down',ArrowLeft:'Left'};
-function onKey(e){if(!X.active)return;e.stopImmediatePropagation();if(e.ctrlKey||e.metaKey||e.altKey)return;const code=e.code;if(KEYMAP[code]||['Enter','Escape','Digit1','Digit2','Digit3','Digit4','Tab'].includes(code))e.preventDefault();if(e.repeat)return;try{unlockAudio();}catch{}
- if(X.mode==='menu'){const m=/^Digit([1-4])$/.exec(code);if(m)return go(m[1]);if(code==='Enter'||code==='Space')return go('1');return;}
+function onKey(e){if(!X.active)return;e.stopImmediatePropagation();if(e.ctrlKey||e.metaKey||e.altKey)return;const code=e.code;if(KEYMAP[code]||['Enter','Escape','Tab'].includes(code)||/^Digit[1-8]$/.test(code))e.preventDefault();if(e.repeat)return;try{unlockAudio();}catch{}
+ if(X.mode==='menu'){const m=/^Digit([1-8])$/.exec(code);if(m)return tryGo(m[1]);if(code==='Enter'||code==='Space')return tryGo(L.RemixProgress.next(X.all?{best:{}}:X.prog));return;}
  if(X.mode==='ready'){if(code==='Escape')return toMenu();return go(X.stageId);}
- if(X.mode==='result'){if(code==='Space')return go(X.stageId);if(code==='Enter'){const n=String(Number(X.stageId)+1);return go(L.RemixStageTable.some(s=>s.id===n)?n:X.stageId);}if(code==='Escape')return toMenu();return;}
+ if(X.mode==='result'){if(code==='Space')return go(X.stageId);if(code==='Enter'){const n=nextId(X.stageId);return go(n&&isOpen(n)?n:X.stageId);}if(code==='Escape')return toMenu();return;}
  if(X.mode==='play'){if(code==='Escape')return toMenu();const k=KEYMAP[code];if(!k||X.bot)return;feed({type:'key',key:k,t:songNow(e.timeStamp)},true);}}
 function feed(ev,sound){const r=L.input(X.run,ev);if(!sound||ev.type!=='key')return r;const k=ev.key,K=L.KeySoundTable[k];
  if(K){liveSound({word:K.voice,len:K.len});X.disp.padAt[k]=X.lastNow;if(k==='A')X.disp.leftAt=X.lastNow;if(k==='L')X.disp.rightAt=X.lastNow;if(r&&r.kind==='free'){X.disp.catHit=X.lastNow;X.disp.catSnd=K.snd;}}
- else if(k==='Space'){if(r&&r.kind==='catch'){const S=RemixAudioTable.catch[r.g];if(S)liveSound({word:S.word,vel:S.gain});}else if(r&&r.kind==='place'){liveSound({word:'chak'});}else liveSound({word:RemixAudioTable.whiff.word,vel:RemixAudioTable.whiff.gain});}
+ else if(k==='Space'){if(r&&r.kind==='catch'){const S=RemixAudioTable.catch[r.g];if(S)liveSound({word:S.word,vel:S.gain});}else if(r&&r.kind==='place'){liveSound({word:RemixAudioTable.place.word});}else liveSound({word:RemixAudioTable.whiff.word,vel:RemixAudioTable.whiff.gain});}
  return r;}
 function logicalXY(e){const r=cv.getBoundingClientRect();return {x:(e.clientX-r.left)*1920/r.width,y:(e.clientY-r.top)*1080/r.height};}
 function pointerEv(e,type){if(X.mode!=='play'||X.bot)return;const S=RemixUITable.spin,list=type==='pointer'&&e.getCoalescedEvents?e.getCoalescedEvents():[e];for(const q of (list.length?list:[e])){const {x,y}=logicalXY(q),a=Math.atan2(x-S.cx,-(y-S.cy)),r=Math.hypot(x-S.cx,y-S.cy);feed({type,a:(a+2*Math.PI)%(2*Math.PI),r,t:songNow(q.timeStamp)});}}
 
 /* ── 판 시작·끝 ── */
-async function go(id){if(!L.RemixStageTable.some(s=>s.id===String(id)))return;X.stageId=String(id);X.mode='starting';showPanels();try{unlockAudio();}catch{}
+function tryGo(id){if(!stageOf(id))return;if(!isOpen(id)){const c=menuEl.querySelector(`.rxCard[data-stage="${id}"]`);if(c){c.classList.remove('nope');void c.offsetWidth;c.classList.add('nope');}return;}return go(id);}
+async function go(id){if(!stageOf(id))return;X.stageId=String(id);X.mode='starting';showPanels();try{unlockAudio();}catch{}
  if(audio&&audio.state!=='running'){try{await Promise.race([audio.resume(),new Promise(r=>setTimeout(r,400))]);}catch{}}begin();}
-function begin(){cancelAll();X.C=L.buildChart(X.stageId);X.run=L.makeRun(X.C);X.sched={i:0,d:0};X.fxi=0;X.pops=[];X.log=[];X.frames=[];X.offDev=[];X.stats={made:0,live:X.stats.live,maxLive:X.stats.live,late:0,lateMaxMs:0,scheduled:0};X.meters=null;X.meterAt=-9;X.catReact=null;X.mkReact=null;
- X.disp={th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null};
+function begin(){cancelAll();X.C=L.buildChart(X.stageId);X.run=L.makeRun(X.C);X.sched={i:0,d:0};X.fxi=0;X.pops=[];X.log=[];X.frames=[];X.offDev=[];X.stats={made:0,live:X.stats.live,maxLive:X.stats.live,late:0,lateMaxMs:0,scheduled:0};X.meters=null;X.meterAt=-9;X.marks=[];X.rm=rmNow();X.tdHit=-9;X.hhHit=-9;X.lastSpinN=0;X.occ={max:0,n:0,hits:{}};
+ X.ms={nodT:-9,shakeT:-9,browT:-9,inspected:false};X.disp={th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null};
  if(audio&&audio.state==='running'&&gx()&&px()){X.clock.audio=true;X.clock.off=null;syncOff();X.clock.t0=audio.currentTime+L.RemixTable.leadInSec;ensureBus();startSpinNoise();}else{X.clock.audio=false;X.clock.p0=performance.now()+L.RemixTable.leadInSec*1000;}
  X.botI=0;X.botEv=X.bot?L.botEvents(X.C,X.bot.kind,X.bot.seed):null;X.mode='play';X.started=performance.now();showPanels();log('rx_start',{stage:X.stageId,audio:X.clock.audio,bot:X.bot?.kind||null});}
-function finish(){X.mode='result';stopSpinNoise();const R=X.run.result;log('rx_result',{stage:X.stageId,bot:X.bot?.kind||null,result:R,stats:{...X.stats},frames:frameStats()});buildResult(R);showPanels();}
-function toMenu(){cancelAll();X.mode='menu';X.run=null;X.C=null;X.bot=null;showPanels();}
+function finish(){X.mode='result';stopSpinNoise();const R=X.run.result,nx=nextId(X.stageId),wasOpen=nx?isOpen(nx):false;X.prog=L.RemixProgress.record(X.prog,X.stageId,R);saveProg();R.unlocked=nx&&!wasOpen&&isOpen(nx)?nx:null;
+ log('rx_result',{stage:X.stageId,bot:X.bot?.kind||null,result:R,stats:{...X.stats},frames:frameStats(),occlusion:{...X.occ}});buildResult(R);showPanels();}
+function toMenu(){cancelAll();X.mode='menu';X.run=null;X.C=null;X.bot=null;buildMenu();showPanels();}
 function frameStats(){const f=X.frames.slice(5);if(!f.length)return null;const s=[...f].sort((a,b)=>a-b);return {n:f.length,mean:+(f.reduce((a,b)=>a+b,0)/f.length).toFixed(2),p95:+s[Math.floor(s.length*.95)].toFixed(2),over33:f.filter(x=>x>33).length,max:+s[s.length-1].toFixed(1)};}
 
 /* ── 화면 틀(DOM) ── */
 function css(){const st=document.createElement('style');st.textContent=`#rxRoot{position:fixed;inset:0;z-index:50;background:#0A1017;overflow:hidden;font-family:'Malgun Gothic',sans-serif;color:${C0.cream}}#rxRoot[hidden]{display:none}
 #rxStage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}#rxCanvas{position:absolute;inset:0;width:1920px;height:1080px;touch-action:none;cursor:crosshair}
-.rxCat{position:absolute;pointer-events:none}.rxBub{position:absolute;font:800 30px 'Malgun Gothic',sans-serif;color:#1c1915;background:#f2e6cc;border:4px solid #0d1520;border-radius:18px;padding:6px 18px;box-shadow:0 5px 0 #0d1520;white-space:nowrap;pointer-events:none}
-.rxPanel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 50% 40%,#1E3746ee,#0A1017f5 70%)}.rxPanel[hidden]{display:none}
-.rxTitle{font:900 92px 'Malgun Gothic',sans-serif;color:${C0.gold};margin-top:70px;letter-spacing:4px;text-shadow:0 6px 0 #0A1017}.rxSub{font:700 30px 'Malgun Gothic',sans-serif;color:${C0.sub};margin-top:10px}
-.rxCards{display:flex;gap:28px;margin-top:56px}.rxCard{width:390px;min-height:430px;border:5px solid #0A1017;border-radius:28px;background:${C0.navy};box-shadow:0 10px 0 #0A1017;padding:26px 26px;text-align:left;display:flex;flex-direction:column;gap:12px;color:${C0.cream}}
-.rxCard:hover,.rxCard:focus-visible{background:#1E3746;outline:4px solid ${C0.gold}}.rxCard b{font:900 26px 'Malgun Gothic',sans-serif;color:${C0.gold}}.rxCard h3{margin:0;font:900 36px 'Malgun Gothic',sans-serif}.rxCard p{margin:0;font:600 22px/1.45 'Malgun Gothic',sans-serif;color:${C0.sub}}
-.rxChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}.rxChips span{font:800 19px 'Malgun Gothic',sans-serif;background:#0A1017;color:${C0.cream};border-radius:12px;padding:5px 12px}.rxCard.first{border-color:${C0.gold}}.rxCard.first b:after{content:' · 여기부터';color:${C0.cream}}
-.rxHint{margin-top:34px;font:700 24px 'Malgun Gothic',sans-serif;color:${C0.sub}}.rxOld{position:absolute;right:40px;bottom:30px;text-align:right}.rxOld>button{background:none;border:2px solid #3E5A60;border-radius:14px;padding:8px 18px;font:700 22px 'Malgun Gothic',sans-serif;color:${C0.sub}}
+.rxCast{position:absolute;pointer-events:none;transform-origin:50% 0}.rxBub{position:absolute;font:800 28px 'Malgun Gothic',sans-serif;color:#1c1915;background:#f2e6cc;border:4px solid #0d1520;border-radius:18px;padding:5px 16px;box-shadow:0 5px 0 #0d1520;white-space:nowrap;pointer-events:none}
+#rxMsBub{background:${C0.paper};color:${C0.paperInk};border-color:${C0.stamp};box-shadow:0 5px 0 #0d1520;font-size:30px}#rxHhBub{background:#1E2A33;color:${C0.sky};border-color:${C0.sky}}#rxTdBub{background:#FFF6E6;color:#7A2E22;border-color:#C8352C}
+.rxPanel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 50% 40%,#1E3746f2,#0A1017fa 70%)}.rxPanel[hidden]{display:none}
+.rxTitle{font:900 76px 'Malgun Gothic',sans-serif;color:${C0.gold};margin-top:40px;letter-spacing:3px;text-shadow:0 6px 0 #0A1017}.rxSub{font:700 28px 'Malgun Gothic',sans-serif;color:${C0.sub};margin-top:8px}
+.rxCards{display:grid;grid-template-columns:repeat(4,404px);gap:22px;margin-top:30px}.rxCard{position:relative;height:330px;border:5px solid #0A1017;border-radius:26px;background:${C0.navy};box-shadow:0 9px 0 #0A1017;padding:14px 20px;text-align:left;display:flex;flex-direction:column;gap:6px;color:${C0.cream};cursor:pointer;overflow:hidden}
+.rxCard:hover,.rxCard:focus-visible{background:#1E3746;outline:4px solid ${C0.gold}}.rxCardTop{display:flex;justify-content:space-between;align-items:center}.rxCardTop b{font:900 24px 'Malgun Gothic',sans-serif;color:#0A1017;background:${C0.gold};border-radius:12px;padding:1px 12px}
+.rxStars{font:900 24px 'Malgun Gothic',sans-serif;color:${C0.gold};letter-spacing:2px}.rxStars i{font-style:normal;color:#3E5A60}.rxArt{height:120px;display:flex;justify-content:center}.rxArt svg{width:200px;height:125px}
+.rxCard h3{margin:0;font:900 36px 'Malgun Gothic',sans-serif;line-height:1.1}.rxCard p{margin:0;font:600 19px 'Malgun Gothic',sans-serif;color:${C0.sub}}
+.rxChips{display:flex;flex-wrap:wrap;gap:6px}.rxChips span{display:inline-flex;align-items:center;gap:5px;font:800 18px 'Malgun Gothic',sans-serif;background:#0A1017;color:${C0.cream};border-radius:11px;padding:3px 10px 3px 6px}.rxChips svg{color:${C0.gold}}
+.rxCard.first{border-color:${C0.gold}}.rxCard.first:after{content:'다음 판';position:absolute;right:16px;bottom:14px;font:900 18px 'Malgun Gothic',sans-serif;color:#0A1017;background:${C0.gold};border-radius:10px;padding:2px 10px}
+.rxBest{position:absolute;right:16px;top:52px;font:900 20px 'Malgun Gothic',sans-serif;border:3px solid currentColor;border-radius:50%;width:58px;height:58px;display:flex;align-items:center;justify-content:center;transform:rotate(-12deg);color:${C0.stamp};background:#F4EAD5ee;line-height:1;text-align:center}
+.rxCard.locked{cursor:default;background:#0E1A22}.rxCard.locked .rxArt,.rxCard.locked h3,.rxCard.locked .rxChips{filter:grayscale(1) brightness(.55)}.rxLock{position:absolute;left:0;right:0;top:66px;display:flex;flex-direction:column;align-items:center;gap:6px;font:800 20px 'Malgun Gothic',sans-serif;color:${C0.cream};text-shadow:0 2px 0 #0A1017}
+.rxCard.nope{animation:rxNope .32s}@keyframes rxNope{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}@media (prefers-reduced-motion: reduce){.rxCard.nope{animation:none;outline:4px solid ${C0.bad}}}
+.rxHint{margin-top:22px;font:700 23px 'Malgun Gothic',sans-serif;color:${C0.sub}}.rxOld{position:absolute;right:40px;bottom:24px;text-align:right}.rxOld>button{background:none;border:2px solid #3E5A60;border-radius:14px;padding:8px 18px;font:700 22px 'Malgun Gothic',sans-serif;color:${C0.sub}}
 .rxOldBox{margin-top:10px;background:#0A1017;border:2px solid #3E5A60;border-radius:14px;padding:14px 18px;font:600 20px/1.5 'Malgun Gothic',sans-serif;color:${C0.sub};max-width:520px}.rxOldBox button{margin-top:8px;background:${C0.navy};border:2px solid ${C0.sub};border-radius:12px;padding:8px 16px;font:800 22px 'Malgun Gothic',sans-serif;color:${C0.cream}}
-.rxRes h2{font:900 64px 'Malgun Gothic',sans-serif;margin:60px 0 0;color:${C0.gold}}.rxGrade{font:900 120px 'Malgun Gothic',sans-serif;line-height:1;margin-top:10px}.rxRows{margin-top:26px;width:1100px;display:flex;flex-direction:column;gap:14px}
-.rxRow{display:grid;grid-template-columns:230px 560px 90px;gap:22px;align-items:center;font:800 28px 'Malgun Gothic',sans-serif}.rxRow small{grid-column:2/4;font:600 20px 'Malgun Gothic',sans-serif;color:${C0.sub};margin-top:-8px}
-.rxBar{height:30px;border-radius:15px;background:#0A1017;overflow:hidden;border:3px solid #0A1017}.rxBar i{display:block;height:100%;border-radius:12px}.rxCom{margin-top:26px;font:800 32px 'Malgun Gothic',sans-serif;color:${C0.cream};text-align:center;line-height:1.5}
+.rxSheet{margin-top:60px;width:1500px;min-height:560px;background:${C0.paper};color:${C0.paperInk};border:6px solid #0A1017;border-radius:22px;box-shadow:0 12px 0 #0A1017;display:grid;grid-template-columns:900px 1fr;overflow:hidden;position:relative}
+.rxSheet:before{content:'';position:absolute;left:900px;top:30px;bottom:30px;border-left:3px dashed #C9B48E}.rxSL{padding:30px 40px}.rxSR{padding:30px 34px;display:flex;flex-direction:column;align-items:center;position:relative}
+.rxSH{display:flex;align-items:baseline;gap:18px;border-bottom:4px solid ${C0.paperInk};padding-bottom:10px}.rxSH em{font:900 26px 'Malgun Gothic',sans-serif;font-style:normal;color:#F4EAD5;background:${C0.stamp};border-radius:8px;padding:2px 12px}.rxSH h2{margin:0;font:900 58px 'Malgun Gothic',sans-serif}.rxSH span{font:800 24px 'Malgun Gothic',sans-serif;color:#7A6A52}.rxSH .rxStars{color:${C0.stamp}}.rxSH .rxStars i{color:#D8C8A8}.rxTier{margin-top:10px;font:800 22px 'Malgun Gothic',sans-serif;color:#5E4E38;background:#EADBBD;border-radius:12px;padding:8px 14px}
+.rxRows{margin-top:18px;display:flex;flex-direction:column;gap:12px}.rxRow{display:grid;grid-template-columns:52px 170px 470px 70px;gap:14px;align-items:center;font:800 27px 'Malgun Gothic',sans-serif}.rxRow small{grid-column:2/5;font:600 19px 'Malgun Gothic',sans-serif;color:#7A6A52;margin-top:-8px}
+.rxMark{font:900 40px 'Malgun Gothic',sans-serif;text-align:center;line-height:1}.rxBar{height:26px;border-radius:13px;background:#E2D3B5;overflow:hidden;border:3px solid ${C0.paperInk}}.rxBar i{display:block;height:100%}
+.rxMemo{margin-top:20px;border-top:3px dashed #C9B48E;padding-top:14px;font:700 25px/1.55 'Malgun Gothic',sans-serif;color:${C0.paperInk}}.rxMemo b{color:${C0.stamp}}
+.rxPlate{width:430px;height:270px;margin-top:6px}.rxStamp{position:absolute;right:40px;top:200px;width:150px;height:150px;border:9px solid ${C0.stamp};border-radius:50%;color:${C0.stamp};display:flex;flex-direction:column;align-items:center;justify-content:center;font:900 52px 'Malgun Gothic',sans-serif;transform:rotate(-14deg);opacity:.88;line-height:1;background:#F4EAD599}.rxStamp small{font:900 26px 'Malgun Gothic',sans-serif;margin-top:4px}
+.rxFace{width:190px;height:170px;margin-top:4px}.rxSay{margin-top:6px;font:900 31px 'Malgun Gothic',sans-serif;text-align:center;color:${C0.paperInk}}.rxUnlock{margin-top:14px;font:900 25px 'Malgun Gothic',sans-serif;color:#0A1017;background:${C0.gold};border:3px solid #0A1017;border-radius:14px;padding:6px 16px}.rxUnlock.no{background:#E2D3B5;color:#7A6A52}
 .rxBtns{display:flex;gap:20px;margin-top:26px}.rxBtns button{background:${C0.navy};border:4px solid #0A1017;border-radius:18px;padding:12px 28px;font:900 28px 'Malgun Gothic',sans-serif;color:${C0.cream};box-shadow:0 6px 0 #0A1017}.rxBtns button:first-child{background:${C0.gold};color:#0A1017}
 #rxBack{position:fixed;right:16px;bottom:16px;z-index:60;background:${C0.gold};color:#0A1017;border:3px solid #0A1017;border-radius:14px;padding:8px 16px;font:900 18px 'Malgun Gothic',sans-serif}`;document.head.append(st);}
 function el(tag,attrs={},html=''){const e=document.createElement(tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);if(html)e.innerHTML=html;return e;}
-function buildDom(){css();root=el('div',{id:'rxRoot'});stage=el('div',{id:'rxStage'});root.append(stage);cv=el('canvas',{id:'rxCanvas',width:1920,height:1080});stage.append(cv);ctx=cv.getContext('2d');
- const g=gx(),p=px();dj=el('div',{class:'rxCat',id:'rxDj'});Object.assign(dj.style,{left:'26px',top:'200px',width:'300px',height:'337px'});if(g&&g.catSvg)dj.innerHTML=g.catSvg().replace(/id="cv/g,'id="rxcv');stage.append(dj);
- mk=el('div',{class:'rxCat',id:'rxMk'});Object.assign(mk.style,{left:'1600px',top:'230px',width:'280px',height:'350px'});if(p&&p.manekiSvg)mk.innerHTML=p.manekiSvg().replace(/id="mk/g,'id="rxmk');stage.append(mk);
- djBub=el('div',{class:'rxBub',id:'rxDjBub'});Object.assign(djBub.style,{left:'250px',top:'176px'});djBub.hidden=true;stage.append(djBub);mkBub=el('div',{class:'rxBub',id:'rxMkBub'});Object.assign(mkBub.style,{right:'260px',top:'190px'});mkBub.hidden=true;stage.append(mkBub);
- menuEl=el('div',{class:'rxPanel',id:'rxMenu'});const cards=L.RemixStageTable.map((s,i)=>`<button class="rxCard${i?'':' first'}" data-stage="${s.id}"><b>${i?'판 '+s.id:'판 1 · 첫 판'}</b><h3>${s.name.replace(/^판 \d · /,'').replace(/^첫 판 · /,'')}</h3><p>${s.sub}</p><p>${s.bpm} BPM${s.sections.some(x=>x.bpmTo)?' → '+Math.max(...s.sections.map(x=>x.bpmTo||0)):''} · 약 ${Math.round(L.buildChart(s.id).end)}초</p><div class="rxChips">${(RemixUITable.menuVerbs[s.id]||[]).map(v=>`<span>${v}</span>`).join('')}</div></button>`).join('');
- menuEl.innerHTML=`<div class="rxTitle">니기리 리믹스</div><div class="rxSub">박을 타고 굴리고 · 던지고 · 두 손으로 · 즉흥으로 — 음악이 바뀌면 손도 바뀌어요</div><div class="rxCards">${cards}</div><div class="rxHint">숫자 1~4 또는 클릭 · 판 1은 1분 남짓, 다섯 가지를 다 맛봐요 · 마우스와 키보드를 함께 써요</div>
- <div class="rxOld"><button id="rxOldBtn" aria-expanded="false">옛 판 ▸</button><div class="rxOldBox" id="rxOldBox" hidden>예전 실험(손 문장 · 그루브 · 수련 판)은 그대로 남아 있어요.<br><button id="rxOldGo">옛 판 화면으로</button></div></div>`;stage.append(menuEl);
- menuEl.querySelectorAll('.rxCard').forEach(b=>b.addEventListener('click',()=>go(b.dataset.stage)));menuEl.querySelector('#rxOldBtn').addEventListener('click',e=>{const box=menuEl.querySelector('#rxOldBox');box.hidden=!box.hidden;e.currentTarget.textContent=box.hidden?'옛 판 ▸':'옛 판 ▾';e.currentTarget.setAttribute('aria-expanded',String(!box.hidden));});
- menuEl.querySelector('#rxOldGo').addEventListener('click',()=>setActive(false));
+function place(e,r){Object.assign(e.style,{left:r.x+'px',top:r.y+'px',width:r.w+'px',height:r.h+'px'});}
+function buildDom(){css();loadNetaImages();root=el('div',{id:'rxRoot'});stage=el('div',{id:'rxStage'});root.append(stage);cv=el('canvas',{id:'rxCanvas',width:1920,height:1080});stage.append(cv);ctx=cv.getContext('2d');
+ const U=RemixUITable.chars,Bb=RemixUITable.bubbles;msEl=el('div',{class:'rxCast',id:'rxMaster'},masterSvg('rxms'));place(msEl,U.master);hhEl=el('div',{class:'rxCast',id:'rxHh'},hhSvg('rxhh'));place(hhEl,U.hh);tdEl=el('div',{class:'rxCast',id:'rxTd'},tdSvg('rxtd'));place(tdEl,U.td);stage.append(hhEl,tdEl,msEl);
+ msBub=el('div',{class:'rxBub',id:'rxMsBub'});Object.assign(msBub.style,{left:Bb.master.left+'px',top:Bb.master.top+'px'});hhBub=el('div',{class:'rxBub',id:'rxHhBub'});Object.assign(hhBub.style,{left:Bb.hh.left+'px',top:Bb.hh.top+'px'});tdBub=el('div',{class:'rxBub',id:'rxTdBub'});Object.assign(tdBub.style,{right:Bb.td.right+'px',top:Bb.td.top+'px'});for(const b of [msBub,hhBub,tdBub]){b.hidden=true;stage.append(b);}
+ X.el={};for(const [k,root2,ids] of [['ms',msEl,['Head','Body','BrowL','BrowR','EyesNarrow','EyesOpen','EyesWide','EyesClosed','MouthFlat','MouthSmile','MouthFrown','MouthOpen']],['hh',hhEl,['Body','Head','Paw','Bell','EarL','EarR','EyesOpen','EyesHappy','EyesWide','EyesClosed','MouthSmile','MouthGrin','MouthO','F1','F2','F3','F4']],['td',tdEl,['Body','Head','Paw','Bell','Drum','DrumHit','Glint','EyesClosed','EyesOpen','EyesWide','MouthSmile','MouthOpen']]]){X.el[k]={};for(const id of ids)X.el[k][id]=root2.querySelector('#rx'+k+id);}
+ menuEl=el('div',{class:'rxPanel',id:'rxMenu'});stage.append(menuEl);buildMenu();
  resultEl=el('div',{class:'rxPanel rxRes',id:'rxResult'});stage.append(resultEl);startEl=el('div',{class:'rxPanel',id:'rxReady'});stage.append(startEl);
  backBtn=el('button',{id:'rxBack'},'니기리 리믹스로 ◂');backBtn.hidden=true;backBtn.addEventListener('click',()=>setActive(true));document.body.append(backBtn);
  cv.addEventListener('pointerdown',e=>{if(e.button!==0)return;try{cv.setPointerCapture(e.pointerId);}catch{}pointerEv(e,'pointerdown');pointerEv(e,'pointer');});cv.addEventListener('pointermove',e=>pointerEv(e,'pointer'));cv.addEventListener('pointerup',e=>pointerEv(e,'pointerup'));cv.addEventListener('pointercancel',e=>pointerEv(e,'pointerup'));
  document.body.append(root);fit();window.addEventListener('resize',fit);document.addEventListener('visibilitychange',()=>{if(document.hidden&&X.mode==='play'&&!X.bot)toMenu();});}
+function buildMenu(){if(!menuEl)return;const P=X.prog,nx=L.RemixProgress.next(X.all?{best:{}}:P);
+ const cards=L.RemixStageTable.map((s,i)=>{const open=isOpen(s.id),b=P.best?.[s.id],secs=Math.round(L.buildChart(s.id).end),bpm2=Math.max(0,...s.sections.map(x=>x.bpmTo||0)),prev=L.RemixStageTable[i-1];
+  const chips=s.scoreVerbs.map(v=>`<span>${ICON[v]}${shortName(s,v)}</span>`).join('');
+  return `<button class="rxCard${open?'':' locked'}${s.id===nx&&open?' first':''}" data-stage="${s.id}"${open?'':' aria-disabled="true"'}><div class="rxCardTop"><b>${s.id}</b><span class="rxStars" aria-label="난이도 ${s.stars}">${'★'.repeat(s.stars)}<i>${'★'.repeat(5-s.stars)}</i></span></div><div class="rxArt">${sushiSvg(s.neta,{gloss:b?.pass?1:.5})}</div><h3>${s.name}</h3><div class="rxChips">${chips}</div><p>${s.bpm}${bpm2?' → '+bpm2:''} BPM · 약 ${secs}초 · ${RemixUITable.kindName[s.kind]}</p>${b?`<em class="rxBest">${b.grade}<br>${b.total}</em>`:''}${open?'':`<div class="rxLock">${LOCK}<span>「${prev.name}」${josa(prev.name,'을','를')} 통과하면 열려요</span></div>`}</button>`;}).join('');
+ const nS=stageOf(nx);menuEl.innerHTML=`<div class="rxTitle">니기리 리믹스 · 오늘의 횟감</div><div class="rxSub">기믹 하나씩 쉬운 판부터 → 섞은 판 → 마지막은 참치 대뱃살 · 앞 판을 통과하면 다음 횟감이 열려요</div><div class="rxCards">${cards}</div><div class="rxHint">숫자 1~8 또는 클릭 · Enter = 다음 판 「${nS.name}」 · 마우스와 키보드를 함께 써요</div>
+ <div class="rxOld"><button id="rxOldBtn" aria-expanded="false">옛 판 ▸</button><div class="rxOldBox" id="rxOldBox" hidden>예전 실험(손 문장 · 그루브 · 수련 판)은 그대로 남아 있어요.<br><button id="rxOldGo">옛 판 화면으로</button></div></div>`;
+ menuEl.querySelectorAll('.rxCard').forEach(b=>b.addEventListener('click',()=>tryGo(b.dataset.stage)));menuEl.querySelector('#rxOldBtn').addEventListener('click',e=>{const box=menuEl.querySelector('#rxOldBox');box.hidden=!box.hidden;e.currentTarget.textContent=box.hidden?'옛 판 ▸':'옛 판 ▾';e.currentTarget.setAttribute('aria-expanded',String(!box.hidden));});
+ menuEl.querySelector('#rxOldGo').addEventListener('click',()=>setActive(false));}
 function fit(){if(!stage)return;const s=Math.min(innerWidth/1920,innerHeight/1080),x=(innerWidth-1920*s)/2,y=(innerHeight-1080*s)/2;stage.style.transform=`translate(${x}px,${y}px) scale(${s})`;}
-function setActive(on){X.active=on;root.hidden=!on;backBtn.hidden=on;if(!on&&X.mode==='play')toMenu();if(on){X.mode='menu';showPanels();}}
-function showPanels(){menuEl.hidden=X.mode!=='menu';resultEl.hidden=X.mode!=='result';startEl.hidden=X.mode!=='ready';}
-function buildResult(R){const S=L.RemixStageTable.find(s=>s.id===X.stageId),V=L.VerbTable,D=R.detail,line={spin:D.spin&&`위상 오차 평균 ${D.spin.meanAbsErrMs} ms · 납작 ${D.spin.flat} · 흩어짐 ${D.spin.scatter}`,toss:D.toss&&`딱 ${D.toss.perfect} · 좋아요 ${D.toss.ok} · 놓침 ${D.toss.miss} / ${D.toss.n}`,
-  poly:D.poly&&`왼손 ${D.poly.left} (흔들림 ${D.poly.leftSigmaMs} ms) · 오른손 ${D.poly.right}`,free:D.free&&`그루브 ${D.free.groove} · 다양성 ${D.free.diversity} · 응답 ${D.free.response}${D.free.spam?' · 같은 키 반복':''}`,vary:D.vary&&`변주 경계 ${D.vary.transitions.length}곳 · 브레이크 복귀 ${D.vary.transitions.filter(t=>t.kind==='return').map(t=>Math.round(t.q*100)).join('·')||'-'}`};
- const color={금:C0.gold,은:'#D9E2E4',동:'#D08A4E','한 번 더':C0.sub}[R.grade];const rows=Object.keys(R.verbs).map(k=>`<div class="rxRow"><span>${V[k].name}</span><div class="rxBar"><i style="width:${R.verbs[k]}%;background:${V[k].color}"></i></div><span>${R.verbs[k]}</span><small>${line[k]||''}</small></div>`).join('');
- const nx=L.RemixStageTable.some(s=>s.id===String(Number(X.stageId)+1));
- resultEl.innerHTML=`<h2>${S.name}</h2><div class="rxGrade" style="color:${color}">${R.grade} · ${R.total}</div><div class="rxRows">${rows}</div><div class="rxCom">「${R.comment[0]}」<br>「${R.comment[1]}」</div><div class="rxBtns"><button data-a="next">${nx?'다음 판 (Enter)':'한 번 더 (Enter)'}</button><button data-a="retry">다시 (Space)</button><button data-a="menu">메뉴 (Esc)</button></div>`;
- resultEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.a;if(a==='retry')go(X.stageId);else if(a==='next')go(nx?String(Number(X.stageId)+1):X.stageId);else toMenu();}));}
+function setActive(on){X.active=on;root.hidden=!on;backBtn.hidden=on;if(!on&&X.mode==='play')toMenu();if(on){X.mode='menu';buildMenu();showPanels();}}
+function showPanels(){menuEl.hidden=X.mode!=='menu';resultEl.hidden=X.mode!=='result';startEl.hidden=X.mode!=='ready';if(X.mode!=='play')for(const b of [msBub,hhBub,tdBub])b.hidden=true;}
+/* 기믹 판의 단계별 점수(1단계 쉬움 · 2단계 조금 어려움): 그 단계 구간 안 판정 품질 평균 */
+function tierScores(run){const C=run.C,acc={},gv=g=>L.RemixScoreTable[g]??0,add=(sec,q)=>{const t=C.secs[sec]?.tier;if(t)(acc[t]??=[]).push(q);};
+ for(const x of run.tosses)add(x.sec,gv(x.res?.g||'miss'));for(const x of [...run.pulses,...run.rights])add(x.sec,gv(x.res?.g||'miss'));for(const s of run.spin.samples)add(s.sec,s.q);for(const b of run.free.bars)if(b.role==='play'&&b.score)add(b.sec,b.score.score);
+ return Object.keys(acc).sort().map(t=>({tier:+t,score:Math.round(100*acc[t].reduce((a,b)=>a+b,0)/acc[t].length),n:acc[t].length}));}
+const markOf=v=>v>=85?RemixUITable.marksOf.perfect:v>=55?RemixUITable.marksOf.ok:RemixUITable.marksOf.miss;
+function buildResult(R){const S=stageOf(X.stageId),V=L.VerbTable,D=R.detail,F=R.finale||{},line={spin:D.spin&&`위상 오차 평균 ${D.spin.meanAbsErrMs} ms · 납작 ${D.spin.flat} · 흩어짐 ${D.spin.scatter}`,toss:D.toss&&`딱 ${D.toss.perfect} · 좋아요 ${D.toss.ok} · 놓침 ${D.toss.miss} / ${D.toss.n}`,
+  poly:D.poly&&(S.verbNames?.poly?`박 ${D.poly.pulses}번 · 놓침 ${D.poly.leftMiss} · 흔들림 ${D.poly.leftSigmaMs} ms`:`왼손 ${D.poly.left} (흔들림 ${D.poly.leftSigmaMs} ms) · 오른손 ${D.poly.right}`),free:D.free&&`그루브 ${D.free.groove} · 다양성 ${D.free.diversity} · 응답 ${D.free.response}${D.free.spam?' · 같은 키 반복':''}`,vary:D.vary&&`변주 경계 ${D.vary.transitions.length}곳 · 브레이크 복귀 ${D.vary.transitions.filter(t=>t.kind==='return').map(t=>Math.round(t.q*100)).join('·')||'-'}`};
+ const rows=Object.keys(R.verbs).map(k=>{const [m,mc]=markOf(R.verbs[k]);return `<div class="rxRow"><span class="rxMark" style="color:${mc}">${m}</span><span>${verbName(S,k)}</span><div class="rxBar"><i style="width:${R.verbs[k]}%;background:${V[k].color}"></i></div><span>${R.verbs[k]}</span><small>${line[k]||''}</small></div>`;}).join('');
+ const pg=F.placeG||R.places?.[0]||'miss',[pm,pmc]=RemixUITable.marksOf[pg],pRow=`<div class="rxRow"><span class="rxMark" style="color:${pmc}">${pm}</span><span>마지막 착</span><span style="grid-column:3/5;font-size:24px">${RemixUITable.judge[pg][0]}${F.err!=null?` · ${F.err>0?'+':''}${Math.round(F.err)} ms`:''} · 네타 ${Math.abs(F.dx||0)<3?'가운데':F.dx>0?'오른쪽으로 '+Math.round(F.dx)+' px':'왼쪽으로 '+Math.round(-F.dx)+' px'}${F.rot?` · ${Math.abs(F.rot).toFixed(0)}° 기움`:''}</span></div>`;
+ const tiers=tierScores(X.run);const nx=nextId(X.stageId),nS=nx&&stageOf(nx),open=nx&&isOpen(nx),face={nod:{eyes:'closed',mouth:'smile'},hmm:{eyes:'open',mouth:'flat'},shake:{eyes:'narrow',mouth:'frown'}}[F.react||'hmm'];
+ const unlock=R.unlocked?`<div class="rxUnlock">다음 횟감 「${nS.name}」${josa(nS.name,'이','가')} 열렸어요!</div>`:!R.pass?`<div class="rxUnlock no">「동」 이상이면 통과 · 다음 판이 열려요</div>`:nx?'':`<div class="rxUnlock">마지막 판까지 통과했어요!</div>`;
+ resultEl.innerHTML=`<div class="rxSheet"><div class="rxSL"><div class="rxSH"><em>검수표</em><h2>${S.name}</h2><span class="rxStars">${'★'.repeat(S.stars)}<i>${'★'.repeat(5-S.stars)}</i></span><span>${S.gimmick} · ${RemixUITable.kindName[S.kind]}</span></div><div class="rxRows">${rows}${pRow}</div>
+ ${tiers.length>1?`<div class="rxTier">단계별 — ${tiers.map(t=>`${RemixUITable.tierName[t.tier]} <b>${t.score}</b>`).join(' · ')}</div>`:''}<div class="rxMemo">검수 메모 — 「${R.comment[0]}」<br>「${R.comment[1]}」</div></div>
+ <div class="rxSR"><div class="rxPlate">${sushiSvg(S.neta,{dx:F.dx||0,rot:F.rot||0,gloss:F.gloss??.5})}</div><div class="rxStamp" aria-label="등급 ${R.grade}">${R.grade==='한 번 더'?'다시':R.grade}<small>${R.total}</small></div><div class="rxFace">${masterSvg('rxmr',face)}</div><div class="rxSay">「${F.line||''}」</div>${unlock}</div></div>
+ <div class="rxBtns"><button data-a="next">${open?`다음 판 「${nS.name}」 (Enter)`:'한 번 더 (Enter)'}</button><button data-a="retry">다시 (Space)</button><button data-a="menu">메뉴 (Esc)</button></div>`;
+ resultEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.a;if(a==='retry')go(X.stageId);else if(a==='next')go(open?nx:X.stageId);else toMenu();}));}
 
 /* ── 그리기 ── */
 const TAU=Math.PI*2,ease=x=>1-(1-x)*(1-x);
 function rr(x,y,w,h,r,fill,stroke,lw=4){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke();}}
 function oval(x,y,rx,ry,fill,stroke,lw=4,rot=0){ctx.beginPath();ctx.ellipse(x,y,Math.max(1,rx),Math.max(1,ry),rot,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke();}}
 function text(t,x,y,size,color,align='center',weight=800,stroke=null){ctx.font=`${weight} ${size}px 'Malgun Gothic',sans-serif`;ctx.textAlign=align;ctx.textBaseline='middle';if(stroke){ctx.lineWidth=Math.max(4,size/7);ctx.strokeStyle=stroke;ctx.lineJoin='round';ctx.strokeText(t,x,y);}ctx.fillStyle=color;ctx.fillText(t,x,y);}
+function fitText(t,x,y,maxW,size,color,align='center',weight=800,stroke=null){ctx.font=`${weight} ${size}px 'Malgun Gothic',sans-serif`;const w=ctx.measureText(t).width;if(w>maxW)size=Math.max(14,Math.floor(size*maxW/w));text(t,x,y,size,color,align,weight,stroke);return Math.min(w,maxW);}
 function riceBall(x,y,w,h,rot,squash=1,scatter=0,tilt=0){ctx.save();ctx.translate(x,y);ctx.rotate(tilt*Math.PI/180);oval(0,h*.55,w*.55,16,'#0A101766');ctx.scale(squash,1/squash);oval(0,0,w/2,h/2,C0.rice,'#0A1017',5);ctx.save();ctx.beginPath();ctx.ellipse(0,0,w/2-4,h/2-4,0,0,TAU);ctx.clip();
  for(let i=0;i<26;i++){const a=i*2.399+rot,rad=(i%7+1)/8,gx2=Math.cos(a)*w/2*rad,gy=Math.sin(a)*h/2*rad*.9;oval(gx2,gy,9,5,C0.grain,null,0,a);}ctx.restore();
- if(scatter>0)for(let i=0;i<10;i++){const a=i*0.63+rot*.3,d=w*.55+scatter*60*((i%3)+1)/3;oval(Math.cos(a)*d,Math.sin(a)*d*.7,7,4,C0.rice,'#0A1017',2,a);}ctx.restore();}
+ if(scatter>.05){ctx.globalAlpha=Math.min(1,scatter*1.6);for(let i=0;i<10;i++){const a=i*0.63+rot*.3,d=w*.55+scatter*60*((i%3)+1)/3;oval(Math.cos(a)*d,Math.sin(a)*d*.7,7,4,C0.rice,'#0A1017',2,a);}ctx.globalAlpha=1;}ctx.restore();}
 function handShape(x,y,side,lift=0,curl=0){ctx.save();ctx.translate(x,y-lift);ctx.scale(side,1);rr(-150,30,150,62,26,C0.handDk,'#0A1017',4);oval(0,24,78,58,C0.hand,'#0A1017',4);for(let i=0;i<4;i++)rr(-58+i*30,-56+Math.abs(i-1.2)*8+curl*16,26,74-curl*14,12,C0.hand,'#0A1017',3);rr(62,-6,26,62,12,C0.hand,'#0A1017',3);ctx.restore();}
 function netaShape(x,y,rot,s=1){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(s,s);rr(-48,-20,96,40,18,C0.neta,'#0A1017',4);ctx.strokeStyle=C0.netaLine;ctx.lineWidth=5;for(const dx of [-22,0,22]){ctx.beginPath();ctx.moveTo(dx-8,-14);ctx.lineTo(dx+8,14);ctx.stroke();}ctx.restore();}
-function bg(now,sec){const bd=document.getElementById('roomBackdrop');if(bd)ctx.drawImage(bd,0,0);else{ctx.fillStyle=C0.navy;ctx.fillRect(0,0,1920,1080);}const f=sec?(sec.feel==='break'?'break':L.feelOf(sec)):'straight',col=L.FeelTable[f]?.color||C0.sky;
- ctx.fillStyle=sec&&sec.feel==='break'?'rgba(5,8,12,.78)':'rgba(10,16,23,.55)';ctx.fillRect(0,0,1920,1080);const g=ctx.createRadialGradient(960,620,80,960,620,820);g.addColorStop(0,col+'33');g.addColorStop(1,'#0A101700');ctx.fillStyle=g;ctx.fillRect(0,0,1920,1080);
- rr(300,930,1320,180,30,'#2a2018','#0A1017',6);}
-function drawHud(now,B,sec){const C=X.C,S=C.stage,T=C.secs;rr(470,26,980,40,14,'#0A1017cc');const x0=478,w=964,total=C.endBeat;
- for(const s of T){const a=x0+w*s.b0/total,b=x0+w*s.b1/total,v=L.VerbTable[s.verb];const brk=s.feel==='break';rr(a+1,32,b-a-2,28,8,brk?'#3E5A60':v.color+(s===sec?'':'99'));if(brk){ctx.save();ctx.beginPath();ctx.rect(a+1,32,b-a-2,28);ctx.clip();ctx.strokeStyle='#0A101788';ctx.lineWidth=4;for(let k=a-30;k<b;k+=12){ctx.beginPath();ctx.moveTo(k,60);ctx.lineTo(k+28,32);ctx.stroke();}ctx.restore();}
-  if(b-a>58&&s.verb!=='count')text(brk?'쉿':v.name.replace('던지고 받기','토스').replace('프리스타일','즉흥').replace('양손 폴리','폴리'),(a+b)/2,47,17,'#0A1017','center',900);}
- const ph=x0+w*Math.max(0,Math.min(total,B))/total;rr(ph-3,22,6,48,3,C0.cream);
- text(S.name,40,52,30,C0.gold,'left',900,'#0A1017');const line=sec?.line||'';if(line)text(line,960,104,36,C0.cream,'center',800,'#0A1017');
- const f=sec?(sec.feel==='break'?'break':sec.feel==='count'?'count':L.feelOf(sec)):'count',F=L.FeelTable[f],bpm=Math.round(60/C.beatDur(Math.max(0,Math.floor(B))));rr(1478,22,410,92,20,'#0A1017cc',F.color,4);text(F.name,1500,52,30,F.color,'left',900);text(F.short,1500,90,21,C0.sub,'left',700);text(bpm+' BPM',1868,52,26,C0.cream,'right',900);
- const bi=Math.floor(B),inBar=((bi%4)+4)%4,fr=B-bi;for(let i=0;i<4;i++){const on=i===inBar&&sec?.feel!=='break',r=on?13-6*fr:8;oval(1760+i*30,92,r,r,on?F.color:'#3E5A60');}}
-function drawMeters(now){const M=RemixUITable.meters;if(now-X.meterAt>.25){X.meterAt=now;X.meters=L.results(X.run);}const R=X.meters;if(!R)return;rr(M.x-6,M.y-14,M.w+12,M.row*5+20,18,'#0A1017cc');let y=M.y+8;
- for(const k of ['spin','toss','poly','free','vary']){const v=L.VerbTable[k],has=R.verbs[k]!=null,val=has?R.verbs[k]:0;text(v.name,M.x+8,y+8,20,has?C0.cream:'#3E5A60','left',800);rr(M.x+150,y,220,16,8,'#1E3746');if(has)rr(M.x+150,y,220*val/100,16,8,v.color);text(has?String(val):'-',M.x+M.w-6,y+8,20,C0.cream,'right',900);y+=M.row;}}
-function popAdd(t,txt,x,y,color,size=40){X.pops.push({t,txt,x,y,color,size});if(X.pops.length>40)X.pops.shift();}
-function drawPops(now){for(const p of X.pops){const age=now-p.t;if(age<0||age>.75)continue;ctx.globalAlpha=1-age/.75;text(p.txt,p.x,p.y-age*60,p.size,p.color,'center',900,'#0A1017');}ctx.globalAlpha=1;X.pops=X.pops.filter(p=>now-p.t<.8);}
+/* 네타 그림(그 판 횟감). w = 폭(px, 높이 = w/2) · o.sq = 세로 눌림 · o.gloss = 윤기(하이라이트 + 금이면 반짝임) · o.t = 검수 뒤 경과(빛 쓸기) */
+function drawNeta(id,x,y,w,rot=0,o={}){const im=NETA_IMG[id];ctx.save();ctx.translate(x,y);ctx.rotate(rot);if(o.sq&&o.sq!==1){ctx.translate(0,w*.15);ctx.scale(1+(1-o.sq)*.6,o.sq);ctx.translate(0,-w*.15);}
+ if(im&&im.complete&&im.naturalWidth)ctx.drawImage(im,-w/2,-w/4,w,w/2);else netaShape(0,0,0,w/110);
+ const g=o.gloss||0;if(g>0){ctx.globalAlpha=.55*g;oval(-w*.1,-w*.07,w*.22,w*.032,'#fff',null,0,-.07);const tt=o.t??9;if(tt>=0&&tt<.7){const u=tt/.7;ctx.globalAlpha=.4*g*Math.sin(Math.PI*u);oval(-w*.42+w*.84*u,w*.02,w*.05,w*.13,'#fff',null,0,.35);}ctx.globalAlpha=1;
+  if(g>=.9){const tw=(Math.sin((o.now||0)*7)+1)/2;for(const [sx,sy,s] of [[w*.4,-w*.16,1],[-w*.36,-w*.15,.7],[w*.12,-w*.22,.55]]){ctx.globalAlpha=.5+.5*tw;star(sx,sy,12*s*(.7+.3*tw),'#FFF6D8');}ctx.globalAlpha=1;}}
+ ctx.restore();}
+function star(x,y,r,c){ctx.beginPath();ctx.moveTo(x,y-r);ctx.lineTo(x+r*.28,y-r*.28);ctx.lineTo(x+r,y);ctx.lineTo(x+r*.28,y+r*.28);ctx.lineTo(x,y+r);ctx.lineTo(x-r*.28,y+r*.28);ctx.lineTo(x-r,y);ctx.lineTo(x-r*.28,y-r*.28);ctx.closePath();ctx.fillStyle=c;ctx.fill();}
+function gunkanBack(x,y){oval(x,y-26,84,17,C0.rice,'#0A1017',3);}
+function gunkanFront(x,y){ctx.beginPath();ctx.ellipse(x,y-26,84,17,0,0,Math.PI);ctx.lineTo(x-84,y+36);ctx.ellipse(x,y+36,84,17,0,Math.PI,0,true);ctx.closePath();ctx.fillStyle=C0.nori;ctx.fill();ctx.strokeStyle='#0A1017';ctx.lineWidth=4;ctx.stroke();ctx.strokeStyle='#2F4436';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x-76,y+4);ctx.quadraticCurveTo(x,y+16,x+76,y+4);ctx.stroke();}
+function bg(now,sec){ctx.clearRect(0,0,1920,1080);/* 매 프레임 비움(배경이 덮지만 검증 도구의 글자 기록이 쌓이지 않게) */const bd=document.getElementById('roomBackdrop');if(bd)ctx.drawImage(bd,0,0);else{ctx.fillStyle=C0.navy;ctx.fillRect(0,0,1920,1080);}const f=sec?(sec.feel==='break'?'break':L.feelOf(sec)):'straight',col=L.FeelTable[f]?.color||C0.sky;
+ ctx.fillStyle=sec&&sec.feel==='break'?'rgba(5,8,12,.78)':'rgba(10,16,23,.55)';ctx.fillRect(0,0,1920,1080);const g=ctx.createRadialGradient(960,640,80,960,640,820);g.addColorStop(0,col+'33');g.addColorStop(1,'#0A101700');ctx.fillStyle=g;ctx.fillRect(0,0,1920,1080);
+ /* 세 자리: 왼쪽 힙합 무대(네온 바닥) · 오른쪽 전통 무대(나무 마루) · 가운데 위 검수대 */
+ rr(16,690,356,24,10,'#1E2A33','#74C9E6',3);rr(1548,690,356,24,10,'#6B3D1D','#C8352C',3);rr(300,930,1320,180,30,'#2a2018','#0A1017',6);}
+function drawHud(now,B,sec){const C=X.C,S=C.stage,T=C.secs,H=RemixUITable.hud,bx=H.bar.x,bw=H.bar.w,by=H.bar.y,bh=H.bar.h,total=C.endBeat;rr(bx-8,by-6,bw+16,bh+12,14,'#0A1017cc');
+ for(const s of T){const a=bx+bw*s.b0/total,b=bx+bw*s.b1/total,v=L.VerbTable[s.verb];const brk=s.feel==='break';rr(a+1,by,b-a-2,bh,8,brk?'#3E5A60':v.color+(s===sec?'':'99'));if(brk){ctx.save();ctx.beginPath();ctx.rect(a+1,by,b-a-2,bh);ctx.clip();ctx.strokeStyle='#0A101788';ctx.lineWidth=4;for(let k=a-30;k<b;k+=12){ctx.beginPath();ctx.moveTo(k,by+bh);ctx.lineTo(k+28,by);ctx.stroke();}ctx.restore();}
+  if(b-a>50&&s.verb!=='count')text(brk?'쉿':s.verb==='place'?'착':shortName(S,s.verb),(a+b)/2,by+bh/2+1,16,'#0A1017','center',900);}
+ const ph=bx+bw*clamp(B/total);rr(ph-3,by-8,6,bh+16,3,C0.cream);
+ fitText(`${S.name} · ${S.gimmick}`,40,40,400,32,C0.gold,'left',900,'#0A1017');const tier=sec?.tier?RemixUITable.tierName[sec.tier]:S.kind!=='solo'?RemixUITable.kindName[S.kind]:'';if(tier){ctx.font=`900 21px 'Malgun Gothic',sans-serif`;const w=ctx.measureText(tier).width;rr(36,66,w+24,34,12,sec?.tier===2?C0.bad:'#1E3746','#0A1017',3);text(tier,48,84,21,C0.cream,'left',900);}
+ const line=sec?.line||'';X.lineW=line?fitText(line,960,H.line.y,1100,H.line.size,C0.cream,'center',800,'#0A1017'):0;
+ const f=sec?(sec.feel==='break'?'break':sec.feel==='count'?'count':L.feelOf(sec)):'count',F=L.FeelTable[f],bpm=Math.round(60/C.beatDur(Math.max(0,Math.floor(B))));rr(1478,12,410,92,20,'#0A1017cc',F.color,4);text(F.name,1500,42,30,F.color,'left',900);text(F.short,1500,80,21,C0.sub,'left',700);text(bpm+' BPM',1868,42,26,C0.cream,'right',900);
+ const bi=Math.floor(B),inBar=((bi%4)+4)%4,fr=B-bi;for(let i=0;i<4;i++){const on=i===inBar&&sec?.feel!=='break',r=on?12-6*fr:7;oval(1770+i*28,82,r,r,on?F.color:'#3E5A60');}}
+function drawMeters(now){const M=RemixUITable.meters,keys=X.C.stage.scoreVerbs;if(now-X.meterAt>.25){X.meterAt=now;X.meters=L.results(X.run);}const R=X.meters;if(!R)return;const y0=M.bottom-keys.length*M.row-14;rr(M.x-6,y0-14,M.w+12,M.row*keys.length+20,18,'#0A1017cc');let y=y0+8;
+ for(const k of keys){const v=L.VerbTable[k],has=R.verbs[k]!=null,val=has?R.verbs[k]:0;text(verbName(X.C.stage,k),M.x+8,y+8,20,has?C0.cream:'#3E5A60','left',800);rr(M.x+150,y,220,16,8,'#1E3746');if(has)rr(M.x+150,y,220*val/100,16,8,v.color);text(has?String(val):'-',M.x+M.w-6,y+8,20,C0.cream,'right',900);y+=M.row;}}
+function popAdd(t,txt,x,y,color,size=40){ctx.font=`900 ${size}px 'Malgun Gothic',sans-serif`;X.pops.push({t,txt,x,y,color,size,w:ctx.measureText(txt).width+size*.3});if(X.pops.length>40)X.pops.shift();}
+function drawPops(now){for(const p of X.pops){const age=now-p.t;if(age<0||age>.75)continue;ctx.globalAlpha=1-age/.75;text(p.txt,p.x,p.y-(X.rm?0:age*60),p.size,p.color,'center',900,'#0A1017');}ctx.globalAlpha=1;X.pops=X.pops.filter(p=>now-p.t<.8);}
+/* 스승 검수: 판정 하나하나를 표시(○△×)하고 끄덕/눈썹 */
+function judge(g,now,quiet){const M=X.ms;X.marks.push({t:now,g});if(X.marks.length>40)X.marks.splice(0,20);if(quiet)return;if(g==='perfect'){if(now-M.nodT>CastTable.master.nodGap)M.nodT=now;}else if(g==='miss')M.browT=now;}
 function consumeFx(now){const F=X.run.fx,U=RemixUITable,J=U.judge;for(;X.fxi<F.length;X.fxi++){const e=F[X.fxi];
- if(e.type==='catch'){popAdd(now,J[e.g][0],U.toss.handX,U.toss.handY-170,J[e.g][1]);X.mkReact={id:e.g==='perfect'?'great':'nod',t:now};}
- else if(e.type==='drop'){popAdd(now,'놓쳤어요',U.toss.handX,U.toss.handY-170,J.miss[1]);X.mkReact={id:'ears',t:now};liveSound({word:RemixAudioTable.drop.word,vel:RemixAudioTable.drop.gain});}
- else if(e.type==='pulse'){const tilt=Math.abs(X.run.tilt)>12;if(e.g!=='perfect'||tilt)popAdd(now,e.g==='miss'?'왼손!':tilt?'기울어요!':J[e.g][0],U.poly.lx,U.poly.ly-200,J[e.g][1],32);}
- else if(e.type==='right'){popAdd(now,J[e.g][0],U.poly.rx,U.poly.ry-190,J[e.g][1],32);}
- else if(e.type==='place'){popAdd(now,e.g==='miss'?'놓쳤어요':'착!',U.place.x,U.place.y-200,J[e.g][1],64);if(e.g!=='miss'){X.mkReact={id:'great',t:now};X.catReact={id:'place',t:now};}}
- else if(e.type==='freeBar'){const s=e.score;popAdd(now,s.flags.includes('spam')?'같은 키만…':s.score>.75?'그루브!':s.score>.5?'좋아요':'더 섞어 봐요',960,250,s.score>.75?C0.good:s.score>.5?C0.gold:C0.warn,40);if(s.score>.75)X.catReact={id:'groove',t:now};}
- else if(e.type==='mix'){X.catReact={id:'mix',t:now};}
+ if(e.type==='catch'){popAdd(now,J[e.g][0],U.toss.handX,U.toss.handY-170,J[e.g][1]);judge(e.g,now);}
+ else if(e.type==='drop'){popAdd(now,'놓쳤어요',U.toss.handX,U.toss.handY-170,J.miss[1]);judge('miss',now);liveSound({word:RemixAudioTable.drop.word,vel:RemixAudioTable.drop.gain});}
+ else if(e.type==='pulse'){const tilt=Math.abs(X.run.tilt)>12;if(e.g!=='perfect'||tilt)popAdd(now,e.g==='miss'?'왼손!':tilt?'기울어요!':J[e.g][0],U.poly.lx,U.poly.ly-200,J[e.g][1],32);judge(e.g,now);}
+ else if(e.type==='right'){popAdd(now,J[e.g][0],U.poly.rx,U.poly.ry-190,J[e.g][1],32);judge(e.g,now);}
+ else if(e.type==='place'){if(e.g==='miss')liveSound({word:RemixAudioTable.place.miss,vel:1});judge(e.g,now,true);X.landAt=now;}
+ else if(e.type==='freeBar'){const s=e.score;popAdd(now,s.flags.includes('spam')?'같은 키만…':s.score>.75?'그루브!':s.score>.5?'좋아요':'더 섞어 봐요',960,U.free.popY,s.score>.75?C0.good:s.score>.5?C0.gold:C0.warn,40);if(s.flags.includes('spam')){X.ms.shakeT=now;X.marks.push({t:now,g:'miss'});}else judge(s.score>.75?'perfect':s.score>.5?'ok':'miss',now);}
+ else if(e.type==='mix'){X.tdCue=now;}
  else if(e.type==='top'){if(X.C.secAt(X.C.beatAt(e.t))?.verb==='spin')liveSound({word:RemixAudioTable.topTick.word,vel:RemixAudioTable.topTick.gain});}
- else if(e.type==='done'){finish();}}}
-function drawSpin(now,B,sec){const U=RemixUITable.spin,R=X.run,rev=L.FeelTable[L.feelOf(sec)].revBeats,bd=X.C.beatDur(Math.max(0,Math.floor(B)));
+ else if(e.type==='done'){finish();}}
+ /* 굴리기는 표본 n개마다 평균으로 검수 */
+ const S=X.run.spin.samples,n=CastTable.master.spinJudgeEvery;while(S.length-X.lastSpinN>=n){const q=S.slice(X.lastSpinN,X.lastSpinN+n).reduce((a,s)=>a+s.q,0)/n;X.lastSpinN+=n;judge(q>.75?'perfect':q>.4?'ok':'miss',now);}}
+function drawSpin(now,B,sec){const U=RemixUITable.spin,R=X.run,rev=L.FeelTable[L.feelOf(sec)].revBeats;
  const th=L.thetaAt(R,now);if(th!=null){let d=th-X.disp.th;X.disp.th+=d*Math.min(1,.35+(R.spin.path.at(-1)?.src==='key'?0:.65));}
  const tS=now-.12,smp=th!=null?L.spinSample(R,{t:tS,b:X.C.beatAt(tS),rev,sec:sec.i}):null,q=smp?smp.q:0,ratio=smp?smp.ratio:0;
  X.disp.squash+=((ratio>1.3?1.35:ratio>1.12?1.12:1)-X.disp.squash)*.15;X.disp.scatter+=((ratio>0&&ratio<.72||!th&&B>sec.b0+1?1:0)-X.disp.scatter)*.1;
  if(spinN&&audio){const T=RemixAudioTable.spinNoise,r=Math.min(1.6,Math.max(0,ratio));spinN.g.gain.setTargetAtTime(T.gainMax*Math.min(1,r),audio.currentTime,T.tau);spinN.f.frequency.setTargetAtTime(T.hz[0]+(T.hz[1]-T.hz[0])*Math.min(1,r/1.4),audio.currentTime,T.tau);}
  ctx.setLineDash([14,14]);oval(U.cx,U.cy,U.ring,U.ring,null,'#9DB4B666',4);ctx.setLineDash([]);
  const cyc=((B/rev)%1+1)%1,flash=Math.max(0,1-cyc*4),beatFl=Math.max(0,1-((B%1+1)%1)*4);ctx.beginPath();ctx.moveTo(U.cx-26,U.cy-U.ring-44);ctx.lineTo(U.cx+26,U.cy-U.ring-44);ctx.lineTo(U.cx,U.cy-U.ring-8);ctx.closePath();ctx.fillStyle=flash>0?`rgba(247,185,78,${.4+.6*flash})`:`rgba(157,180,182,${.35+.4*beatFl})`;ctx.fill();
- if(X.C.stage.guide==='full'||sec.feel==='break'&&X.C.stage.guide==='full'){const ga=TAU*B/rev;oval(U.cx+Math.sin(ga)*U.ring,U.cy-Math.cos(ga)*U.ring,16,16,'#FFF3DC55','#FFF3DC99',3);}
+ if(X.C.stage.guide==='full'){const ga=TAU*B/rev;oval(U.cx+Math.sin(ga)*U.ring,U.cy-Math.cos(ga)*U.ring,16,16,'#FFF3DC55','#FFF3DC99',3);}
  if(th!=null){const a=X.disp.th;ctx.lineWidth=14;ctx.strokeStyle=q>.7?C0.good:q>.35?C0.gold:C0.bad;ctx.beginPath();ctx.arc(U.cx,U.cy,U.ring,-Math.PI/2+a-.9,-Math.PI/2+a);ctx.stroke();oval(U.cx+Math.sin(a)*U.ring,U.cy-Math.cos(a)*U.ring,22,22,C0.gold,'#0A1017',4);}
  const a=X.disp.th,lift=Math.sin(a)*22;handShape(U.cx-205,U.cy+40,1,lift,.5);handShape(U.cx+205,U.cy+40,-1,-lift,.5);riceBall(U.cx,U.cy,U.rice.w,U.rice.h,a,X.disp.squash,X.disp.scatter);
- const st=!th?'원을 그려요 (드래그 · ↑→↓←)':ratio<=0.05?'멈췄어요 · 계속 돌려요':ratio>1.3?'너무 빨라요 · 밥이 납작해요':ratio<.72?'너무 느려요 · 밥알이 흩어져요':smp&&Math.abs(smp.errMs)>120?(smp.errMs<0?'박보다 앞서요':'박보다 늦어요'):'좋아요 · 박마다 위를 지나요';text(st,U.cx,U.cy+U.ring+70,30,q>.7?C0.good:q>.35?C0.gold:C0.warn,'center',800,'#0A1017');
- text(rev===2?'2박에 한 바퀴':'1박에 한 바퀴',U.cx,U.cy-U.ring-74,24,C0.sub,'center',800,'#0A1017');}
-function drawToss(now){const U=RemixUITable.toss,R=X.run;handShape(U.handX-70,U.handY+40,1,0,.9);handShape(U.handX+70,U.handY+40,-1,0,.9);
+ const st=!th?'원을 그려요 (드래그 · ↑→↓←)':ratio<=0.05?'멈췄어요 · 계속 돌려요':ratio>1.3?'너무 빨라요 · 밥이 납작해요':ratio<.72?'너무 느려요 · 밥알이 흩어져요':smp&&Math.abs(smp.errMs)>120?(smp.errMs<0?'박보다 앞서요':'박보다 늦어요'):'좋아요 · 박마다 위를 지나요';text(st,U.cx,U.cy+U.ring+64,30,q>.7?C0.good:q>.35?C0.gold:C0.warn,'center',800,'#0A1017');
+ text(rev===2?'2박에 한 바퀴':'1박에 한 바퀴',U.cx,U.cy+U.ring+104,24,C0.sub,'center',800,'#0A1017');}
+function drawToss(now){const U=RemixUITable.toss,R=X.run,nid=X.C.stage.neta,toss=(x,xx,yy,r,s=1)=>x.obj==='neta'?drawNeta(nid,xx,yy,110*s,r):riceBall(xx,yy,70*s,52*s,r*3);handShape(U.handX-70,U.handY+40,1,0,.9);handShape(U.handX+70,U.handY+40,-1,0,.9);
  for(const x of R.tosses){if(now<x.tToss-.15||now>x.tLand+.9)continue;const x0=U.handX+x.side*U.fromDX,x1=U.handX,y1=U.handY,u=(now-x.tToss)/(x.tLand-x.tToss);
-  if(u<0){(x.obj==='neta'?netaShape(x0,y1+8,0,.9):riceBall(x0,y1,70,52,0));continue;}
-  if(u<=1){const sh=.25+.75*u;oval(x1,y1+60,48*sh,12*sh,`rgba(10,16,23,${.25+.5*u})`);const xx=x0+(x1-x0)*u,yy=y1-4*x.h*u*(1-u);x.obj==='neta'?netaShape(xx,yy,u*TAU*x.flightBeats*.5,1):riceBall(xx,yy,70,52,u*6);continue;}
-  const age=now-x.tLand;if(x.res&&x.res.g!=='miss'){ctx.globalAlpha=Math.max(0,1-age/.9);x.obj==='neta'?netaShape(x1,y1-6,0,1):riceBall(x1,y1-10,70,52,0);if(age<.25)oval(x1,y1-10,60+age*200,30+age*90,null,x.res.g==='perfect'?C0.good:C0.gold,6);ctx.globalAlpha=1;}
-  else if(x.res){const k=Math.min(1,age/.5),yy=y1+k*150-Math.sin(k*Math.PI)*40;ctx.globalAlpha=Math.max(0,1-age/.9);x.obj==='neta'?netaShape(x1+30*k,yy,k*2,1):riceBall(x1+30*k,yy,70,52,k*4,1,.6);ctx.globalAlpha=1;}}
+  if(u<0){toss(x,x0,y1+8,0,.9);continue;}
+  if(u<=1){const sh=.25+.75*u;oval(x1,y1+60,48*sh,12*sh,`rgba(10,16,23,${.25+.5*u})`);const xx=x0+(x1-x0)*u,yy=y1-4*x.h*u*(1-u);toss(x,xx,yy,u*TAU*x.flightBeats*.5);continue;}
+  const age=now-x.tLand;if(x.res&&x.res.g!=='miss'){ctx.globalAlpha=Math.max(0,1-age/.9);toss(x,x1,y1-8,0);if(age<.25)oval(x1,y1-10,60+age*200,30+age*90,null,x.res.g==='perfect'?C0.good:C0.gold,6);ctx.globalAlpha=1;}
+  else if(x.res){const k=Math.min(1,age/.5),yy=y1+k*150-Math.sin(k*Math.PI)*40;ctx.globalAlpha=Math.max(0,1-age/.9);toss(x,x1+30*k,yy,k*2);ctx.globalAlpha=1;}}
  const caught=R.tosses.filter(x=>x.res&&x.res.g!=='miss').length,done=R.tosses.filter(x=>x.res).length;text(`받은 개수 ${caught} / ${done}`,U.handX,U.handY+150,26,C0.sub,'center',800,'#0A1017');}
 function drawPoly(now,B,sec){const U=RemixUITable.poly,R=X.run;X.disp.tilt+=(R.tilt-X.disp.tilt)*.12;const la=now-X.disp.leftAt,ra=now-X.disp.rightAt;
  handShape(U.lx,U.ly+30,1,la<.12?-10*(1-la/.12):0,.2);riceBall(U.lx-10,U.ly-50,170,112,0,1,Math.abs(X.disp.tilt)>14?.5:0,X.disp.tilt);
  handShape(U.rx,U.ry,-1,ra<.12?-26*(1-ra/.12):12,.8);
- const brk=sec.feel==='break';if(!brk)for(let i=0;i<4;i++){const bi=Math.floor(B),on=((bi%4)+4)%4===i;oval(U.lx-90+i*60,U.ly+150,on?14:9,on?14:9,on?C0.sky:'#3E5A60');}
- text('왼손 A · 박마다',U.lx,U.ly+196,24,C0.sky,'center',800,'#0A1017');if(!sec.leftOnly)text('오른손 L',U.rx,U.ry+170,24,C0.good,'center',800,'#0A1017');if(Math.abs(X.disp.tilt)>12)text('밥이 기울어요!',U.lx,U.ly-170,28,C0.warn,'center',900,'#0A1017');
+ /* 왼손 박 줄: 이 마디의 펄스 자리(스윙·셋잇단이면 실제 시각대로 밀림) · 지난 것은 판정 색 · 방금 박은 번쩍(브레이크엔 번쩍 없음) */
+ const brk=sec.feel==='break',Ln=U.lane,lx0=U.lx-Ln.w/2,ly=U.ly+Ln.dy,bar0=sec.b0+4*Math.floor((B-sec.b0)/4),t0=X.C.timeOf(bar0),t1=X.C.timeOf(bar0+4);rr(lx0-16,ly-16,Ln.w+32,32,16,'#0A1017cc','#3E5A60',3);
+ for(const p of R.pulses){if(p.b<bar0-1e-9||p.b>=bar0+4-1e-9)continue;const x=lx0+Ln.w*(p.t-t0)/(t1-t0),on=!brk&&now>=p.t&&now<p.t+.15,col=p.res?(p.res.g==='miss'?C0.bad:p.res.g==='perfect'?C0.good:C0.gold):on?C0.sky:'#3E5A60';oval(x,ly,on?13:9,on?13:9,col,'#0A1017',2);}
+ text((sec.leftOnly&&X.C.stage.verbNames?.poly?'A · 박 짚기':'왼손 A')+(brk?' · 소리 없이':''),U.lx,U.ly+196,24,C0.sky,'center',800,'#0A1017');if(!sec.leftOnly)text('오른손 L',U.rx,U.ry+170,24,C0.good,'center',800,'#0A1017');if(Math.abs(X.disp.tilt)>12)text('밥이 기울어요!',U.lx,U.ly-170,28,C0.warn,'center',900,'#0A1017');
  const G=U.ring,k=Math.floor((B-sec.b0)/4),phase=((B-sec.b0)%4+4)%4/4;if(!sec.leftOnly&&(sec.right||[]).length){oval(G.x,G.y,G.r,G.r,'#0A1017cc','#3E5A60',4);for(let i=0;i<4;i++){const a=i/4*TAU;ctx.strokeStyle='#3E5A60';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(G.x+Math.sin(a)*(G.r-16),G.y-Math.cos(a)*(G.r-16));ctx.lineTo(G.x+Math.sin(a)*G.r,G.y-Math.cos(a)*G.r);ctx.stroke();}
-  const preview=k<(sec.rightFromBar??0);for(const p of sec.right){const a=p/4*TAU,B0=sec.b0+4*k+p,r=R.rights.find(x=>Math.abs(x.b-B0)<1e-6),col=preview?'#FFF3DC':r?.res?(r.res.g==='miss'?C0.bad:r.res.g==='perfect'?C0.good:C0.gold):'#FFF3DCaa';oval(G.x+Math.sin(a)*(G.r-34),G.y-Math.cos(a)*(G.r-34),15,15,col,'#0A1017',3);}
+  const preview=k<(sec.rightFromBar??0);for(const p of sec.right){const a=p/4*TAU,B0=sec.b0+4*k+p,r=R.rights.find(x=>Math.abs(x.b-B0)<1e-6),col=preview?'#FFF3DC':r?.res?(r.res.g==='miss'?C0.bad:r.res.g==='perfect'?C0.good:C0.gold):'#FFF3DCaa';oval(G.x+Math.sin(a)*(G.r-32),G.y-Math.cos(a)*(G.r-32),14,14,col,'#0A1017',3);}
   const a=phase*TAU;ctx.strokeStyle=C0.cream;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(G.x,G.y);ctx.lineTo(G.x+Math.sin(a)*(G.r-10),G.y-Math.cos(a)*(G.r-10));ctx.stroke();text(preview?'고양이 시범 · 들어 봐요':'오른손 고리',G.x,G.y+G.r+26,22,preview?C0.gold:C0.sub,'center',800,'#0A1017');}}
 function drawFree(now,B,sec){const U=RemixUITable.free,R=X.run,bars=R.free.bars.filter(b=>b.sec===sec.i),cur=bars.find(b=>now>=b.t0-.07&&now<b.t1-.07)||bars[0],S=U.strip;
- const roleLine={call:'고양이 콜 · 들어 봐요',play:'반쵸 차례 · 자유롭게!',mix:'고양이가 반쵸 리듬을 섞어 돌려줘요',answer:'고양이의 대답 · 반쵸 리듬이 섞였어요'}[cur.role];text(roleLine,960,272,36,cur.role==='play'?C0.gold:C0.cream,'center',900,'#0A1017');
+ const roleLine={call:'힙합 고양이의 콜 · 들어 봐요',play:'반쵸 차례 · 자유롭게!',mix:'전통 고양이가 반쵸 리듬을 섞어 돌려줘요',answer:'전통 고양이의 대답 · 반쵸 리듬이 섞였어요'}[cur.role];text(roleLine,960,U.line.y,34,cur.role==='play'?C0.gold:C0.cream,'center',900,'#0A1017');
  const strip=(y,label,pat,hits,steps,bar,col)=>{rr(S.x,y,S.w,S.h,14,'#0A1017cc','#3E5A60',3);text(label,S.x-14,y+S.h/2,22,C0.sub,'right',800);const cw=S.w/steps;for(let i=0;i<steps;i++)if(i%(steps/4)===0){ctx.fillStyle='#3E5A60';ctx.fillRect(S.x+i*cw,y+6,2,S.h-12);}
   for(const [st,snd] of pat||[])oval(S.x+(st+.5)*cw,y+S.h/2,13,13,RemixUITable.sndColor[snd]+(col?'':'66'),'#0A1017',2);for(const h of hits||[]){oval(S.x+(h.step+.5)*cw+Math.max(-cw/2,Math.min(cw/2,h.err/1000/((bar.t1-bar.t0)/steps)*cw)),y+S.h/2,15,15,RemixUITable.sndColor[h.snd],'#0A1017',3);}
   if(bar&&now>=bar.t0&&now<bar.t1){const x=S.x+S.w*(X.C.beatAt(now)-bar.b0)/4;ctx.fillStyle=C0.cream;ctx.fillRect(x-2,y-6,4,S.h+12);}};
  const ref=cur.role==='play'?(cur.callRef!=null?R.free.bars[cur.callRef]:null):cur;const refPat=ref?(ref.role==='call'?ref.pattern:ref.dyn):null;
  strip(S.y,'고양이',refPat,null,cur.steps,cur.role!=='play'?cur:null,cur.role!=='play');strip(S.y+S.h+S.gap,'반쵸',null,cur.role==='play'?cur.hits:[],cur.steps,cur.role==='play'?cur:null,true);
- const sc=[...bars].reverse().find(b=>b.score);if(sc){const s=sc.score,x=1490,y=610;rr(x,y,300,150,16,'#0A1017cc');[['그루브',s.pocket,C0.good],['다양성',s.diversity,C0.gold],['응답',s.response,C0.sky]].forEach(([n,v,c],i)=>{text(n,x+16,y+28+i*44,22,C0.cream,'left',800);rr(x+110,y+18+i*44,170,18,9,'#1E3746');rr(x+110,y+18+i*44,170*v,18,9,c);});}
+ const sc=[...bars].reverse().find(b=>b.score);if(sc){const s=sc.score,x=U.score.x,y=U.score.y;rr(x,y,300,150,16,'#0A1017cc');[['그루브',s.pocket,C0.good],['다양성',s.diversity,C0.gold],['응답',s.response,C0.sky]].forEach(([n,v,c],i)=>{text(n,x+16,y+28+i*44,22,C0.cream,'left',800);rr(x+110,y+18+i*44,170,18,9,'#1E3746');rr(x+110,y+18+i*44,170*v,18,9,c);});}
  const pw=U.padW,gap=U.padGap,x0=960-(5*pw+4*gap)/2;RemixUITable.pads.forEach((k,i)=>{const K=L.KeySoundTable[k],age=now-(X.disp.padAt[k]??-9),on=age<.15,x=x0+i*(pw+gap),y=U.padY-(on?8:0);rr(x,y,pw,pw*.92,22,on?RemixUITable.sndColor[K.snd]:'#132430','#0A1017',5);text(k,x+pw/2,y+42,44,on?'#0A1017':C0.cream,'center',900);text(K.label+' · '+K.cook,x+pw/2,y+100,22,on?'#0A1017':C0.sub,'center',800);});
- const ha=now-X.disp.catHit,bump=ha<.15?1-ha/.15:0;riceBall(960,600,150,100,X.C.beatAt(now)*.6,1+bump*.18,0);}
-function drawPlace(now,B,sec){const U=RemixUITable.place,p=X.run.places.find(x=>x.sec===sec.i);oval(U.x,U.y+40,190,46,'#E9E2D2','#0A1017',5);oval(U.x,U.y+34,150,30,'#F6F1E6');
- if(p){const dt=p.t-now;if(!p.res&&dt>-.2&&dt<2.2){const r=40+U.r0*Math.max(0,dt)/2;oval(U.x,U.y,r,r*.5,null,dt<.08?C0.good:C0.gold,7);text('스페이스',U.x,U.y-150,30,C0.cream,'center',900,'#0A1017');}
-  if(p.res&&p.res.g!=='miss'){const age=now-p.res.t,k=Math.min(1,age/.25);riceBall(U.x,U.y-10-40*(1-k),150,80,0);netaShape(U.x,U.y-46-40*(1-k),0,1.4);} else if(!p.res){riceBall(U.x-260,U.y-120,130,72,0);netaShape(U.x-260,U.y-150,0,1.2);}}
- if(now>=X.C.timeOf(sec.b0)+.3)text(X.C.stage.finale,960,330,72,C0.gold,'center',900,'#0A1017');}
-function drawCount(now,B){const i=Math.floor(B);if(i<0||i>3)return;const fr=B-i;text(['하나','둘','셋','넷'][i],960,560,150*(1.1-.1*fr),C0.cream,'center',900,'#0A1017');}
-function drawWarn(now){const w=X.C.warnings.find(w=>now>=w.tFrom&&now<w.tTo);if(!w)return;const left=X.C.beatAt(w.t)-X.C.beatAt(now),blink=(left%1+1)%1>.5;const col=L.FeelTable[w.kind]?.color||(w.kind==='return'?C0.good:w.kind==='accel'?C0.bad:C0.sky);
- rr(610,136,700,108,24,'#0A1017ee',blink?col:col+'88',7);text(w.label,960,176,38,col,'center',900);text(left>0?`${Math.ceil(left)}박 뒤`:'지금!',960,222,24,C0.cream,'center',800);}
-function drawBreak(now,B,sec){if(sec.feel!=='break')return;text('쉿 — 소리 없이 박을 지켜요',1010,1010,34,C0.sub,'center',800,'#0A1017');}
-function catFrame(now,B,sec){const g=gx();if(!dj||!dj.firstChild)return;const q=id=>dj.querySelector('#'+id),E=X.catEl||(X.catEl=Object.fromEntries(['rxcvBody','rxcvHead','rxcvArmL','rxcvArmR','rxcvTail','rxcvEarL','rxcvEarR','rxcvRecMark','rxcvEyesOpen','rxcvEyesHappy','rxcvEyesClosed','rxcvEyesWide','rxcvMouthSmile','rxcvMouthGrin','rxcvMouthO','rxcvThumb','rxcvCap'].map(id=>[id,q(id)])));
- let kick=0;const A=X.C?.audio;if(A&&sec&&sec.feel!=='break'){for(let i=Math.min(X.sched.i,A.length)-1,n=0;i>=0&&n<40;i--,n++){const e=A[i];if(e.inst==='kick'&&e.t<=now){kick=Math.exp(-(now-e.t)/.14);break;}}}
- const w=X.C?.warnings.find(w=>now>=w.tFrom&&now<w.tTo),ha=now-X.disp.catHit,rx=X.catReact&&now-X.catReact.t<1?X.catReact:null;let armL=18,armR=10,head=5*kick,eyes='open',mouth='smile',bub='',thumb=false,ears=0,scr=0;
- if(sec?.verb==='free'){const bar=X.run.free.bars.find(b=>b.sec===sec.i&&now>=b.t0&&now<b.t1);if(bar?.role==='call'||bar?.role==='mix'||bar?.role==='answer'){bub=bar.role==='call'?'들어 봐요!':bar.role==='mix'?'섞어서 돌려줄게요!':'이렇게요!';const ce=(bar.role==='call'?bar.pattern:bar.dyn)||[];const st=Math.floor((X.C.beatAt(now)-bar.b0)/4*bar.steps);const hit=ce.find(p=>p[0]===st);if(hit){armL=hit[1]==='kkuk'||hit[1]==='tok'?60:18;armR=hit[1]==='chak'||hit[1]==='tak'||hit[1]==='sseuk'?60:10;mouth='grin';}}
-  else if(bar?.role==='play'){bub='반쵸 차례!';if(ha<.25){const s=X.disp.catSnd;armL=s==='kkuk'||s==='tok'?120:40;armR=s==='chak'||s==='tak'||s==='sseuk'?120:30;head=(s==='kkuk'?-10:10);eyes='happy';mouth='grin';}}}
- if(w){bub=w.label.split(' — ')[0];armR=150;scr=1;mouth='grin';eyes='wide';}
- if(sec?.feel==='break'){const i=((Math.floor(B)%4)+4)%4;if(X.C.stage.guide==='full')bub=['하나','둘','셋','넷'][i]+'…';ears=.3;armL=40+i*25;mouth='o';}
- if(sec?.verb==='count'){const i=Math.floor(B);if(i>=0&&i<4)bub=['하나!','둘!','셋!','넷!'][i];}
- if(rx){if(rx.id==='groove'){bub='그루브!';eyes='closed';head=-10;}else if(rx.id==='place'){bub='좋아요!';armL=165;armR=165;eyes='happy';mouth='grin';}else if(rx.id==='mix'){armR=120;thumb=true;}}
- const set=(e,v)=>{if(e&&e.getAttribute('transform')!==v)e.setAttribute('transform',v);},show=(e,on)=>{if(e){const d=on?'':'none';if(e.style.display!==d)e.style.display=d;}};
- set(E.rxcvBody,`translate(0 ${(3*kick).toFixed(2)})`);set(E.rxcvHead,`translate(0 ${(9*kick).toFixed(2)}) rotate(${head.toFixed(2)} 160 178)`);set(E.rxcvArmL,`rotate(${armL.toFixed(1)} 112 196)`);set(E.rxcvArmR,`rotate(${(-armR).toFixed(1)} 208 196)`);set(E.rxcvEarL,`rotate(${(-38*ears).toFixed(1)} 126 98)`);set(E.rxcvEarR,`rotate(${(38*ears).toFixed(1)} 194 98)`);
- show(E.rxcvThumb,thumb);for(const [k,id] of [['open','rxcvEyesOpen'],['happy','rxcvEyesHappy'],['closed','rxcvEyesClosed'],['wide','rxcvEyesWide']])show(E[id],eyes===k);for(const [k,id] of [['smile','rxcvMouthSmile'],['grin','rxcvMouthGrin'],['o','rxcvMouthO']])show(E[id],mouth===k);
- if(E.rxcvRecMark){X.rec=(X.rec||0)+(sec?.feel==='break'?0:6)+(scr?40*Math.sin(now*50):0);const ang=X.rec*Math.PI/180;E.rxcvRecMark.setAttribute('x2',(222+46*Math.cos(ang)).toFixed(1));E.rxcvRecMark.setAttribute('y2',(246+10*Math.sin(ang)).toFixed(1));}
- if(bub){if(djBub.textContent!==bub)djBub.textContent=bub;djBub.hidden=false;}else djBub.hidden=true;}
-function mkFrame(now,B,sec){if(!mk||!mk.firstChild)return;const q=id=>mk.querySelector('#'+id),E=X.mkEl||(X.mkEl=Object.fromEntries(['rxmkBody','rxmkHead','rxmkArm','rxmkEarL','rxmkEarR','rxmkBell','rxmkEyesOpen','rxmkEyesHappy','rxmkEyesWide','rxmkEyesSquint','rxmkMouthSmile','rxmkMouthOpen','rxmkMouthO','rxmkMouthFlat'].map(id=>[id,q(id)])));
- const fr=((B%1)+1)%1,brk=sec?.feel==='break';let arm=brk?-6:-6+28*Math.exp(-fr*5),headY=0,headRot=0,ears=0,bell=0,eyes='open',mouth='smile',bub='';const r=X.mkReact&&now-X.mkReact.t<1.1?X.mkReact:null;
- if(r){const age=now-r.t;if(r.id==='great'){arm=10+30*Math.sin(age*20);bell=20*Math.sin(age*14)*Math.exp(-age/.35);eyes='happy';mouth='open';bub='냥, 좋아요!';}else if(r.id==='nod'){headY=8*Math.abs(Math.sin(age*7));eyes='happy';}else if(r.id==='ears'){ears=1;eyes='wide';mouth='o';bub='앗!';}}
- if(X.mode==='result'&&X.run?.result){eyes='happy';mouth='open';}
- const set=(e,v)=>{if(e&&e.getAttribute('transform')!==v)e.setAttribute('transform',v);},show=(e,on)=>{if(e){const d=on?'':'none';if(e.style.display!==d)e.style.display=d;}};
- set(E.rxmkHead,`translate(0 ${headY.toFixed(2)}) rotate(${headRot.toFixed(2)} 160 200)`);set(E.rxmkArm,`rotate(${arm.toFixed(2)} 113 238)`);set(E.rxmkEarL,`rotate(${(-34*ears).toFixed(1)} 118 100)`);set(E.rxmkEarR,`rotate(${(34*ears).toFixed(1)} 202 100)`);set(E.rxmkBell,`rotate(${bell.toFixed(2)} 160 208)`);
- for(const [k,id] of [['open','rxmkEyesOpen'],['happy','rxmkEyesHappy'],['wide','rxmkEyesWide'],['squint','rxmkEyesSquint']])show(E[id],eyes===k);for(const [k,id] of [['smile','rxmkMouthSmile'],['open','rxmkMouthOpen'],['o','rxmkMouthO'],['flat','rxmkMouthFlat']])show(E[id],mouth===k);
- if(bub){if(mkBub.textContent!==bub)mkBub.textContent=bub;mkBub.hidden=false;}else mkBub.hidden=true;}
+ const ha=now-X.disp.catHit,bump=ha<.15?1-ha/.15:0;riceBall(U.rice.x,U.rice.y,150,100,X.C.beatAt(now)*.6,1+bump*.18,0);}
+/* 마지막 착: 네타가 1박 전부터 위에서 미끄러져 와 밥 위에 떠 있다가, 착(스페이스)에 딱 앉는다. 위치·기울기·윤기 = run.finale(등급·착 오차) */
+function drawPlace(now,B,sec,pre=1){const U=RemixUITable.place,C=X.C,S=C.stage,p=X.run.places.find(x=>x.sec===sec.i);if(!p)return;const nk=L.NetaTable[S.neta]?.kind||'nigiri',bd=C.beatDur(Math.floor(p.b)),F=X.run.finale,rm=X.rm;
+ /* pre < 1 = 착 1박 전(앞 구간 마지막 박): 접시·밥이 서서히 나타나고 네타가 위에서 미끄러져 온다 */ctx.globalAlpha=pre;oval(U.x,U.y+44,200,48,'#E9E2D2','#0A1017',5);oval(U.x,U.y+38,160,32,'#F6F1E6');if(nk==='gunkan')gunkanBack(U.x,U.y);else riceBall(U.x,U.y,160,84,0);ctx.globalAlpha=1;
+ const from=U.from,hov={x:U.x,y:U.y+U.hoverDy},land={x:U.x+(F?.dx||0),y:U.y+(nk==='gunkan'?-34:U.landDy)+(F?.dy||0)};let x,y,rot=0,sq=1,gloss=0,gt=9;
+ if(!p.res){const u=clamp((now-(p.t-bd))/bd),e=rm?(u>0?1:0):ease(u);x=from.x+(hov.x-from.x)*e;y=from.y+(hov.y-from.y)*e-(rm?0:Math.sin(Math.PI*e)*40);rot=-.25*(1-e);if(now>p.t&&!rm)y+=Math.sin(now*18)*3;
+  oval(U.x,U.y-36,70*e,12*e,'#0A101744');const dt=p.t-now;if(dt>-.25&&dt<2*bd){const r=40+U.r0*Math.max(0,dt)/(2*bd);oval(U.x,U.y-30,r,r*.45,null,dt<.08?C0.good:C0.gold,6);text('스페이스 · 착!',U.x,U.y+120,30,C0.cream,'center',900,'#0A1017');}}
+ else{const lt=F?.t??p.res.t,age=now-lt,k=rm?1:clamp(age/.08);x=hov.x+(land.x-hov.x)*k;y=hov.y+(land.y-hov.y)*k;rot=(F?.rot||0)*k*Math.PI/180;if(!rm&&age>=.08&&age<.3)sq=1-.14*Math.sin(Math.PI*(age-.08)/.22);
+  if(age>0&&age<.3&&p.res.g!=='miss'&&!rm)oval(U.x,U.y-30,90+age*260,30+age*90,null,p.res.g==='perfect'?C0.good:C0.gold,6);const insp=age-CastTable.master.inspectDelay;if(F&&insp>=0){gloss=F.gloss;gt=insp;}}
+ drawNeta(S.neta,x,y,nk==='gunkan'?170:190,rot,{sq,gloss,t:gt,now});if(nk==='gunkan'){ctx.globalAlpha=pre;gunkanFront(U.x,U.y);ctx.globalAlpha=1;}
+ if(p.res&&now>=(F?.t??p.res.t)+.3)text(S.finale,960,U.textY,60,p.res.g==='miss'?C0.warn:C0.gold,'center',900,'#0A1017');}
+function preSlide(now){const C=X.C;for(const p of X.run.places){if(p.res)continue;const bd=C.beatDur(Math.floor(p.b));if(now>=p.t-bd&&now<p.t)return {p,a:clamp((now-(p.t-bd))/bd*1.6)};}return null;}
+function drawCount(now,B){const i=Math.floor(B);if(i<0||i>3)return;const fr=B-i;text(['하나','둘','셋','넷'][i],960,600,150*(1.1-(X.rm?0:.1*fr)),C0.cream,'center',900,'#0A1017');}
+/* 변주 예고판: 왼쪽 힙합 고양이 위 네온판(「스윙 · n박 뒤」) */
+function drawWarn(now){const w=X.C.warnings.find(w=>now>=w.tFrom&&now<w.tTo);if(!w)return null;const W=RemixUITable.warn,left=X.C.beatAt(w.t)-X.C.beatAt(now),blink=X.rm?true:(left%1+1)%1>.5;const col=L.FeelTable[w.kind]?.color||(w.kind==='return'?C0.good:w.kind==='accel'?C0.bad:C0.sky);
+ rr(W.x,W.y,W.w,W.h,22,'#0A1017ee',blink?col:col+'88',6);const [a,b]=w.label.split(' — ');fitText(a,W.x+W.w/2,W.y+40,W.w-28,34,col,'center',900);fitText(left>0?`${Math.ceil(left)}박 뒤`+(b?' · '+b:''):'지금!',W.x+W.w/2,W.y+86,W.w-28,22,C0.cream,'center',800);return {w,left};}
+function drawBreak(now,B,sec){if(sec.feel!=='break')return;text('쉿 — 소리 없이 박을 지켜요',960,1040,32,C0.sub,'center',800,'#0A1017');}
+/* 스승의 ○△× 줄(검수대 오른쪽): 방금 것은 크게, 지난 8개는 작게 */
+function drawMarks(now){const M=RemixUITable.marks,last=X.marks[X.marks.length-1];if(last&&now-last.t<CastTable.master.markSec){const [s,c]=RemixUITable.marksOf[last.g],age=now-last.t;ctx.globalAlpha=1-age/CastTable.master.markSec;text(s,M.x,M.y-(X.rm?0:age*14),52,c,'center',900,'#0A1017');ctx.globalAlpha=1;}
+ const row=X.marks.slice(-M.rowN);row.forEach((m,i)=>{const [s,c]=RemixUITable.marksOf[m.g];text(s,M.rowX+i*M.rowStep,M.rowY,22,c,'center',900,'#0A1017');});}
+
+/* ── 인물 움직임 ── */
+const setT=(e,v)=>{if(e&&e.getAttribute('transform')!==v)e.setAttribute('transform',v);},show=(e,on)=>{if(e){const d=on?'':'none';if(e.style.display!==d)e.style.display=d;}};
+function lastAudio(now,pred,back=80){const A=X.C?.audio;if(!A)return null;for(let i=Math.min(X.sched.i,A.length)-1,n=0;i>=0&&n<back;i--,n++){const e=A[i];if(e.t<=now&&pred(e))return e;}return null;}
+function bub(e,txt){if(txt){if(e.textContent!==txt)e.textContent=txt;e.hidden=false;}else e.hidden=true;}
+function hhFrame(now,B,sec,warn){const E=X.el.hh,H=CastTable.hh,k=X.rm?CastTable.rmScale:1;if(!E)return;let paw=0,head=0,bob=0,eyes='open',mouth='smile',b='',fingers=0,ears=0;
+ const brk=sec?.feel==='break',kick=brk?null:lastAudio(now,e=>e.inst==='kick'||e.inst==='snare'),env=kick?Math.exp(-(now-kick.t)/H.kickTau):0;paw=H.beckonDeg*env;bob=H.bobPx*env;head=kick?.inst==='snare'?5*env:-3*env;
+ if(sec?.verb==='free'){const bar=X.run.free.bars.find(b=>b.sec===sec.i&&now>=b.t0&&now<b.t1);if(bar?.role==='call'){b='들어 봐요!';mouth='grin';const st=Math.floor((X.C.beatAt(now)-bar.b0)/4*bar.steps),hit=bar.pattern.find(p=>p[0]===st);if(hit){paw=H.beckonDeg*1.4;head=8;}}
+  else if(bar?.role==='play'){b='반쵸 차례!';const ha=now-X.disp.catHit;if(ha<.25){paw=H.beckonDeg*(1-ha/.25);eyes='happy';mouth='grin';}}else if(bar){eyes='happy';head=6*Math.sin(B*Math.PI);}}
+ if(sec?.verb==='poly'&&!sec.leftOnly&&X.C.previews.length){const pv=X.C.previews.filter(p=>p.sec===sec.i);if(pv.length&&B<pv[pv.length-1].b+.5&&B>=sec.b0){b='오른손은 이렇게!';const near=pv.find(p=>now>=p.t&&now<p.t+.18);if(near){paw=H.beckonDeg*1.5;mouth='grin';}}}
+ if(warn){const n=Math.max(1,Math.min(4,Math.ceil(warn.left)));fingers=warn.left>0?n:0;paw=-24;b=warn.left>0?'':'지금!';eyes='wide';mouth='grin';}/* 예고판이 이미 말하므로 말풍선은 「지금!」만 · 남은 박은 손가락 */
+ if(brk){const i=((Math.floor(B)%4)+4)%4;paw=-24;ears=.3;mouth='o';if(X.C.stage.guide==='full'){fingers=i+1;b=['하나','둘','셋','넷'][i]+'…';}else{b='쉿!';eyes='closed';}}
+ if(sec?.verb==='count'){const i=Math.floor(B);if(i>=0&&i<4){b=['하나!','둘!','셋!','넷!'][i];fingers=i+1;paw=-24;}}
+ if(sec?.verb==='place'&&X.run.finale&&now>=X.run.finale.t){paw=-40;eyes='happy';mouth='grin';b=X.run.finale.placeG==='miss'?'앗!':'착!';}
+ setT(E.Body,`translate(0 ${(bob*.4*k).toFixed(2)})`);setT(E.Head,`translate(0 ${(bob*k).toFixed(2)}) rotate(${(head*k).toFixed(2)} 170 150)`);setT(E.Paw,`rotate(${(X.rm?(paw>8?H.beckonDeg:paw<-8?-24:0):paw).toFixed(1)} 262 254)`);setT(E.EarL,`rotate(${(-30*ears).toFixed(1)} 124 96)`);setT(E.EarR,`rotate(${(30*ears).toFixed(1)} 216 96)`);
+ for(let i=1;i<=4;i++)show(E['F'+i],fingers>=i);for(const [s,id] of [['open','EyesOpen'],['happy','EyesHappy'],['wide','EyesWide'],['closed','EyesClosed']])show(E[id],eyes===s);for(const [s,id] of [['smile','MouthSmile'],['grin','MouthGrin'],['o','MouthO']])show(E[id],mouth===s);
+ bub(hhBub,b);X.hhState={paw,fingers,b};}
+function tdFrame(now,B,sec){const E=X.el.td,T=CastTable.td,k=X.rm?CastTable.rmScale:1;if(!E)return;let strike=0,eyes='closed',mouth='smile',b='',glint=0;
+ const brk=sec?.feel==='break',fr=((B%1)+1)%1,beatOn=sec&&!brk&&sec.verb!=='free'&&now>=0;if(beatOn)strike=Math.exp(-fr*T.strikeK);
+ if(sec?.verb==='free'){const bar=X.run.free.bars.find(b=>b.sec===sec.i&&now>=b.t0&&now<b.t1);if(bar&&(bar.role==='answer'||bar.role==='mix')){b=bar.role==='mix'?'섞어서 돌려줄게요!':'이렇게요!';eyes='open';mouth='open';const st=Math.floor((X.C.beatAt(now)-bar.b0)/4*bar.steps),hit=(bar.dyn||[]).find(p=>p[0]===st);if(hit){const tt=bar.grid[st];strike=Math.exp(-(now-tt)/.09);}}else if(bar?.role==='play'){eyes='open';}else if(bar?.role==='call'){eyes='open';b='';}}
+ if(brk){eyes='closed';b=X.C.stage.guide==='full'?'쉿…':'';}
+ if(sec?.verb==='place'&&X.run.finale&&now>=X.run.finale.t){eyes='open';mouth='open';glint=Math.max(0,1-(now-X.run.finale.t)/.8);b=X.run.finale.placeG==='miss'?'':'좋아요!';}
+ const ang=T.restDeg*(1-strike)+T.strikeDeg*strike;setT(E.Paw,`rotate(${(X.rm?(strike>.5?T.strikeDeg:T.restDeg):ang).toFixed(1)} 122 250)`);setT(E.Bell,`rotate(${(X.rm||brk?0:7*Math.sin(B*Math.PI)).toFixed(1)} 180 236)`);if(E.DrumHit)E.DrumHit.setAttribute('opacity',(beatOn||sec?.verb==='free'?.9*strike:0).toFixed(2));if(E.Glint)E.Glint.setAttribute('opacity',glint.toFixed(2));
+ setT(E.Body,`translate(0 ${(1.5*strike*k).toFixed(2)})`);setT(E.Head,`translate(0 ${(3*strike*k).toFixed(2)})`);for(const [s,id] of [['closed','EyesClosed'],['open','EyesOpen'],['wide','EyesWide']])show(E[id],eyes===s);for(const [s,id] of [['smile','MouthSmile'],['open','MouthOpen']])show(E[id],mouth===s);
+ bub(tdBub,b);X.tdState={strike,b};}
+function msFrame(now){const E=X.el.ms,M=X.ms,T=CastTable.master;if(!E||!M)return;let ty=0,rot=0,eyes='narrow',mouth='flat',browL=0,browR=0,scale=1,b='';const F=X.run?.finale;
+ if(F&&now>=F.t){const age=now-F.t;scale=X.rm?1:1+(T.zoom-1)*clamp(age/T.zoomSec);eyes='wide';if(age>=T.inspectDelay){if(!M.inspected){M.inspected=true;if(F.react==='nod')M.nodT=now;else if(F.react==='shake')M.shakeT=now;if(F.grade==='금'&&F.placeG!=='miss')liveSound(RemixAudioTable.place.gold);}
+  b=F.line;if(F.react==='nod'){eyes='closed';mouth='smile';}else if(F.react==='hmm'){eyes='open';mouth='flat';browL=-9;}else{eyes='narrow';mouth='frown';}}}
+ const na=now-M.nodT;if(na>=0&&na<T.nodSec)ty=T.nodPx*Math.sin(Math.PI*na/T.nodSec);const ba=now-M.browT;if(ba>=0&&ba<T.browSec&&!(F&&now>=F.t)){browL=-9;browR=3;eyes='open';mouth='frown';}
+ const sa=now-M.shakeT;if(sa>=0&&sa<T.shakeSec){rot=T.shakeDeg*Math.sin(sa*22)*Math.exp(-sa*2.5);if(!(F&&now>=F.t))mouth='frown';}
+ const k=X.rm?CastTable.rmScale:1;setT(E.Head,`translate(0 ${(ty*(X.rm?.4:1)).toFixed(2)}) rotate(${(rot*k).toFixed(2)} 140 130)`);setT(E.Body,`translate(0 ${(X.rm?0:1.2*Math.sin(now*2.2)).toFixed(2)})`);setT(E.BrowL,`translate(0 ${browL}) rotate(${browL?-8:0} 119 70)`);setT(E.BrowR,`translate(0 ${browR})`);
+ for(const [s,id] of [['narrow','EyesNarrow'],['open','EyesOpen'],['wide','EyesWide'],['closed','EyesClosed']])show(E[id],eyes===s);for(const [s,id] of [['flat','MouthFlat'],['smile','MouthSmile'],['frown','MouthFrown'],['open','MouthOpen']])show(E[id],mouth===s);
+ const tf=scale!==1?`scale(${scale.toFixed(3)})`:'';if(msEl.style.transform!==tf)msEl.style.transform=tf;bub(msBub,b);X.msState={ty,rot,eyes,mouth,scale,b};}
 function draw(now){const C=X.C,B=C.beatAt(now),sec=now<0?C.secs[0]:C.secAt(B);bg(now,sec);
  if(sec.verb==='spin')drawSpin(now,B,sec);else if(spinN&&audio)spinN.g.gain.setTargetAtTime(0,audio.currentTime,.05);
- if(sec.verb==='toss'||X.run.tosses.some(x=>now>=x.tToss-.15&&now<=x.tLand+.9))drawToss(now);if(sec.verb==='poly')drawPoly(now,B,sec);if(sec.verb==='free')drawFree(now,B,sec);if(sec.verb==='place')drawPlace(now,B,sec);if(sec.verb==='count'||now<0)drawCount(now,B);
- drawBreak(now,B,sec);drawHud(now,B,sec);drawWarn(now);drawMeters(now);drawPops(now);catFrame(now,B,sec);mkFrame(now,B,sec);}
+ if(sec.verb==='toss'||X.run.tosses.some(x=>now>=x.tToss-.15&&now<=x.tLand+.9))drawToss(now);if(sec.verb==='poly')drawPoly(now,B,sec);if(sec.verb==='free')drawFree(now,B,sec);if(sec.verb==='place')drawPlace(now,B,sec);else{const pp=preSlide(now);if(pp)drawPlace(now,B,C.secs[pp.p.sec],pp.a);}if(sec.verb==='count'||now<0)drawCount(now,B);
+ drawBreak(now,B,sec);drawHud(now,B,sec);const warn=drawWarn(now);drawMeters(now);drawPops(now);drawMarks(now);hhFrame(now,B,sec,warn);tdFrame(now,B,sec);msFrame(now);
+ const o=occlusion(now);if(o){X.occ.n++;if(o.px>X.occ.max)X.occ.max=o.px;for(const h of o.hits)X.occ.hits[h]=(X.occ.hits[h]||0)+1;}}
+
+/* ── 가림 검사: 인물·말풍선 사각형 vs 이 프레임에 그려진 놀이 요소 사각형(논리 좌표) ── */
+function stageRect(e){const r=e.getBoundingClientRect(),s=stage.getBoundingClientRect(),k=s.width/1920;return {x:(r.left-s.left)/k,y:(r.top-s.top)/k,w:r.width/k,h:r.height/k};}
+function castRects(){const out=[];for(const [n,e] of [['스승',msEl],['힙합 고양이',hhEl],['전통 고양이',tdEl],['스승 말풍선',msBub],['힙합 말풍선',hhBub],['전통 말풍선',tdBub]])if(e&&!e.hidden)out.push({n,...stageRect(e)});return out;}
+function playRects(now){const C=X.C,B=C.beatAt(now),sec=now<0?C.secs[0]:C.secAt(B),U=RemixUITable,out=[],R=(n,x,y,w,h)=>out.push({n,x,y,w,h});
+ if(X.lineW)R('안내 줄',960-X.lineW/2-6,U.hud.line.y-U.hud.line.size*.7,X.lineW+12,U.hud.line.size*1.4);
+ if(sec.verb==='spin'){const S=U.spin;R('회전 원',S.cx-S.ring-30,S.cy-S.ring-50,2*S.ring+60,2*S.ring+80);R('두 손',S.cx-360,S.cy-40,720,180);R('회전 글',S.cx-330,S.cy+S.ring+40,660,84);}
+ for(const x of X.run.tosses)if(now>=x.tToss-.15&&now<=x.tLand+.9){const T=U.toss,x0=T.handX+x.side*T.fromDX;R('토스 궤적',Math.min(x0,T.handX)-60,T.handY-x.h-60,Math.abs(x0-T.handX)+120,x.h+260);}
+ if(sec.verb==='toss'){const T=U.toss;R('받는 손',T.handX-230,T.handY-20,460,190);}
+ if(sec.verb==='poly'){const P=U.poly;R('왼손·밥',P.lx-160,P.ly-120,260,250);R('오른손',P.rx-100,P.ry-90,250,190);R('박 줄',P.lx-P.lane.w/2-20,P.ly+P.lane.dy-20,P.lane.w+40,90);if(!sec.leftOnly&&(sec.right||[]).length)R('오른손 고리',P.ring.x-P.ring.r-10,P.ring.y-P.ring.r-10,2*P.ring.r+20,2*P.ring.r+50);}
+ if(sec.verb==='free'){const F=U.free,S=F.strip;R('즉흥 줄',S.x-100,F.line.y-24,S.w+100,S.y+2*S.h+S.gap-F.line.y+30);R('즉흥 밥',F.rice.x-90,F.rice.y-60,180,130);R('점수판',F.score.x,F.score.y,300,150);R('패드',960-430,F.padY-10,860,160);}
+ if(sec.verb==='place'||preSlide(now)){const P=U.place;R('접시',P.x-210,P.y-80,420,180);R('네타 길',P.from.x-110,P.from.y-60,P.x-P.from.x+260,P.y-P.from.y+60);if(sec.verb==='place')R('완성 글',960-380,P.textY-40,760,80);}
+ if(sec.verb==='count')R('카운트',960-140,600-90,280,180);
+ for(const p of X.pops)if(now-p.t>=0&&now-p.t<.75)R('판정 글',p.x-p.w/2,p.y-p.size*.7-(X.rm?0:45),p.w,p.size*1.4+(X.rm?0:45));
+ return out;}
+function occlusion(now=X.lastNow){if(X.mode!=='play'||!X.C)return null;const A=castRects(),P=playRects(now);let px=0;const hits=[];for(const a of A)for(const p of P){const w=Math.min(a.x+a.w,p.x+p.w)-Math.max(a.x,p.x),h=Math.min(a.y+a.h,p.y+p.h)-Math.max(a.y,p.y);if(w>.5&&h>.5){px+=w*h;hits.push(a.n+'×'+p.n);}}return {px:Math.round(px),hits,cast:A.length,play:P.length};}
 
 /* ── 프레임 ── */
 function frame(ts){requestAnimationFrame(frame);if(!X.active)return;const dt=ts-(X.lastTs||ts);X.lastTs=ts;if(X.mode!=='play')return;if(X.clock.audio)syncOff();const now=songNow();X.lastNow=now;X.frames.push(dt);if(X.frames.length>20000)X.frames.splice(0,10000);
@@ -1923,15 +2184,16 @@ function frame(ts){requestAnimationFrame(frame);if(!X.active)return;const dt=ts-
  L.update(X.run,now);schedule();consumeFx(now);if(X.mode!=='play')return;draw(now);}
 
 /* ── 공개(봇·검사) ── */
-const api={ON,X,L,go,begin,toMenu,setActive,songNow,schedule,frameStats,UI:RemixUITable,AUDIO:RemixAudioTable,
+const api={ON,X,L,go,begin,toMenu,setActive,songNow,schedule,frameStats,occlusion,tierScores,castRects,playRects,UI:RemixUITable,AUDIO:RemixAudioTable,CAST:CastTable,sushiSvg,
  startBot(id,kind,seed=1){X.bot={kind,seed};return go(id);},stats:()=>({...X.stats,voices:X.voices.size,mode:X.mode,stage:X.stageId}),
+ progress:()=>JSON.parse(JSON.stringify(X.prog)),setProgress(p){X.prog=p&&p.best?p:{best:{}};saveProg();if(X.mode==='menu')buildMenu();},isOpen,castState:()=>({ms:X.msState,hh:X.hhState,td:X.tdState}),
  /* 출력 시각 검사: 같은 voice()로 드럼을 오프라인 렌더해 박 위 소리의 시작 시각을 잰다(변주 경계 앞뒤 ±2박) */
  async onsetAudit(id,thr=.02){const C=L.buildChart(id),g=gx(),out=[];for(const tr of C.transitions){const from=C.timeOf(tr.b-2),to=C.timeOf(tr.b+2)+.05,sr=48000,ctxO=new OfflineAudioContext(1,Math.ceil((to-from+.4)*sr),sr),b2=g.makeBus(ctxO,ctxO.destination),pad=.2;
    const kicks=C.audio.filter(e=>e.inst==='kick'&&e.t>=from-.001&&e.t<to);for(const e of C.audio)if(e.t>=from-.001&&e.t<to&&!e.word&&['kick','snare','hat','ghost','crash','bass','chord'].includes(e.inst))g.voice(ctxO,b2.input,e.inst,e.t-from+pad,e.vel,e.o||{});
    const d=(await ctxO.startRendering()).getChannelData(0);for(const k of kicks){const t0=k.t-from+pad;let i=Math.floor((t0-.01)*sr),base=0;for(let j=i-40;j<i;j++)base=Math.max(base,Math.abs(d[j]||0));while(i<d.length&&Math.abs(d[i])<=Math.max(thr,base*1.5))i++;out.push({tr:tr.kind,b:+k.b.toFixed(3),errMs:+((i/sr-t0)*1000).toFixed(3)});}}
-  return {thr,n:out.length,maxAbsMs:Math.max(...out.map(o=>Math.abs(o.errMs))),list:out};},
- init(){if(!ON)return;buildDom();setActive(true);requestAnimationFrame(frame);setInterval(()=>{if(X.active&&X.mode==='play')schedule();},RemixAudioTable.intervalMs);
-  const qs=query.get('rstage'),qb=query.get('rbot');if(qs&&L.RemixStageTable.some(s=>s.id===qs)){if(qb&&L.BotTable[qb])setTimeout(()=>api.startBot(qs,qb,Number(query.get('rseed'))||1),300);else{X.stageId=qs;X.mode='ready';const S=L.RemixStageTable.find(s=>s.id===qs);startEl.innerHTML=`<div class="rxTitle">${S.name}</div><div class="rxSub">${S.sub}</div><div class="rxHint" style="margin-top:80px;font-size:34px;color:#FFF3DC">아무 키나 누르거나 클릭하면 시작해요</div>`;startEl.addEventListener('click',()=>go(qs));showPanels();}}}};
+  return {thr,n:out.length,maxAbsMs:out.length?Math.max(...out.map(o=>Math.abs(o.errMs))):0,list:out};},
+ init(){if(!ON)return;X.prog=loadProg();X.all=query.get('rall')==='1';if(query.get('rreset')==='1'){X.prog={best:{}};saveProg();}X.rm=rmNow();buildDom();setActive(true);requestAnimationFrame(frame);setInterval(()=>{if(X.active&&X.mode==='play')schedule();},RemixAudioTable.intervalMs);
+  const qs=query.get('rstage'),qb=query.get('rbot');if(qs&&stageOf(qs)){if(qb&&L.BotTable[qb])setTimeout(()=>api.startBot(qs,qb,Number(query.get('rseed'))||1),300);else{X.stageId=qs;X.mode='ready';const S=stageOf(qs);startEl.innerHTML=`<div class="rxArt" style="height:220px;margin-top:120px">${sushiSvg(S.neta,{gloss:1}).replace('width="100%" height="100%"','width="352" height="220"')}</div><div class="rxTitle" style="margin-top:10px">${S.name}</div><div class="rxSub">${S.gimmick} · ${S.sub}</div><div class="rxHint" style="margin-top:60px;font-size:34px;color:#FFF3DC">아무 키나 누르거나 클릭하면 시작해요</div>`;startEl.addEventListener('click',()=>go(qs));showPanels();}}}};
 if(ON){window.addEventListener('keydown',onKey,true);window.addEventListener('keyup',e=>{if(X.active)e.stopImmediatePropagation();},true);}
 window.__rx=api;return api;})();
 /*REMIX-END*/
