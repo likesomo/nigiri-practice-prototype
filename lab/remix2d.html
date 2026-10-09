@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>니기리 리믹스 · 오늘의 횟감</title>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>니기리 리믹스 · 과정 연습과 오늘의 횟감</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#1c1915;color:#f2e6cc;font-family:'Malgun Gothic',sans-serif;overflow:hidden}button{font:inherit;cursor:pointer;color:inherit}button:focus-visible{outline:3px solid #d8a445;outline-offset:5px}[hidden]{display:none!important}#screen{position:absolute;width:1920px;height:1080px;transform-origin:top left;background:radial-gradient(ellipse at 50% 46%,#2f5f66,#1c1915 72%)}.eyebrow{color:#c58f4a;font-size:16px;letter-spacing:5px}.hudLabel{position:absolute;top:42px;padding:20px 26px;border:1px solid #8a837755;border-radius:16px;background:#1c1915}.hudLabel small{display:block;color:#f2e6cc;font-size:16px;margin-bottom:12px}#selection{left:60px;width:320px;height:144px}#selection button{border:0;background:none;font-size:23px;padding:5px 12px}#keys{right:60px;width:380px;height:144px;font-size:18px;line-height:1.9}#counter{position:absolute;top:46px;left:660px;width:600px;text-align:center;font-size:18px;color:#f2e6cc}#lights{position:absolute;top:118px;left:520px;width:880px;height:62px;display:flex;gap:18px;justify-content:center}.light{width:84px;height:58px;border-radius:12px;border:1px solid #8a8377;color:#8a8377;display:grid;place-items:center;font-size:23px;background:#1c1915}.light.next{background:#8a8377;color:#f2e6cc}.light.active{background:#f2e6cc;color:#1c1915;box-shadow:0 0 30px #d8a44544}#stage{position:absolute;left:360px;top:200px;width:1200px;height:700px;border-radius:160px;background:radial-gradient(ellipse,#8a837722,transparent 70%)}#riceCanvas{width:1200px;height:700px}#cue{position:absolute;top:25px;left:350px;width:500px;text-align:center;color:#f2e6cc;font-size:44px;letter-spacing:4px;pointer-events:none}#count{position:absolute;top:126px;left:450px;width:300px;text-align:center;font-size:64px;color:#f2e6cc;pointer-events:none}#plate{position:absolute;left:450px;top:626px;width:300px;height:70px;border:3px solid #f2e6cc;border-radius:50%;background:radial-gradient(ellipse,#8a8377,#2f5f66);box-shadow:0 14px 0 #1c191566;color:#f2e6cc;font-size:20px;padding-top:20px}#plate:active{filter:brightness(1.25)}#strip{position:absolute;left:520px;top:912px;width:880px;height:48px;display:flex;justify-content:center;gap:18px}.stamp{width:84px;text-align:center;font-size:27px;color:#f2e6cc}.stamp small{font-size:12px;display:block;color:#f2e6cc}#legend{position:absolute;top:968px;left:560px;width:800px;text-align:center;color:#8a8377;font-size:15px}#hint{position:absolute;top:1010px;left:260px;width:1400px;text-align:center;font-size:25px;color:#f2e6cc}.overlay{position:absolute;inset:0;background:#1c1915f5;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5}h1{font-weight:400;font-size:76px;margin:20px 0;letter-spacing:10px}.lead{font-size:23px;color:#f2e6cc;line-height:1.8}.primary{border:1px solid #d8a445;border-radius:40px;padding:18px 65px;background:#d8a445;color:#1c1915;font-size:26px;margin-top:32px}#titleArt{width:620px;height:280px}#result{position:absolute;left:470px;top:275px;width:980px;height:540px;border:1px solid #8a8377;border-radius:24px;background:#f2e6cc;color:#2f5f66;z-index:4;text-align:center;box-shadow:0 30px 90px #1c191580}#grade{font-size:58px;display:inline-block;border:5px double #2f5f66;border-radius:18px;padding:6px 32px;margin-top:25px;transform:rotate(-4deg)}#perfect{font-size:20px;height:30px;margin-top:12px;color:#7a4a22}#resultCanvas{display:block;margin:auto;width:840px;height:230px}#worst{font-size:22px;margin:14px}#summary{z-index:6}#summary h1{font-size:58px}#totals{display:flex;gap:60px;margin:25px;font-size:24px}#totals b{display:block;font-size:54px;color:#f2e6cc;text-align:center}#ratio{font-size:25px;margin:20px}#causes{display:flex;gap:30px;color:#f2e6cc;font-size:21px}#pause{z-index:9;font-size:48px}#pause small{font-size:22px;margin-top:20px}
 #ladder{position:absolute;left:810px;top:82px;width:300px;display:flex;gap:10px;justify-content:center}#ladder span{width:36px;height:23px;border-radius:5px;background:#2f5f66;color:#8a8377;text-align:center}#ladder .on{background:#f2e6cc;color:#1c1915}#progress{position:absolute;left:470px;top:838px;width:980px;text-align:center;font-size:22px;color:#f2e6cc;z-index:4}#levelNotice{position:absolute;left:540px;top:410px;width:840px;padding:70px 20px;text-align:center;background:#f2e6cc;color:#2f5f66;border-radius:24px;font-size:43px;z-index:5}#levelSummary{font-size:21px;margin-top:28px;color:#f2e6cc}#presets{display:flex;gap:16px;margin-top:20px}#presets button{border:1px solid #8a8377;border-radius:18px;padding:12px 30px;background:#2f5f66;font-size:22px}#presets button[aria-pressed="true"]{background:#d8a445;color:#1c1915}#sets{display:flex;gap:16px;margin-top:18px}#sets button{border:1px solid #8a8377;border-radius:18px;padding:14px 24px;background:#2f5f66;font-size:22px}#telegraph{position:absolute;top:190px;left:460px;width:1000px;text-align:center;color:#f2e6cc;font-size:25px;z-index:2}#modifierResult{font-size:19px;margin:8px 20px;color:#7a4a22}#modifierSummary{display:block;max-height:320px;overflow:auto;flex-shrink:0;border-collapse:collapse;width:760px;font-size:18px;margin-top:18px}#modifierSummary td,#modifierSummary th{padding:5px 18px;border-bottom:1px solid #8a8377;text-align:left}#summary h1{margin:8px 0;font-size:44px}#summary #totals{margin:12px}#summary #ratio{margin:8px}#summary #levelSummary{margin-top:12px}#summary .primary{margin-top:18px;padding:10px 60px}#tableError{z-index:20;padding:80px;font-size:22px}#tableError pre{max-width:1600px;max-height:700px;overflow:auto;white-space:pre-wrap} .light.rest{background:#2f5f66;color:#f2e6cc}.light.tempo{border-color:#d8a445}.light.offbeat:after{content:'·';color:#f2e6cc;position:absolute;margin-left:102px}#lights.muted{visibility:hidden}#skillStamp{position:absolute;right:60px;top:210px;width:290px;min-height:86px;border:3px double #d8a445;border-radius:20px;background:#2f5f66;color:#f2e6cc;font-size:22px;padding:15px;z-index:4}#skillStamp:disabled{opacity:.55}#comboText{position:absolute;left:720px;top:16px;width:480px;text-align:center;color:#f2e6cc}#stampBoard{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;width:1120px;margin-top:16px}#stampBoard span{border:1px solid #8a8377;padding:7px;color:#8a8377;text-align:center;font-size:14px}#stampBoard .earned{color:#f2e6cc;border-color:#d8a445}#bestLine,#tomorrow{margin-top:16px;font-size:19px;color:#f2e6cc}#titleArt{height:160px;width:354px}#title h1{font-size:60px;margin:10px}#title .primary{margin-top:18px;padding:12px 65px}#sets button:disabled{opacity:.4}#envTitle{font-size:18px;color:#f2e6cc;margin:8px}#envHud{position:absolute;right:65px;top:315px;font-size:18px;color:#f2e6cc}#envNext{position:absolute;top:880px;left:470px;width:980px;text-align:center;font-size:21px}#conditionResult{font-size:16px;margin:4px}#telegraph{font-size:23px}#lights .light{flex-shrink:1;min-width:48px}#lights{gap:8px}#lights .light{display:flex;flex-direction:column;justify-content:center;font-size:17px;line-height:1.25}#lights .light strong{font-size:20px;white-space:nowrap;font-weight:400}
@@ -1429,12 +1429,14 @@ window.__pt=api;
 return api;})();
 /*PATAPON-END*/
 /*REMIX-LOGIC-BEGIN*/
-/* T68-a → T69-a 「니기리 리믹스」 판정·악보 논리(DOM·오디오 없음 — 노드 단위 테스트가 이 구간만 잘라 실행한다).
-   동사 5개 = 요리 동작 5개: 굴리기(회전 스피너) · 던지고 받기(토스 & 캐치) · 양손 폴리리듬(받치기 + 당김음) · 프리스타일(즉흥 콜 & 리스폰스) · 변주 타기(스윙·하프·더블·셋잇단·브레이크·가속).
-   T69-a: 판 = 횟감. 기믹 하나씩(광어 굴리기 → 연어 토스 → 새우 두 손 → 아나고 즉흥 → 도미 변주) 쉬운 것부터, 그다음 조합(성게 2 → 연어알 3 → 참치 대뱃살 전부 + 가속).
-   앞 판을 통과(등급 「한 번 더」가 아님)해야 다음 판이 열린다(RemixProgress). 마지막 착에서 그 판 이름의 네타가 밥 위에 앉는다(FinaleTable · 등급이 위치·윤기·스승 반응을 정함).
+/* T68-a → T69-a → T71-a 「니기리 리믹스」 판정·악보 논리(DOM·오디오 없음 — 노드 단위 테스트가 이 구간만 잘라 실행한다).
+   동사 5개(T68-a 판정 그대로): 굴리기(회전 스피너) · 던지고 받기(토스 & 캐치) · 양손 폴리리듬(받치기 + 당김음) · 프리스타일(즉흥 콜 & 리스폰스) · 변주 타기(스윙·하프·더블·셋잇단·브레이크·가속).
+   T71-a: 기믹 하나 = 니기리를 만드는 실제 과정 하나(ProcTable). 판 두 줄:
+    연습 — 과정 익히기(p1 손 적시기·박 짚기 → p2 모양 잡기·굴리기 → p3 쥐기·양손 폴리 → p4 뒤집기·던지고 받기 → p5 다듬기·즉흥, 판 이름 = 과정, 네타 없이 과정 결과물만)
+    실전 — 오늘의 횟감(r1 광어 → r2 연어 → r3 새우 → r4 아나고 → r5 참치 대뱃살, 한 판 = 손님 주문 1~3점, 한 점 = 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착 순서, 착마다 그 횟감이 딱).
+   해금(RemixProgress): 연습은 앞 과정을 통과하면 다음 과정 · 실전 첫 판은 연습 다섯 개를 모두 통과해야 · 실전은 앞 판 통과 → 다음 판. 점수 = 과정별(procScores) 평균.
    시간 단위: 곡 시각 t(초, 0 = 카운트인 첫 박) · 박 B(실수, 마디 = 4박). 판정 기준 시각은 모두 timeOf(B) 하나에서 나오고, 오디오 예약도 같은 함수로 만든다(박 ↔ 판정 기준 일치).
-   표: RemixTable · FeelTable · VerbTable · KeySoundTable · CallTable · NetaTable · RemixStageTable · RemixScoreTable · CatLineTable · FinaleTable · BotTable  [튜닝] */
+   표: RemixTable · FeelTable · VerbTable · ProcTable · KeySoundTable · CallTable · NetaTable · ProductTable · RemixStageTable · RemixScoreTable · CatLineTable · ProcLineTable · FinaleTable · BotTable  [튜닝] */
 const RemixLogic=(()=>{
 /* 전역 규칙. spin: sampleDiv = 한 박에 위상 표본 몇 번 · lagSec = 표본을 이만큼 늦게 채점(키보드 사이 보간이 끝나도록) · stallGapSec = 입력 간격이 이보다 길면 멈춘 것으로 봄
    perfectMs/zeroMs = 위상 오차(시간 환산)가 perfect 이하면 1, zero 이상이면 0 · speedTol/speedSpan = |log2(속도비)|가 tol 이하면 1, tol+span에서 0 · flat/scatter = 속도비가 이보다 크면 납작 / 작으면 흩어짐
@@ -1474,105 +1476,151 @@ const CallTable={
  c2:{steps:[[0,'kkuk'],[3,'tok'],[4,'chak'],[7,'tok'],[8,'kkuk'],[10,'kkuk'],[12,'chak'],[14,'sseuk']]},
  c3:{steps:[[0,'kkuk'],[3,'tak'],[6,'kkuk'],[8,'chak'],[11,'tak'],[14,'chak']]},
  c4:{steps:[[0,'kkuk'],[2,'tok'],[4,'chak'],[7,'kkuk'],[9,'tak'],[10,'kkuk'],[12,'chak'],[13,'tok'],[15,'sseuk']]}};
-/* 횟감(판 이름 = 그 판 마지막에 밥 위에 올라가는 네타). kind = nigiri(밥 위에 한 점) | gunkan(김 띠 안에 담김) */
+/* T71-a 니기리 과정 = 기믹(1:1). verb = 그 과정을 연습하는 입력(판정 규칙은 T68-a 동사 그대로) · gimmick = 화면에 쓰는 기믹 이름 · step = 실제 니기리 순서 번호(①~⑥)
+   why = 「이 손놀림은 니기리의 ○○ 과정이에요」 다음 줄(왜 이 입력이 그 과정인가) · flow는 구간이 아니라 변주 경계에서 채점(실전 내내 걸침) */
+const ProcTable={
+ tezu:{name:'손 적시기',short:'테즈',gimmick:'박 짚기',verb:'poly',icon:'tezu',step:1,color:'#74C9E6',why:'손끝을 물에 적시며 박을 몸에 새겨요 · 음악이 바뀌어도 이 박이 손을 지켜요'},
+ shape:{name:'모양 잡기',short:'모양',gimmick:'굴리기',verb:'spin',icon:'spin',step:2,color:'#F7B94E',why:'떠낸 밥을 손바닥 사이에서 굴려 둥근 타원으로 · 원 그리기 = 손바닥 사이 회전'},
+ press:{name:'쥐기',short:'쥐기',gimmick:'양손 폴리',verb:'poly',icon:'poly',step:3,color:'#7FCB5B',why:'왼손은 받치고 오른손 두 손가락이 리듬 있게 눌러 모양을 굳혀요 · 두 손 역할이 달라요'},
+ flip:{name:'뒤집기',short:'뒤집기',gimmick:'던지고 받기',verb:'toss',icon:'toss',step:4,color:'#E89A5C',why:'손안에서 한 점을 뒤집어 받아요(고테가에시) · 돌아 떨어지는 순간을 받아요'},
+ finish:{name:'다듬기',short:'다듬기',gimmick:'즉흥',verb:'free',icon:'free',step:5,color:'#E8503C',why:'고양이가 보여 준 손질을 내 방식으로 바꿔 모양을 완성해요 · 자유 변형'},
+ flow:{name:'흐름 맞추기',short:'흐름',gimmick:'변주 타기',verb:'vary',icon:'vary',step:0,color:'#C89BE8',why:'손님 흐름(스윙·하프·브레이크·가속)이 바뀌어도 손은 박 위에'},
+ place:{name:'올리기·내놓기',short:'착',gimmick:'착',verb:'place',icon:'place',step:6,color:'#FFF3DC',why:'마지막 박에 네타를 딱 올려 접시에 내놓아요'}};
+const ProcOrder=['tezu','shape','press','flip','finish','place'];/* 실제 니기리 순서(한 점) */
+/* 횟감(실전 판 이름 = 그 판에서 마지막에 밥 위에 올라가는 네타). kind = nigiri | gunkan(김 띠) */
 const NetaTable={
  gwangeo:{name:'광어',kind:'nigiri'},yeoneo:{name:'연어',kind:'nigiri'},saeu:{name:'새우',kind:'nigiri'},anago:{name:'아나고',kind:'nigiri'},
  domi:{name:'도미',kind:'nigiri'},seongge:{name:'성게',kind:'gunkan'},yeoneoal:{name:'연어알',kind:'gunkan'},daebaetsal:{name:'참치 대뱃살',kind:'nigiri'}};
-/* 판. 쉬운 것부터: 기믹 하나씩(1~5) → 조합(6 = 둘, 7 = 셋, 8 = 전부 + 가속). sections 순서대로 이어 붙인다. bars(프리스타일은 roles 길이) · feel · bpm/bpmTo(가속) · tier = 기믹 판 안 단계(1 쉬움 · 2 조금 어려움)
-   동사별 값: spin.graceBeats = 첫 몇 박은 채점 안 함 · toss.tosses = [던지는 박, 떨어지는 박](구간 안 상대 박, 스윙이면 .5가 밀림) · poly.left = 한 마디 안 왼손 펄스 박(기본 0·1·2·3) · poly.right = 한 마디 안 오른손 박 · rightFromBar = 이 마디부터 오른손(앞 마디는 고양이 시범)
-   free.roles = call(힙합 고양이 콜) · play(반쵸 즉흥) · mix(전통 고양이가 반쵸 리듬을 섞어 돌려줌 = 다음 콜) · answer(전통 고양이 대답) · place.at = 놓을 박
-   scoreVerbs = 이 판에서 점수를 매기는 동작(검수표 줄) · verbNames = 이 판에서만 쓰는 동작 이름 · stars = 난이도(1~5) · win = 판정 창(ms) · guide = full(한 줄 안내 + 회전 유령 점 + 브레이크 손가락 셈) / lite(한 줄만) */
+/* 연습판 결과물(네타 없음 — 그 과정의 결과만). bowl = 손 적시기 물그릇 · shari = 둥글게 잡은 밥 · pressed = 쥐어 굳힌 밥 · flipped = 뒤집혀 바로 앉은 한 점 · finished = 다듬은 밥 */
+const ProductTable={bowl:{name:'테즈 물그릇'},shari:{name:'둥근 샤리'},pressed:{name:'쥔 샤리'},flipped:{name:'뒤집힌 한 점'},finished:{name:'다듬은 샤리'}};
+/* 판. type = practice(연습 — 과정 익히기, 판 이름 = 과정) | real(실전 — 오늘의 횟감, 판 이름 = 횟감). sections 순서대로 이어 붙인다.
+   구간: proc(니기리 과정) · verb(입력) · bars(즉흥은 roles 길이) · feel · bpm/bpmTo(가속) · tier(연습 단계 1 쉬움 · 2 조금 어려움) · piece(실전: 몇 번째 한 점, 0부터)
+   동사별 값: spin.graceBeats · toss.tosses=[던지는 박, 떨어지는 박] · poly.left/right/rightFromBar · free.roles(call·play·mix·answer)/call · place.at
+   procs = 이 판에서 검수하는 과정(검수표 줄) · stars = 난이도 · win = 판정 창(ms) · guide = full(한 줄 + 회전 유령 점 + 브레이크 손가락 셈) | lite */
 const WIN={easy:{perfectMs:75,okMs:160,catchPerfectMs:80,catchOkMs:170},mid:{perfectMs:65,okMs:140,catchPerfectMs:70,catchOkMs:150},hard:{perfectMs:60,okMs:130,catchPerfectMs:65,catchOkMs:140},boss:{perfectMs:50,okMs:110,catchPerfectMs:55,catchOkMs:120}};
 const Q4=[0,1,2,3],H2=[0,2],E8=[0,.5,1,1.5,2,2.5,3,3.5],SH=[0,2/3,1,5/3,2,8/3,3,11/3];
+const SEC=(proc,bars,feel,o={})=>({proc,verb:ProcTable[proc].verb,bars,feel,...(proc==='tezu'?{leftOnly:true,right:[],left:Q4}:{}),...o});
+const FIN=(call,roles,feel,o={})=>({proc:'finish',verb:'free',call,roles,feel,...o});
+const COUNT=(line)=>({proc:'count',verb:'count',bars:2,feel:'count',line});
 const RemixStageTable=[
- {id:'1',neta:'gwangeo',name:'광어',gimmick:'굴리기',kind:'solo',stars:1,sub:'원을 그려 밥을 굴려요 · 하프타임(2박에 한 바퀴) → 1박에 한 바퀴',bpm:80,guide:'full',win:WIN.easy,scoreVerbs:['spin'],finale:'광어 한 점, 착!',
-  sections:[
-   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
-   {verb:'spin',bars:6,feel:'half',tier:1,line:'원을 그려 밥을 굴려요 · 마우스 드래그 또는 ↑→↓← · 2박에 한 바퀴',graceBeats:2},
-   {verb:'spin',bars:4,feel:'straight',tier:2,line:'2단계! 두 배로 · 1박에 한 바퀴'},
-   {verb:'spin',bars:2,feel:'half',tier:2,line:'다시 느긋하게 · 2박에 한 바퀴'},
-   {verb:'spin',bars:6,feel:'straight',tier:2,line:'1박에 한 바퀴 · 끝까지 박마다 위로'},
-   {verb:'place',bars:1,feel:'straight',line:'첫 박에 스페이스 · 광어를 올려요!',at:[0]}]},
- {id:'2',neta:'yeoneo',name:'연어',gimmick:'던지고 받기',kind:'solo',stars:1,sub:'포물선만 보고 받아요 · 1박·2박 비행 → 스윙(뒷박이 살짝 늦게)',bpm:84,guide:'full',win:WIN.easy,scoreVerbs:['toss'],finale:'연어 한 점, 착!',
-  sections:[
-   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
-   {verb:'toss',bars:5,feel:'straight',tier:1,line:'떨어지는 순간 스페이스로 받아요 · 높을수록 늦게 떨어져요',tosses:[[0,1],[2,3],[4,6],[6,7],[8,9],[10,12],[12,13],[14,16],[16,17],[18,19]]},
-   {verb:'toss',bars:4,feel:'straight',tier:1,line:'1박 · 2박이 섞여요',tosses:[[0,1],[1,3],[3,4],[4,5],[5,7],[7,8],[8,10],[10,11],[11,12],[12,14],[14,15]]},
-   {verb:'toss',bars:5,feel:'swing',tier:2,line:'2단계! 스윙 · 뒷박이 살짝 늦게 떨어져요',tosses:[[0,1.5],[2,3.5],[4,5.5],[6,7],[8,9.5],[10,11.5],[12,13],[14,15.5],[16,17.5],[18,19]]},
-   {verb:'toss',bars:4,feel:'swing',tier:2,line:'스윙 토스 · 짧게 길게',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5],[8,9.5],[10,11],[11,12.5],[13,14.5],[14.5,15.5]]},
-   {verb:'place',bars:1,feel:'swing',line:'첫 박에 스페이스 · 연어를 올려요!',at:[0]}]},
- {id:'3',neta:'saeu',name:'새우',gimmick:'양손 폴리',kind:'solo',stars:2,sub:'왼손 A는 박마다 · 오른손 L은 2박마다 → 당김음 · 3-3-2',bpm:80,guide:'full',win:WIN.easy,scoreVerbs:['poly'],finale:'새우 한 점, 착!',
-  sections:[
-   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
-   {verb:'poly',bars:2,feel:'straight',tier:1,line:'왼손 A로 박마다 톡 · 밥을 받쳐요',right:[],leftOnly:true},
-   {verb:'poly',bars:5,feel:'straight',tier:1,line:'오른손 L은 2박마다 · 첫 마디는 고양이 시범',right:[0,2],rightFromBar:1},
-   {verb:'poly',bars:5,feel:'straight',tier:2,line:'2단계! 오른손은 뒷박 · 당김음',right:[1.5,3.5],rightFromBar:1},
-   {verb:'poly',bars:4,feel:'straight',tier:2,line:'3-3-2 · 오른손이 엇갈려요',right:[0,1.5,3],rightFromBar:0},
-   {verb:'poly',bars:1,feel:'straight',tier:2,line:'왼손만 남아요 · 박 지키기',right:[],leftOnly:true},
-   {verb:'place',bars:1,feel:'straight',line:'첫 박에 스페이스 · 새우를 올려요!',at:[0]}]},
- {id:'4',neta:'anago',name:'아나고',gimmick:'즉흥',kind:'solo',stars:2,sub:'고양이 콜을 듣고 내 리듬으로 대답 → 길게 주고받기',bpm:80,guide:'full',win:WIN.easy,scoreVerbs:['free'],finale:'아나고 한 점, 착!',
-  sections:[
-   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
-   {verb:'free',feel:'straight',tier:1,call:'c1',roles:['call','play','play','answer'],line:'콜을 듣고 내 리듬으로 · A톡 S탁 D쓱 K꾹 L착'},
-   {verb:'free',feel:'straight',tier:1,call:'c3',roles:['call','play','play','answer'],line:'콜을 살짝 바꿔 대답하면 더 좋아요'},
-   {verb:'free',feel:'straight',tier:2,call:'c2',roles:['call','play','play','answer'],line:'2단계! 엇박 콜 · 여러 소리를 섞어요'},
-   {verb:'free',feel:'straight',tier:2,call:'c4',roles:['call','play','play','mix','play','play','answer'],line:'길게 주고받기 · 고양이가 내 리듬을 섞어 돌려줘요'},
-   {verb:'place',bars:1,feel:'straight',line:'첫 박에 스페이스 · 아나고를 올려요!',at:[0]}]},
- {id:'5',neta:'domi',name:'도미',gimmick:'변주 타기',kind:'solo',stars:3,sub:'A 하나로 박을 짚어요 · 하프·브레이크 → 더블·스윙·셋잇단',bpm:84,guide:'full',win:WIN.easy,scoreVerbs:['poly','vary'],verbNames:{poly:'박 짚기'},finale:'도미 한 점, 착!',
-  sections:[
-   {verb:'count',bars:1,feel:'count',line:'고양이가 박을 세요 · 하나 둘 셋 넷'},
-   {verb:'poly',bars:2,feel:'straight',tier:1,left:Q4,right:[],leftOnly:true,line:'박마다 A · 음악이 바뀌면 손도 바꿔요'},
-   {verb:'poly',bars:2,feel:'half',tier:1,left:H2,right:[],leftOnly:true,line:'하프타임 · 2박마다 A'},
-   {verb:'poly',bars:2,feel:'straight',tier:1,left:Q4,right:[],leftOnly:true,line:'다시 박마다 A'},
-   {verb:'poly',bars:1,feel:'break',tier:1,left:Q4,right:[],leftOnly:true,line:'브레이크! 소리 없이 박마다 A'},
-   {verb:'poly',bars:1,feel:'straight',tier:1,left:Q4,right:[],leftOnly:true,line:'돌아와요 · 첫 박!'},
-   {verb:'poly',bars:3,feel:'double',tier:2,left:E8,right:[],leftOnly:true,line:'2단계! 더블타임 · 반 박마다 A'},
-   {verb:'poly',bars:3,feel:'swing',tier:2,left:E8,right:[],leftOnly:true,line:'스윙 · 뒷박 A가 살짝 늦게'},
-   {verb:'poly',bars:3,feel:'triplet',tier:2,left:SH,right:[],leftOnly:true,line:'셋잇단 · 길게-짧게 A'},
-   {verb:'poly',bars:1,feel:'break',tier:2,left:Q4,right:[],leftOnly:true,line:'마지막 브레이크!'},
-   {verb:'place',bars:1,feel:'straight',line:'돌아와요! 첫 박에 스페이스 · 도미를 올려요!',at:[0]}]},
- {id:'6',neta:'seongge',name:'성게',gimmick:'굴리기 + 토스',kind:'combo',stars:3,sub:'두 기믹을 번갈아 · 굴리다가 받고, 받다가 굴려요',bpm:88,guide:'lite',win:WIN.mid,scoreVerbs:['spin','toss'],finale:'성게 군함, 착!',
-  sections:[
-   {verb:'count',bars:1,feel:'count'},
-   {verb:'spin',bars:2,feel:'straight',line:'굴려요 · 1박에 한 바퀴',graceBeats:1},
-   {verb:'toss',bars:3,feel:'straight',line:'받아요 · 1박 · 2박',tosses:[[0,1],[2,3],[4,6],[6,7],[8,10],[10,11]]},
-   {verb:'spin',bars:2,feel:'half',line:'하프타임 굴리기 · 2박에 한 바퀴'},
-   {verb:'toss',bars:3,feel:'swing',line:'스윙 토스',tosses:[[0,1.5],[2,3.5],[4,5.5],[6,7],[8,9.5],[10,11.5]]},
-   {verb:'spin',bars:2,feel:'straight',line:'다시 1박에 한 바퀴'},
-   {verb:'toss',bars:3,feel:'swing',line:'짧게 길게 · 스윙',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5],[8,9.5],[10,10.5],[10.5,11.5]]},
-   {verb:'spin',bars:3,feel:'straight',line:'끝까지 굴려요'},
-   {verb:'place',bars:1,feel:'straight',line:'첫 박에 착 · 성게를 올려요!',at:[0]}]},
- {id:'7',neta:'yeoneoal',name:'연어알',gimmick:'두 손 + 토스 + 즉흥',kind:'combo',stars:4,sub:'세 기믹 · 3 대 4 폴리 · 더블타임 토스 · 즉흥 두 번',bpm:92,guide:'lite',win:WIN.hard,scoreVerbs:['poly','toss','free'],finale:'연어알 군함, 착!',
-  sections:[
-   {verb:'count',bars:1,feel:'count'},
-   {verb:'poly',bars:2,feel:'straight',line:'두 손 · 오른손 L은 뒷박',right:[1.5,3.5],rightFromBar:0},
-   {verb:'toss',bars:2,feel:'straight',line:'받아요',tosses:[[0,1],[1,2],[2,4],[4,5],[5,6],[6,7]]},
-   {verb:'free',feel:'straight',call:'c1',roles:['call','play','play','answer'],line:'즉흥!'},
-   {verb:'poly',bars:4,feel:'straight',line:'3 대 4 · 오른손 L이 한 마디에 셋',right:[0,4/3,8/3],rightFromBar:1},
-   {verb:'toss',bars:4,feel:'double',line:'더블타임 · 짧게 자주 떨어져요',tosses:[[0,.5],[1,1.5],[2,3],[3,3.5],[4,4.5],[4.5,5],[6,7],[7,7.5],[8,8.5],[9,9.5],[10,11],[11.5,12],[12,12.5],[13,14],[14,14.5],[15,15.5]]},
-   {verb:'free',feel:'straight',call:'c3',roles:['call','play','play','answer'],line:'마지막 즉흥'},
-   {verb:'place',bars:1,feel:'straight',line:'첫 박에 착 · 연어알을 올려요!',at:[0]}]},
- {id:'8',neta:'daebaetsal',name:'참치 대뱃살',gimmick:'전부 + 가속',kind:'boss',stars:5,sub:'다섯 기믹이 다 섞이고 점점 빨라져요(96 → 120) · 긴 즉흥',bpm:96,guide:'lite',win:WIN.boss,scoreVerbs:['spin','toss','poly','free','vary'],finale:'참치 대뱃살, 착!',
-  sections:[
-   {verb:'count',bars:1,feel:'count'},
-   {verb:'spin',bars:2,feel:'swing',line:'스윙 굴리기',graceBeats:1},
-   {verb:'toss',bars:2,feel:'triplet',line:'셋잇단 토스',tosses:[[0,1],[1,1+2/3],[2,2+1/3],[3,4],[4,5+1/3],[6,6+2/3],[7,8]]},
-   {verb:'poly',bars:2,feel:'straight',line:'3 대 4',right:[0,4/3,8/3],rightFromBar:0},
-   {verb:'poly',bars:1,feel:'break',line:'브레이크!',right:[],leftOnly:true},
-   {verb:'toss',bars:2,feel:'double',line:'더블타임 토스',tosses:[[0,.5],[1,1.5],[2,3],[3,3.5],[4,4.5],[5,5.5],[6,7]]},
-   {verb:'spin',bars:2,feel:'half',line:'하프타임 굴리기'},
-   {verb:'free',feel:'straight',call:'c4',roles:['call','play','play','mix','play','play','answer'],line:'긴 즉흥 · 고양이와 주고받기'},
-   {verb:'poly',bars:2,feel:'straight',bpmTo:108,line:'빨라져요! 두 손 유지',right:[.75,2,3.5],rightFromBar:0},
-   {verb:'spin',bars:2,feel:'straight',bpmTo:120,line:'더 빨라져요! 굴리기'},
-   {verb:'toss',bars:2,feel:'swing',line:'스윙 토스',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5]]},
-   {verb:'poly',bars:1,feel:'break',line:'마지막 브레이크!',right:[],leftOnly:true},
-   {verb:'place',bars:1,feel:'straight',line:'첫 박에 착 · 대뱃살을 올려요!',at:[0]}]}];
+ /* ── 연습 — 과정 익히기(실제 니기리 순서 · 입력이 쉬운 것부터) ── */
+ {id:'p1',type:'practice',proc:'tezu',product:'bowl',name:'손 적시기',gimmick:'박 짚기',stars:1,sub:'A 하나로 박을 짚어요 · 곧은 박 → 하프 → 브레이크 → 더블',bpm:80,guide:'full',win:WIN.easy,procs:['tezu','flow'],finale:'손끝이 촉촉해요, 준비 끝!',
+  sections:[COUNT('하나 둘 셋 넷 · 넷 다음 박부터 A'),
+   SEC('tezu',3,'straight',{tier:1,line:'손끝을 물에 적시며 박마다 A · 톡 톡 톡 톡'}),
+   SEC('tezu',2,'half',{tier:1,left:H2,line:'하프타임 · 2박마다 A — 느긋하게'}),
+   SEC('tezu',2,'straight',{tier:1,line:'다시 박마다 A'}),
+   SEC('tezu',1,'break',{tier:1,line:'브레이크! 소리 없이 박마다 A'}),
+   SEC('tezu',1,'straight',{tier:1,line:'돌아와요 · 첫 박!'}),
+   SEC('tezu',3,'double',{tier:2,left:E8,line:'2단계! 더블타임 · 반 박마다 A'}),
+   SEC('tezu',2,'straight',{tier:2,line:'다시 박마다 A'}),
+   SEC('tezu',1,'break',{tier:2,line:'마지막 브레이크!'}),
+   SEC('place',1,'straight',{at:[0],line:'돌아와요! 첫 박에 스페이스 · 손끝을 탁 털어요'})]},
+ {id:'p2',type:'practice',proc:'shape',product:'shari',name:'모양 잡기',gimmick:'굴리기',stars:1,sub:'원을 그려 밥을 굴려요 · 하프타임(2박에 한 바퀴) → 1박에 한 바퀴',bpm:80,guide:'full',win:WIN.easy,procs:['shape'],finale:'둥근 샤리 완성!',
+  sections:[COUNT('하나 둘 셋 넷 · 넷 다음 박부터 굴려요'),
+   SEC('shape',6,'half',{tier:1,graceBeats:2,line:'떠낸 밥을 굴려요 · 마우스 드래그 또는 ↑→↓← · 2박에 한 바퀴'}),
+   SEC('shape',4,'straight',{tier:2,line:'2단계! 두 배로 · 1박에 한 바퀴'}),
+   SEC('shape',2,'half',{tier:2,line:'다시 느긋하게 · 2박에 한 바퀴'}),
+   SEC('shape',6,'straight',{tier:2,line:'1박에 한 바퀴 · 끝까지 박마다 위로'}),
+   SEC('place',1,'straight',{at:[0],line:'첫 박에 스페이스 · 둥글게 잡은 밥을 내려놓아요'})]},
+ {id:'p3',type:'practice',proc:'press',product:'pressed',name:'쥐기',gimmick:'양손 폴리',stars:2,sub:'왼손 A는 박마다 받치고 · 오른손 L은 2박마다 → 당김음 · 3-3-2로 눌러요',bpm:80,guide:'full',win:WIN.easy,procs:['press'],finale:'단단하게 쥐었어요!',
+  sections:[COUNT('하나 둘 셋 넷 · 넷 다음 박부터 왼손 A'),
+   SEC('press',2,'straight',{tier:1,right:[],leftOnly:true,line:'왼손 A로 박마다 톡 · 밥을 받쳐요'}),
+   SEC('press',5,'straight',{tier:1,right:[0,2],rightFromBar:1,line:'오른손 L은 2박마다 꾹 · 첫 마디는 고양이 시범'}),
+   SEC('press',5,'straight',{tier:2,right:[1.5,3.5],rightFromBar:1,line:'2단계! 오른손은 뒷박 · 당김음으로 눌러요'}),
+   SEC('press',4,'straight',{tier:2,right:[0,1.5,3],rightFromBar:0,line:'3-3-2 · 오른손이 엇갈려 눌러요'}),
+   SEC('press',1,'straight',{tier:2,right:[],leftOnly:true,line:'왼손만 남아요 · 박 지키기'}),
+   SEC('place',1,'straight',{at:[0],line:'첫 박에 스페이스 · 쥔 밥을 내려놓아요'})]},
+ {id:'p4',type:'practice',proc:'flip',product:'flipped',name:'뒤집기',gimmick:'던지고 받기',stars:2,sub:'포물선만 보고 받아요 · 1박·2박 → 스윙(뒷박이 살짝 늦게)',bpm:84,guide:'full',win:WIN.easy,procs:['flip'],finale:'한 점이 바로 앉았어요!',
+  sections:[COUNT('하나 둘 셋 넷 · 넷 다음 박부터 던져요'),
+   SEC('flip',5,'straight',{tier:1,line:'한 점을 띄워 뒤집어요 · 떨어지는 순간 스페이스 · 높을수록 늦게 떨어져요',tosses:[[0,1],[2,3],[4,6],[6,7],[8,9],[10,12],[12,13],[14,16],[16,17],[18,19]]}),
+   SEC('flip',4,'straight',{tier:1,line:'1박 · 2박이 섞여요',tosses:[[0,1],[1,3],[3,4],[4,5],[5,7],[7,8],[8,10],[10,11],[11,12],[12,14],[14,15]]}),
+   SEC('flip',5,'swing',{tier:2,line:'2단계! 스윙 · 뒷박이 살짝 늦게 떨어져요',tosses:[[0,1.5],[2,3.5],[4,5.5],[6,7],[8,9.5],[10,11.5],[12,13],[14,15.5],[16,17.5],[18,19]]}),
+   SEC('flip',4,'swing',{tier:2,line:'스윙 · 짧게 길게',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5],[8,9.5],[10,11],[11,12.5],[13,14.5],[14.5,15.5]]}),
+   SEC('place',1,'swing',{at:[0],line:'첫 박에 스페이스 · 뒤집은 한 점을 내려놓아요'})]},
+ {id:'p5',type:'practice',proc:'finish',product:'finished',name:'다듬기',gimmick:'즉흥',stars:2,sub:'고양이 손질(콜)을 듣고 내 리듬으로 다듬어요 → 길게 주고받기',bpm:80,guide:'full',win:WIN.easy,procs:['finish'],finale:'모양이 다듬어졌어요!',
+  sections:[COUNT('하나 둘 셋 넷 · 고양이 손질부터 들어요'),
+   FIN('c1',['call','play','play','answer'],'straight',{tier:1,line:'손질을 듣고 내 리듬으로 · A톡 S탁 D쓱 K꾹 L착'}),
+   FIN('c3',['call','play','play','answer'],'straight',{tier:1,line:'손질을 살짝 바꿔 다듬으면 더 좋아요'}),
+   FIN('c2',['call','play','play','answer'],'straight',{tier:2,line:'2단계! 엇박 손질 · 여러 소리를 섞어요'}),
+   FIN('c4',['call','play','play','mix','play','play','answer'],'straight',{tier:2,line:'길게 주고받기 · 고양이가 내 리듬을 섞어 돌려줘요'}),
+   SEC('place',1,'straight',{at:[0],line:'첫 박에 스페이스 · 다듬은 밥을 내려놓아요'})]},
+ /* ── 실전 — 오늘의 횟감(한 점 = 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착 · 뒤로 갈수록 변주·BPM·창 강화) ── */
+ {id:'r1',type:'real',neta:'gwangeo',name:'광어',order:1,stars:2,sub:'손님 주문 1점 · 과정을 순서대로 한 번씩',bpm:80,guide:'full',win:WIN.easy,procs:['tezu','shape','press','flip','finish','flow'],finale:'광어 한 점, 착!',
+  sections:[COUNT('손님 주문 — 광어 1점 · 넷 다음 박부터 손 적시기'),
+   SEC('tezu',1,'straight',{piece:0,line:'손끝을 적셔요 · 박마다 A'}),
+   SEC('shape',3,'half',{piece:0,graceBeats:1,line:'밥을 굴려 모양을 잡아요 · 2박에 한 바퀴'}),
+   SEC('press',3,'straight',{piece:0,right:[0,2],rightFromBar:1,line:'쥐어요 · 왼손 A 박마다 · 오른손 L 2박마다'}),
+   SEC('flip',3,'straight',{piece:0,line:'뒤집어요 · 떨어지는 순간 스페이스',tosses:[[0,1],[2,3],[4,6],[6,7],[8,10],[10,11]]}),
+   FIN('c1',['call','play','answer'],'straight',{piece:0,line:'다듬어요 · 고양이 손질을 내 리듬으로'}),
+   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 스페이스 · 광어를 올려요!'})]},
+ {id:'r2',type:'real',neta:'yeoneo',name:'연어',order:2,stars:3,sub:'손님 주문 2점 · 당김음 쥐기 · 브레이크 · 스윙 뒤집기',bpm:84,guide:'lite',win:WIN.mid,procs:['tezu','shape','press','flip','finish','flow'],finale:'연어 두 점, 착!',
+  sections:[COUNT('손님 주문 — 연어 2점'),
+   SEC('tezu',1,'straight',{piece:0,line:'손 적시기'}),
+   SEC('shape',2,'straight',{piece:0,graceBeats:1,line:'모양 잡기 · 1박에 한 바퀴'}),
+   SEC('press',2,'straight',{piece:0,right:[1.5,3.5],rightFromBar:0,line:'쥐기 · 오른손 L은 뒷박'}),
+   SEC('flip',2,'straight',{piece:0,line:'뒤집기',tosses:[[0,1],[2,3],[4,6],[6,7]]}),
+   FIN('c1',['call','play','answer'],'straight',{piece:0,line:'다듬기'}),
+   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 착 · 연어 1점째!'}),
+   SEC('tezu',1,'break',{piece:1,line:'브레이크! 소리 없이 손 적시기'}),
+   SEC('shape',2,'half',{piece:1,line:'모양 잡기 · 하프타임 2박에 한 바퀴'}),
+   SEC('press',2,'swing',{piece:1,right:[.5,1.5,3.5],rightFromBar:0,line:'쥐기 · 스윙'}),
+   SEC('flip',2,'swing',{piece:1,line:'뒤집기 · 스윙',tosses:[[0,1.5],[2,3.5],[4,5.5],[6,7]]}),
+   FIN('c3',['call','play','answer'],'straight',{piece:1,line:'다듬기'}),
+   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착 · 연어를 올려요!'})]},
+ {id:'r3',type:'real',neta:'saeu',name:'새우',order:3,stars:4,sub:'손님 주문 2점 · 3-3-2 · 셋잇단 뒤집기 · 3 대 4 · 더블타임',bpm:88,guide:'lite',win:WIN.hard,procs:['tezu','shape','press','flip','finish','flow'],finale:'새우 두 점, 착!',
+  sections:[COUNT('손님 주문 — 새우 2점'),
+   SEC('tezu',1,'straight',{piece:0,line:'손 적시기'}),
+   SEC('shape',2,'straight',{piece:0,graceBeats:1,line:'모양 잡기'}),
+   SEC('press',2,'straight',{piece:0,right:[0,1.5,3],rightFromBar:0,line:'쥐기 · 3-3-2'}),
+   SEC('flip',2,'triplet',{piece:0,line:'뒤집기 · 셋잇단',tosses:[[0,1],[1,1+2/3],[2,2+1/3],[3,4],[4,5+1/3],[6,6+2/3]]}),
+   FIN('c2',['call','play','answer'],'straight',{piece:0,line:'다듬기 · 엇박 손질'}),
+   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 착 · 새우 1점째!'}),
+   SEC('tezu',1,'double',{piece:1,left:E8,line:'손 적시기 · 더블타임 반 박마다'}),
+   SEC('shape',2,'straight',{piece:1,line:'모양 잡기'}),
+   SEC('press',2,'straight',{piece:1,right:[0,4/3,8/3],rightFromBar:0,line:'쥐기 · 3 대 4'}),
+   SEC('flip',2,'double',{piece:1,line:'뒤집기 · 더블타임',tosses:[[0,.5],[1,1.5],[2,3],[3,3.5],[4,4.5],[5,5.5],[6,7]]}),
+   FIN('c3',['call','play','answer'],'straight',{piece:1,line:'다듬기'}),
+   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착 · 새우를 올려요!'})]},
+ {id:'r4',type:'real',neta:'anago',name:'아나고',order:4,stars:4,sub:'손님 주문 2점 · 스윙 한 점 → 브레이크 · 셋잇단 · 긴 다듬기',bpm:92,guide:'lite',win:WIN.hard,procs:['tezu','shape','press','flip','finish','flow'],finale:'아나고 두 점, 착!',
+  sections:[COUNT('손님 주문 — 아나고 2점'),
+   SEC('tezu',1,'swing',{piece:0,left:E8,line:'손 적시기 · 스윙 반 박마다'}),
+   SEC('shape',2,'swing',{piece:0,graceBeats:1,line:'모양 잡기 · 스윙'}),
+   SEC('press',2,'swing',{piece:0,right:[.5,1.5,3.5],rightFromBar:0,line:'쥐기 · 스윙'}),
+   SEC('flip',2,'swing',{piece:0,line:'뒤집기 · 짧게 길게',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5]]}),
+   FIN('c2',['call','play','answer'],'swing',{piece:0,line:'다듬기 · 스윙'}),
+   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 착 · 아나고 1점째!'}),
+   SEC('tezu',1,'break',{piece:1,line:'브레이크! 소리 없이 손 적시기'}),
+   SEC('shape',2,'half',{piece:1,line:'모양 잡기 · 하프타임 2박에 한 바퀴'}),
+   SEC('press',2,'straight',{piece:1,right:[.75,2,3.5],rightFromBar:0,line:'쥐기 · 오른손이 앞당겨요'}),
+   SEC('flip',2,'triplet',{piece:1,line:'뒤집기 · 셋잇단',tosses:[[0,1],[1,1+2/3],[2,2+1/3],[3,4],[4,5+1/3],[6,6+2/3],[7,8]]}),
+   FIN('c4',['call','play','play','answer'],'straight',{piece:1,line:'길게 다듬기'}),
+   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착 · 아나고를 올려요!'})]},
+ {id:'r5',type:'real',neta:'daebaetsal',name:'참치 대뱃살',order:5,boss:true,stars:5,sub:'오마카세 마지막 · 손님 주문 3점 · 점점 빨라져요(96 → 120)',bpm:96,guide:'lite',win:WIN.boss,procs:['tezu','shape','press','flip','finish','flow'],finale:'참치 대뱃살 세 점, 착!',
+  sections:[COUNT('오마카세 마지막 — 참치 대뱃살 3점'),
+   SEC('tezu',1,'straight',{piece:0,line:'손 적시기'}),
+   SEC('shape',2,'swing',{piece:0,graceBeats:1,line:'모양 잡기 · 스윙'}),
+   SEC('press',2,'straight',{piece:0,right:[0,4/3,8/3],rightFromBar:0,line:'쥐기 · 3 대 4'}),
+   SEC('flip',2,'triplet',{piece:0,line:'뒤집기 · 셋잇단',tosses:[[0,1],[1,1+2/3],[2,2+1/3],[3,4],[4,5+1/3],[6,6+2/3],[7,8]]}),
+   FIN('c2',['call','play','answer'],'straight',{piece:0,line:'다듬기'}),
+   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 착 · 1점째!'}),
+   SEC('tezu',1,'break',{piece:1,line:'브레이크! 소리 없이 손 적시기'}),
+   SEC('shape',2,'half',{piece:1,line:'모양 잡기 · 하프타임'}),
+   SEC('press',2,'straight',{piece:1,bpmTo:108,right:[.75,2,3.5],rightFromBar:0,line:'빨라져요! 두 손 유지'}),
+   SEC('flip',2,'double',{piece:1,line:'뒤집기 · 더블타임',tosses:[[0,.5],[1,1.5],[2,3],[3,3.5],[4,4.5],[5,5.5],[6,7]]}),
+   FIN('c4',['call','play','mix','play','answer'],'straight',{piece:1,line:'긴 다듬기 · 고양이와 주고받기'}),
+   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착 · 2점째!'}),
+   SEC('tezu',1,'double',{piece:2,left:E8,line:'손 적시기 · 반 박마다'}),
+   SEC('shape',2,'straight',{piece:2,bpmTo:120,line:'더 빨라져요! 모양 잡기'}),
+   SEC('press',2,'swing',{piece:2,right:[.5,1.5,3.5],rightFromBar:0,line:'쥐기 · 스윙'}),
+   SEC('flip',2,'swing',{piece:2,line:'뒤집기 · 스윙',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5]]}),
+   FIN('c1',['call','play','answer'],'straight',{piece:2,line:'마지막 다듬기'}),
+   SEC('place',1,'straight',{piece:2,at:[0],line:'첫 박에 착 · 대뱃살을 올려요!'})]}];
 /* 점수: 박 판정 딱/좋아요/놓침 · 동사 점수 = 0~100 · 합계 = 등장한 동사 평균(변주 포함) */
 const RemixScoreTable={perfect:1,ok:.6,miss:0,verbWeights:{spin:1,toss:1,poly:1,free:1,vary:1}};
-/* 결과 화면 고양이 코멘트(가장 잘한 동사 칭찬 + 가장 약한 동사 요령) */
+/* 검수 메모(가장 잘한 과정 칭찬 + 가장 약한 과정 요령) — T71-a: 동사가 아니라 니기리 과정별 */
 const CatLineTable={
- best:{spin:'회전이 박이랑 딱 붙었어요!',toss:'받는 손이 정확해요!',poly:'두 손이 따로 놀아요, 드러머 같아요!',free:'즉흥이 멋져요, 제가 따라 했어요!',vary:'변주를 잘 탔어요!'},
- tip:{spin:'원은 박마다 위를 지나게 그려요',toss:'높이 뜰수록 늦게 떨어져요 · 그림자를 봐요',poly:'왼손은 메트로놈처럼, 오른손만 춤춰요',free:'여러 소리를 섞고 고양이 리듬을 살짝 바꿔 봐요',vary:'브레이크 땐 마음속으로 하나 둘 셋 넷'},
+ best:{tezu:'박 짚기가 흔들리지 않아요!',shape:'밥이 박마다 위를 지났어요!',press:'두 손이 따로 놀아요, 드러머 같아요!',flip:'받는 손이 정확해요!',finish:'다듬는 손이 멋져요, 제가 따라 했어요!',flow:'흐름이 바뀌어도 손이 박 위에 있어요!'},
+ tip:{tezu:'음악이 바뀌면 고양이 손가락을 보고 박을 세요',shape:'원은 박마다 위를 지나게 그려요',press:'왼손은 메트로놈처럼, 오른손만 춤춰요',flip:'높이 뜰수록 늦게 떨어져요 · 그림자를 봐요',finish:'여러 소리를 섞고 고양이 리듬을 살짝 바꿔 봐요',flow:'브레이크 땐 마음속으로 하나 둘 셋 넷'},
  spam:'같은 키만 반복했죠? 고양이가 하품해요',
  perfect:'완벽해요! 다음 판으로 가요',
  retry:'손이 아직 박을 쫓아가요 · 천천히 다시 해 봐요'};/* T69-a: 가장 높은 동작도 70 미만이면 칭찬 대신 */
@@ -1585,6 +1633,14 @@ const FinaleTable={
   '한 번 더':{dx:30,rot:13,gloss:.2,react:'shake',line:'다시. 박부터 몸에 새기거라'}},
  errDxPerMs:.1,errDxMax:14,placeGloss:{perfect:1,ok:.85,miss:.6},
  miss:{dx:22,rot:9,dy:6,line:'착이 늦었구나. 네타가 미끄러졌다'}};
+/* T71-a 연습판 「과정 검수」 스승 한 줄 평(과정 × 등급, 스승 말투 -구나/-거라) · miss = 마지막 박(내려놓기)을 놓쳤을 때 */
+const ProcLineTable={
+ tezu:{'금':'박이 손끝에 붙었구나','은':'좋구나. 바뀔 때 한 박 먼저 세어 보거라','동':'박이 손을 떠나는구나. 마음속으로 세거라','한 번 더':'다시. 손끝을 적시며 박부터 세거라'},
+ shape:{'금':'밥이 손안에서 둥글게 돌았구나','은':'둥글구나. 박마다 위를 지나게 굴려 보거라','동':'밥알이 흩어지는구나. 천천히 크게 굴리거라','한 번 더':'다시. 손바닥 사이에서 원부터 그리거라'},
+ press:{'금':'두 손이 제 일을 아는구나','은':'좋구나. 왼손은 더 고르게 받쳐 보거라','동':'누르는 손이 받치는 손을 흔드는구나','한 번 더':'다시. 왼손 박부터 몸에 새기거라'},
+ flip:{'금':'떨어지는 순간을 정확히 받았구나','은':'좋구나. 그림자를 보고 받아 보거라','동':'받는 손이 늦구나. 높이를 읽거라','한 번 더':'다시. 떨어지는 순간만 보거라'},
+ finish:{'금':'네 손맛이 살아 있구나','은':'좋구나. 소리를 더 섞어 보거라','동':'흉내만 내는구나. 살짝 바꿔 보거라','한 번 더':'다시. 고양이 손질부터 잘 듣거라'},
+ miss:'마지막 박을 놓쳤구나. 끝까지 세거라'};
 /* 봇(검증용). sigma = 박 오차 표준편차(ms) · spin: input = mouse|arrows, phaseMs = 일정한 위상 어긋남, wobble = 속도 흔들림(라디안 진폭), wobbleSec = 주기 · skip = 놓칠 확률 · free: style = vary|random|spam · drift = 브레이크 중 박 늘어짐(비율) */
 const BotTable={
  skilled:{sigma:12,catchSigma:12,skip:0,spin:{input:'mouse',phaseMs:0,wobble:.05,wobbleSec:3,jitter:.01},free:{style:'vary',sigma:12},drift:0},
@@ -1598,7 +1654,7 @@ const mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
 const std=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/(a.length-1));};
 function rngOf(seed){let s=(seed>>>0)||1;return ()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296;};}
 function gauss(r){return Math.sqrt(-2*Math.log(Math.max(1e-12,r())))*Math.cos(TAU*r());}
-function stageRow(id){return RemixStageTable.find(s=>s.id===String(id));}
+function stageRow(id){id=String(id);if(/^\d+$/.test(id)){const n=+id;id=n>=1&&n<=5?'p'+n:n>=6&&n<=10?'r'+(n-5):id;}return RemixStageTable.find(s=>s.id===id);}/* T71-a: p1~p5 = 연습 · r1~r5 = 실전(숫자 1~10도 받음) */
 function feelOf(sec){return sec.feel==='break'?sec.breakOf:sec.feel;}
 function mapFrac(f,feel){const s=FeelTable[feel]?.swing??.5;if(!s||s===.5)return f;return f<.5?f*2*s:s+(f-.5)*2*(1-s);}
 
@@ -1615,10 +1671,10 @@ function buildChart(stageId){const S=stageRow(stageId);if(!S)throw Error('no sta
  const C={stage:S,secs,endBeat,bt,timeOf,linTime,beatAt,beatDur,secAt,end:bt[endBeat],tosses:[],pulses:[],rights:[],previews:[],places:[],spinSamples:[],freeBars:[],transitions:[],warnings:[],audio:[],lines:[]};
  const W=S.win;
  for(const s of secs){const f=feelOf(s);C.lines.push({t:timeOf(s.b0),sec:s.i,verb:s.verb,line:s.line||'',feel:s.feel});
-  if(s.verb==='toss')for(const [k,[a,l]] of (s.tosses||[]).entries()){const tT=timeOf(s.b0+a),tL=timeOf(s.b0+l),T=tL-tT,h=RemixTable.toss.hMin+RemixTable.toss.hSpan*(1-Math.exp(-((T/RemixTable.toss.hTau)**2)));C.tosses.push({id:C.tosses.length,sec:s.i,bToss:s.b0+a,bLand:s.b0+l,tToss:tT,tLand:tL,flightBeats:l-a,flightSec:T,h,obj:k%2?'rice':'neta',side:k%2?1:-1,feel:f});}
+  if(s.verb==='toss')for(const [k,[a,l]] of (s.tosses||[]).entries()){const tT=timeOf(s.b0+a),tL=timeOf(s.b0+l),T=tL-tT,h=RemixTable.toss.hMin+RemixTable.toss.hSpan*(1-Math.exp(-((T/RemixTable.toss.hTau)**2)));C.tosses.push({id:C.tosses.length,sec:s.i,bToss:s.b0+a,bLand:s.b0+l,tToss:tT,tLand:tL,flightBeats:l-a,flightSec:T,h,obj:'shari',side:k%2?1:-1,feel:f});}
   if(s.verb==='poly'){for(let k=0;k<s.bars;k++)for(const p of s.left||[0,1,2,3]){const b=s.b0+4*k+p;C.pulses.push({id:C.pulses.length,sec:s.i,b,t:timeOf(b),inBreak:s.feel==='break'});}
    if(!s.leftOnly)for(let k=0;k<s.bars;k++)for(const p of s.right||[]){const B=s.b0+4*k+p,row={id:0,sec:s.i,b:B,t:timeOf(B),inBreak:s.feel==='break'};if(k>=(s.rightFromBar??0)){row.id=C.rights.length;C.rights.push(row);}else C.previews.push(row);}}
-  if(s.verb==='place')for(const a of s.at||[0])C.places.push({id:C.places.length,sec:s.i,b:s.b0+a,t:timeOf(s.b0+a)});
+  if(s.verb==='place')for(const a of s.at||[0])C.places.push({id:C.places.length,sec:s.i,piece:s.piece??0,b:s.b0+a,t:timeOf(s.b0+a)});
   if(s.verb==='spin'){const div=RemixTable.spin.sampleDiv,rev=FeelTable[f].revBeats;for(let k=Math.round((s.graceBeats??1)*div);k<(s.b1-s.b0)*div;k++){const B=s.b0+k/div;C.spinSamples.push({id:C.spinSamples.length,sec:s.i,b:B,t:linTime(B),rev});}}
   if(s.verb==='free'){const grid=FeelTable[f].grid;let callRef=null;for(const [k,role] of s.roles.entries()){const B0=s.b0+4*k,g=[];for(let j=0;j<=grid;j++)g.push(timeOf(B0+4*j/grid));const bar={id:C.freeBars.length,sec:s.i,k,role,b0:B0,t0:g[0],t1:g[grid],grid:g,steps:grid,feel:f};
     if(role==='call'){bar.pattern=(CallTable[s.call]?.steps||[]).map(([st,snd])=>[Math.round(st*grid/16),snd]);callRef=bar.id;}
@@ -1627,6 +1683,7 @@ function buildChart(stageId){const S=stageRow(stageId);if(!S)throw Error('no sta
  for(let i=1;i<secs.length;i++){const a=secs[i-1],b=secs[i];if(a.verb==='count')continue;const fa=a.feel,fb=b.feel,accel=b.bpm1!==b.bpm0;if(fa===fb&&!accel)continue;
   const kind=fb==='break'?'break':fa==='break'?'return':accel&&fa===fb?'accel':fb;const label=kind==='break'?'브레이크! 박을 마음속으로':kind==='return'?'돌아와요 · 첫 박!':kind==='accel'?'빨라져요!':(FeelTable[fb].name+' — '+FeelTable[fb].short)+(accel?' · 빨라져요!':'');
   const tr={id:C.transitions.length,b:b.b0,t:timeOf(b.b0),kind,label,from:fa,to:fb,accel};C.transitions.push(tr);C.warnings.push({tr:tr.id,tFrom:timeOf(b.b0-RemixTable.transition.warnBeats),tTo:timeOf(b.b0)+beatDur(b.b0)*.9,t:tr.t,label,kind});}
+ C.pieces=C.places.length;C.countBeats=secs[0].verb==='count'?secs[0].b1:0;/* T71-a 실전 = 손님 주문 n점(착 n번) · 카운트 = 2마디(첫 마디 과정 안내 · 둘째 마디 하나 둘 셋 넷) */
  buildAudio(C);C.audio.sort((a,b)=>a.t-b.t);return C;}
 
 /* 오디오 사건(드럼·베이스·코드·토스 휙·고양이 시범·콜·스크래치 예고·크래시). inst = groove voice() 악기, word = 손 단어 소리. 브레이크 = 드럼·베이스·코드 없음 */
@@ -1659,7 +1716,7 @@ function input(run,ev){const C=run.C,W=C.stage.win,t=ev.t;
  const k=ev.key;
  if(k==='Up'||k==='Right'||k==='Down'||k==='Left'){const q={Up:0,Right:1,Down:2,Left:3}[k],S=run.spin,last=S.path.length?S.path[S.path.length-1].th:0;let d=(((q*TAU/4-last)%TAU)+TAU)%TAU;if(d>Math.PI+1e-9)d-=TAU;const th=last+d;/* 가까운 쪽으로(반시계 키 = 뒤로), 맞은편 = 앞으로 반 바퀴 */pushPath(run,t,th,'key');return {kind:'spin'};}
  if(k==='Space'){const c=nearest(run.tosses,t,'tLand',W.catchOkMs);if(c){const err=(t-c.tLand)*1000;c.res={err,g:grade(err,W.catchPerfectMs,W.catchOkMs),t};fx(run,{type:'catch',id:c.id,g:c.res.g,err,t});return {kind:'catch',g:c.res.g,err};}
-  const p=nearest(run.places,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};if(!run.finale)run.finale=finaleOf(run,p);fx(run,{type:'place',id:p.id,g:p.res.g,err,t,finale:run.finale});return {kind:'place',g:p.res.g,err};}
+  const p=nearest(run.places,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};if(!p.fin){p.fin=finaleOf(run,p);run.finale=p.fin;}fx(run,{type:'place',id:p.id,g:p.res.g,err,t,finale:p.fin});return {kind:'place',g:p.res.g,err};}
   run.stray++;fx(run,{type:'whiff',t});return {kind:'stray'};}
  if(k==='A'){const p=nearest(run.pulses,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};fx(run,{type:'pulse',id:p.id,g:p.res.g,err,t});return {kind:'pulse',g:p.res.g,err};}}
  if(k==='L'){const p=nearest(run.rights,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};fx(run,{type:'right',id:p.id,g:p.res.g,err,t});return {kind:'right',g:p.res.g,err};}}
@@ -1700,7 +1757,7 @@ function patternOf(run,id){const b=run.free.bars[id];return b?(b.role==='call'?b
 /* 시간 진행: 놓친 토스·펄스·오른손·놓기 확정, 회전 표본(늦춰서), 프리스타일 마디 채점, 고양이 섞기 */
 function update(run,t){const C=run.C,W=C.stage.win,R=RemixTable;run.t=t;
  for(const x of run.tosses)if(!x.res&&t>x.tLand+W.catchOkMs/1000){x.res={err:null,g:'miss',t};fx(run,{type:'drop',id:x.id,g:'miss',t});}
- for(const [list,type] of [[run.pulses,'pulse'],[run.rights,'right'],[run.places,'place']])for(const x of list)if(!x.res&&t>x.t+W.okMs/1000){x.res={err:null,g:'miss',t};if(type==='place'&&!run.finale)run.finale=finaleOf(run,x);fx(run,{type,id:x.id,g:'miss',t,finale:type==='place'?run.finale:undefined});}
+ for(const [list,type] of [[run.pulses,'pulse'],[run.rights,'right'],[run.places,'place']])for(const x of list)if(!x.res&&t>x.t+W.okMs/1000){x.res={err:null,g:'miss',t};if(type==='place'&&!x.fin){x.fin=finaleOf(run,x);run.finale=x.fin;}fx(run,{type,id:x.id,g:'miss',t,finale:type==='place'?x.fin:undefined});}
  const S=run.spin;while(S.next<C.spinSamples.length&&C.spinSamples[S.next].t<=t-R.spin.lagSec){const r=spinSample(run,C.spinSamples[S.next++]);S.samples.push(r);if(r.state==='flat')S.flat++;if(r.state==='scatter')S.scatter++;}
  if(S.path.length>400){const cut=t-R.spin.pruneSec;let n=0;while(n<S.path.length-2&&S.path[n+1].t<cut)n++;if(n>0)S.path.splice(0,n);}
  const bars=run.free.bars;for(const bar of bars){if(bar.role==='play'&&bar.score==null&&t>=bar.t1+.1){const prev=[...bars].reverse().find(b=>b.role==='play'&&b.id<bar.id&&b.score);bar.score=scoreFreeBar(bar.hits,bar.steps,patternOf(run,bar.callRef),prev?prev.score.pattern:null);fx(run,{type:'freeBar',bar:bar.id,score:bar.score,t});}
@@ -1710,29 +1767,47 @@ function update(run,t){const C=run.C,W=C.stage.win,R=RemixTable;run.t=t;
  const rec=run.pulses.filter(p=>p.res&&p.res.t<=t).slice(-R.poly.recent);if(rec.length){let tilt=0;for(const [i,p] of rec.entries())tilt+=p.res.g==='miss'?(i%2?1:-1)*R.poly.tiltMissDeg:p.res.err*R.poly.tiltPerMs/rec.length*1;run.tilt=clamp(tilt,-R.poly.tiltMax,R.poly.tiltMax);}
  if(t>=C.end+RemixTable.endTailSec&&!run.done){run.done=true;run.result=results(run);fx(run,{type:'done',t});}}
 
-/* 결과: 동사별 0~100 */
-function results(run){const C=run.C,out={verbs:{},detail:{}},SV=C.stage.scoreVerbs,has=v=>(!SV||SV.includes(v))&&C.secs.some(s=>s.verb===v);/* T69-a: 판마다 검수할 동작만(scoreVerbs) */
- if(has('spin')){const q=run.spin.samples.map(s=>s.q);out.verbs.spin=Math.round(mean(q)*100);const er=run.spin.samples.filter(s=>s.errMs!=null).map(s=>Math.abs(s.errMs));out.detail.spin={samples:q.length,meanAbsErrMs:Math.round(mean(er)),flat:run.spin.flat,scatter:run.spin.scatter,meanRatio:+mean(run.spin.samples.map(s=>s.ratio)).toFixed(3)};}
- if(has('toss')){const g=run.tosses.map(x=>gval(x.res?.g||'miss'));out.verbs.toss=Math.round(mean(g)*100);const n=k=>run.tosses.filter(x=>x.res?.g===k).length;out.detail.toss={n:run.tosses.length,perfect:n('perfect'),ok:n('ok'),miss:n('miss')};}
- if(has('poly')){const L=run.pulses,Rr=run.rights,lg=mean(L.map(p=>gval(p.res?.g||'miss'))),errs=L.filter(p=>p.res&&p.res.err!=null).map(p=>p.res.err),sd=std(errs),left=lg*(1-Math.min(RemixTable.poly.sigmaCap,sd/RemixTable.poly.sigmaRef)),right=Rr.length?mean(Rr.map(p=>gval(p.res?.g||'miss'))):left;
-  out.verbs.poly=Math.round((RemixTable.poly.leftW*left+RemixTable.poly.rightW*right)*100);out.detail.poly={left:Math.round(left*100),right:Math.round(right*100),leftSigmaMs:Math.round(sd),pulses:L.length,rights:Rr.length,leftMiss:L.filter(p=>p.res?.g==='miss').length,rightMiss:Rr.filter(p=>p.res?.g==='miss').length};}
- if(has('free')){const bars=run.free.bars.filter(b=>b.role==='play'),sc=bars.map(b=>b.score||scoreFreeBar(b.hits,b.steps,patternOf(run,b.callRef),null));out.verbs.free=Math.round(mean(sc.map(s=>s.score))*100);
-  out.detail.free={bars:sc.length,groove:Math.round(mean(sc.map(s=>s.pocket))*100),diversity:Math.round(mean(sc.map(s=>s.diversity))*100),response:Math.round(mean(sc.map(s=>s.response))*100),hits:sc.reduce((a,s)=>a+s.n,0),spam:sc.some(s=>s.flags.includes('spam')),repeat:sc.filter(s=>s.flags.includes('repeat')).length,variation:sc.filter(s=>s.flags.includes('variation')).length};}
- const tr=!SV||SV.includes('vary')?transitionScores(run):[];if(tr.length){out.verbs.vary=Math.round(mean(tr.map(x=>x.q))*100);out.detail.vary={transitions:tr};}
- const keys=Object.keys(out.verbs);out.total=Math.round(mean(keys.map(k=>out.verbs[k])));out.grade=RemixTable.grade.find(([m])=>out.total>=m)[1];
- const sorted=[...keys].sort((a,b)=>out.verbs[b]-out.verbs[a]);out.best=sorted[0];out.worst=sorted[sorted.length-1];
- out.comment=[out.verbs[out.best]>=70?CatLineTable.best[out.best]:CatLineTable.retry,out.detail.free?.spam?CatLineTable.spam:out.verbs[out.worst]>=90?CatLineTable.perfect:CatLineTable.tip[out.worst]];
- out.places=run.places.map(p=>p.res?.g||'miss');out.stray=run.stray;out.pass=out.grade!==RemixTable.grade[RemixTable.grade.length-1][1];if(run.finale)out.finale=run.finale;return out;}
-/* ── T69-a 마무리: 마지막 착에서 그 판 네타가 밥 위에 앉는다. 등급(그때까지의 검수 결과)이 위치·윤기·스승 반응을 정하고, 착 타이밍(오차 부호)이 미끄러지는 방향을 정한다 ── */
+/* 결과. T71-a: 동사 점수(verbScore)는 「어느 구간의 판정만 볼지」(ids = 구간 번호 집합)를 받아 과정별로 다시 쓴다.
+   과정 점수 = 그 과정 구간 안 판정만으로 낸 동사 점수(손 적시기·쥐기는 같은 폴리 규칙이지만 구간이 달라 따로) · flow = 변주 경계 점수. 합계 = 검수 과정 평균.
+   maxSec = 이 구간까지만(실전 중간 착의 「지금까지」 검수) */
+function verbScore(run,verb,ids){const inn=x=>!ids||ids.has(x.sec);
+ if(verb==='spin'){const s=run.spin.samples.filter(inn);if(!s.length)return null;const q=s.map(x=>x.q),er=s.filter(x=>x.errMs!=null).map(x=>Math.abs(x.errMs));return {score:Math.round(mean(q)*100),detail:{samples:q.length,meanAbsErrMs:Math.round(mean(er)),flat:s.filter(x=>x.state==='flat').length,scatter:s.filter(x=>x.state==='scatter').length,meanRatio:+mean(s.map(x=>x.ratio)).toFixed(3)}};}
+ if(verb==='toss'){const T=run.tosses.filter(inn);if(!T.length)return null;const n=k=>T.filter(x=>x.res?.g===k).length;return {score:Math.round(mean(T.map(x=>gval(x.res?.g||'miss')))*100),detail:{n:T.length,perfect:n('perfect'),ok:n('ok'),miss:n('miss')}};}
+ if(verb==='poly'){const L=run.pulses.filter(inn),Rr=run.rights.filter(inn);if(!L.length&&!Rr.length)return null;const lg=mean(L.map(p=>gval(p.res?.g||'miss'))),errs=L.filter(p=>p.res&&p.res.err!=null).map(p=>p.res.err),sd=std(errs),left=lg*(1-Math.min(RemixTable.poly.sigmaCap,sd/RemixTable.poly.sigmaRef)),right=Rr.length?mean(Rr.map(p=>gval(p.res?.g||'miss'))):left;
+  return {score:Math.round((RemixTable.poly.leftW*left+RemixTable.poly.rightW*right)*100),detail:{left:Math.round(left*100),right:Math.round(right*100),leftSigmaMs:Math.round(sd),pulses:L.length,rights:Rr.length,leftMiss:L.filter(p=>p.res?.g==='miss').length,rightMiss:Rr.filter(p=>p.res?.g==='miss').length}};}
+ if(verb==='free'){const bars=run.free.bars.filter(b=>b.role==='play'&&inn(b));if(!bars.length)return null;const sc=bars.map(b=>b.score||scoreFreeBar(b.hits,b.steps,patternOf(run,b.callRef),null));
+  return {score:Math.round(mean(sc.map(s=>s.score))*100),detail:{bars:sc.length,groove:Math.round(mean(sc.map(s=>s.pocket))*100),diversity:Math.round(mean(sc.map(s=>s.diversity))*100),response:Math.round(mean(sc.map(s=>s.response))*100),hits:sc.reduce((a,s)=>a+s.n,0),spam:sc.some(s=>s.flags.includes('spam')),repeat:sc.filter(s=>s.flags.includes('repeat')).length,variation:sc.filter(s=>s.flags.includes('variation')).length}};}
+ return null;}
+function procScores(run,maxSec=Infinity){const C=run.C,out={},detail={};
+ for(const p of C.stage.procs){if(p==='flow'){const tr=transitionScores(run).filter(x=>C.secAt(x.b).i<=maxSec);if(tr.length){out.flow=Math.round(mean(tr.map(x=>x.q))*100);detail.flow={transitions:tr};}continue;}
+  const ids=new Set(C.secs.filter(s=>s.proc===p&&s.i<=maxSec).map(s=>s.i));if(!ids.size)continue;const v=verbScore(run,ProcTable[p].verb,ids);if(v){out[p]=v.score;detail[p]=v.detail;}}
+ return {procs:out,detail};}
+function results(run,maxSec=Infinity){const C=run.C,out={verbs:{},detail:{}};
+ for(const v of ['spin','toss','poly','free']){if(!C.secs.some(s=>s.verb===v&&s.i<=maxSec))continue;const ids=new Set(C.secs.filter(s=>s.verb===v&&s.i<=maxSec).map(s=>s.i)),r=verbScore(run,v,ids);if(r){out.verbs[v]=r.score;out.detail[v]=r.detail;}}
+ const P=procScores(run,maxSec);out.procs=P.procs;out.procDetail=P.detail;if(P.detail.flow){out.verbs.vary=P.procs.flow;out.detail.vary=P.detail.flow;}
+ const keys=Object.keys(out.procs);out.total=keys.length?Math.round(mean(keys.map(k=>out.procs[k]))):0;out.grade=RemixTable.grade.find(([m])=>out.total>=m)[1];
+ const sorted=[...keys].sort((a,b)=>out.procs[b]-out.procs[a]);out.best=sorted[0];out.worst=sorted[sorted.length-1];
+ const freeSpam=Object.entries(out.procDetail).some(([k,d])=>ProcTable[k]?.verb==='free'&&d.spam);
+ out.comment=[out.procs[out.best]>=70?CatLineTable.best[out.best]:CatLineTable.retry,freeSpam?CatLineTable.spam:out.procs[out.worst]>=90?CatLineTable.perfect:CatLineTable.tip[out.worst]];
+ out.places=run.places.map(p=>p.res?.g||'miss');out.stray=run.stray;out.pass=out.grade!==RemixTable.grade[RemixTable.grade.length-1][1];if(run.finale)out.finale=run.finale;out.finales=run.places.map(p=>p.fin||null);return out;}
+/* 실전 한 점씩 점수(그 점의 구간만) · 연습 단계별 점수는 화면 쪽 tierScores */
+function pieceScores(run){const C=run.C,out=[];for(let k=0;k<C.pieces;k++){const ids=new Set(C.secs.filter(s=>s.piece===k&&s.proc!=='place').map(s=>s.i)),q=[];
+  for(const p of C.stage.procs){if(p==='flow')continue;const own=new Set([...ids].filter(i=>C.secs[i].proc===p));if(!own.size)continue;const v=verbScore(run,ProcTable[p].verb,own);if(v)q.push(v.score);}
+  out.push({piece:k,score:q.length?Math.round(mean(q)):0,place:run.places.find(p=>p.piece===k)?.res?.g||null});}return out;}
+/* ── 마무리: 착에서 결과물이 앉는다. 실전 = 그 판 횟감 네타가 밥 위에(점마다) · 연습 = 그 과정 결과물(네타 없음). 등급(그 착까지의 검수 결과)이 위치·윤기·스승 반응을, 착 오차 부호가 미끄러지는 방향을 정한다 ── */
 function flushSpin(run,t){const S=run.spin,C=run.C;while(S.next<C.spinSamples.length&&C.spinSamples[S.next].t<=t){const r=spinSample(run,C.spinSamples[S.next++]);S.samples.push(r);if(r.state==='flat')S.flat++;if(r.state==='scatter')S.scatter++;}}
-function finaleOf(run,p){const F=FinaleTable,C=run.C;flushSpin(run,p.t);const R=results(run),G=F.grades[R.grade],res=p.res||{g:'miss',err:null},miss=res.g==='miss',dir=res.err==null?1:res.err<0?-1:1,errMs=res.err??0;
+function finaleOf(run,p){const F=FinaleTable,C=run.C,S=C.stage,practice=S.type==='practice';flushSpin(run,p.t);const R=results(run,p.sec),G=F.grades[R.grade],res=p.res||{g:'miss',err:null},miss=res.g==='miss',dir=res.err==null?1:res.err<0?-1:1,errMs=res.err??0;
  const dx=dir*(G.dx+(miss?F.miss.dx:0))+clamp(errMs*F.errDxPerMs,-F.errDxMax,F.errDxMax)*(miss?0:1),rot=dir*(G.rot+(miss?F.miss.rot:0)),gloss=+(G.gloss*F.placeGloss[res.g]).toFixed(3);
- const react=miss&&G.react==='nod'?'hmm':G.react;
- return {grade:R.grade,total:R.total,placeG:res.g,err:res.err,dx:+dx.toFixed(2),dy:miss?F.miss.dy:0,rot:+rot.toFixed(2),gloss,react,line:miss?F.miss.line:G.line,neta:C.stage.neta,sound:miss?'dull':'chak',t:res.t??p.t+C.stage.win.okMs/1000};}
-/* ── T69-a 해금: 앞 판을 통과(「한 번 더」가 아님)하면 다음 판이 열린다. 상태 = {best:{판:{grade,total,pass}}} ── */
+ const react=miss&&G.react==='nod'?'hmm':G.react,last=p.piece===C.pieces-1;
+ const line=practice?(miss?ProcLineTable.miss:ProcLineTable[S.proc][R.grade]):(miss?F.miss.line:G.line);
+ return {grade:R.grade,total:R.total,placeG:res.g,err:res.err,dx:+dx.toFixed(2),dy:miss?F.miss.dy:0,rot:+rot.toFixed(2),gloss,react,line,neta:practice?null:S.neta,product:practice?S.product:null,piece:p.piece,last,sound:miss?'dull':'chak',t:res.t??p.t+S.win.okMs/1000};}
+/* ── 해금: 연습은 앞 과정 통과 → 다음 과정 · 실전 첫 판은 연습 다섯 개 모두 통과 · 실전은 앞 판 통과 → 다음 판. 상태 = {best:{판:{grade,total,pass}}} ── */
 const RemixProgress={
  order:()=>RemixStageTable.map(s=>s.id),
- unlocked(state,id){const ids=RemixStageTable.map(s=>s.id),i=ids.indexOf(String(id));if(i<0)return false;if(i===0)return true;return !!state?.best?.[ids[i-1]]?.pass;},
+ practice:()=>RemixStageTable.filter(s=>s.type==='practice').map(s=>s.id),real:()=>RemixStageTable.filter(s=>s.type==='real').map(s=>s.id),
+ unlocked(state,id){const S=stageRow(id);if(!S)return false;const list=RemixStageTable.filter(s=>s.type===S.type),i=list.indexOf(S),pass=x=>!!state?.best?.[x]?.pass;
+  if(i>0)return pass(list[i-1].id);return S.type==='practice'?true:RemixProgress.practice().every(pass);},
+ why(state,id){const S=stageRow(id);if(!S||RemixProgress.unlocked(state,id))return null;const list=RemixStageTable.filter(s=>s.type===S.type),i=list.indexOf(S);if(i>0)return {need:[list[i-1].id]};return {need:RemixProgress.practice().filter(x=>!state?.best?.[x]?.pass)};},
  record(state,id,result){const best={...(state?.best||{})},old=best[id];const row={grade:result.grade,total:result.total,pass:!!result.pass};if(!old||row.total>old.total)best[id]={...row,pass:row.pass||!!old?.pass};else if(row.pass&&!old.pass)best[id]={...old,pass:true};return {...(state||{}),best};},
  next(state){const ids=RemixStageTable.map(s=>s.id);return ids.find(id=>RemixProgress.unlocked(state,id)&&!state?.best?.[id]?.pass)||ids[0];}};
 /* 변주 복귀: 경계 시각부터 windowBeats 박 안의 모든 판정 품질 평균(브레이크 = 소리 없는 구간 안 펄스·회전 포함) */
@@ -1764,19 +1839,21 @@ function botEvents(C,kind,seed=1){const B=BotTable[kind],r=rngOf(seed*7919+kind.
  ev.sort((a,b)=>a.t-b.t);return ev;}
 /* 가상 시계로 한 판 끝까지(오디오·화면 없음) */
 function simRun(stageId,kind,seed=1,dt=1/120){const C=buildChart(stageId),run=makeRun(C),ev=botEvents(C,kind,seed);let i=0;for(let t=-.5;!run.done;t+=dt){while(i<ev.length&&ev[i].t<=t)input(run,ev[i++]);update(run,t);if(t>C.end+10)break;}return {run,result:run.result};}
-return {RemixTable,FeelTable,VerbTable,KeySoundTable,SoundKey,CallTable,NetaTable,RemixStageTable,RemixScoreTable,CatLineTable,FinaleTable,RemixProgress,BotTable,finaleOf,flushSpin,stageRow,
+return {RemixTable,FeelTable,VerbTable,ProcTable,ProcOrder,ProductTable,ProcLineTable,KeySoundTable,SoundKey,CallTable,NetaTable,RemixStageTable,RemixScoreTable,CatLineTable,FinaleTable,RemixProgress,BotTable,finaleOf,flushSpin,stageRow,verbScore,procScores,pieceScores,
  buildChart,makeRun,input,update,results,thetaAt,spinSample,scoreFreeBar,jaccard,mixPattern,transitionScores,botEvents,simRun,grade,mapFrac,feelOf,rngOf};})();
 /*REMIX-LOGIC-END*/
 /*REMIX-BEGIN*/
-/* T68-a → T69-a 「니기리 리믹스」 화면·소리·입력(remix2d.html 전용 — index.html·index2d.html·groove2d.html·training2d.html·patapon2d.html 미적용).
-   메뉴 = 횟감 카드 8장(그 판에서 올라가는 네타 그림 · 기믹 아이콘 · 난이도 별 · 잠금). 앞 판을 통과하면 다음 카드가 열린다(브라우저 저장, ?rall=1 = 모두 열기, ?rreset=1 = 처음부터).
+/* T68-a → T69-a → T71-a 「니기리 리믹스」 화면·소리·입력(remix2d.html 전용 — index.html·index2d.html·groove2d.html·training2d.html·patapon2d.html 미적용).
+   메뉴 두 줄: 「연습 — 과정 익히기」(카드 = 니기리 과정 · 기믹 아이콘 · 과정 결과물 그림 · 잠금) / 「실전 — 오늘의 횟감」(카드 = 횟감 · 과정 순서 아이콘 · 주문 점수).
+   연습은 앞 과정을 통과하면 다음 과정, 실전은 연습 다섯 개를 다 통과하면 열린다(브라우저 저장, ?rall=1 = 모두 열기, ?rreset=1 = 처음부터).
+   판 첫 마디 = 「이 손놀림은 니기리의 ○○ 과정이에요」 안내 · 아래 과정 줄(손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착)에 지금 과정이 켜진다.
    무대 3분할: 가운데 위 = 스승(검수 — 딱이면 끄덕 · 실수면 눈썹 · 마지막 착에서 확대 시선과 한 줄 평) · 왼쪽 = 힙합 마네키네코(킥·스네어에 앞발 손짓, 예고판·카운트·브레이크 손가락 셈, 즉흥 콜)
    · 오른쪽 = 전통 마네키네코(정박마다 북채로 북을 짚음 — 실제 북 소리, 즉흥 대답). 마지막 착 = 그 판 네타가 위에서 미끄러져 와 밥 위에 딱 앉음(등급 → 위치·윤기·스승 반응). 결과 = 스승의 검수표(동작별 점수 + 도장 + 완성 한 점).
    세 인물·말풍선은 판정 원·회전 원·토스 궤적·손을 가리지 않는다(api.occlusion()이 그 프레임에 그려진 놀이 요소 사각형과 겹친 면적을 잰다). prefers-reduced-motion이면 흔들림·확대·미끄러짐을 줄인다.
    기존 블록과 닿는 곳: CORE의 audio(AudioContext)·unlockAudio() · GROOVE G.ext(voice·makeBus·noiseBuf) · PATAPON api.ext(wordVoice) · VIEW2D가 그린 #roomBackdrop(배경 그림 재사용).
    입력은 창 캡처 단계에서 먼저 받아 리믹스가 켜져 있으면 기존 블록으로 넘기지 않는다. ?remix=0 → 이 블록이 아무것도 만들지 않음(patapon2d와 같은 동작).
    시계: 곡 시각 = 성능 시계 + (오디오 출력 시각 − 성능 시각, getOutputTimestamp 지수 평균) − t0. 소리 예약 = t0 + 악보 시각(같은 timeOf) → 들리는 박 = 판정 기준 박.
-   표: RemixUITable · RemixAudioTable · CastTable · NetaArtTable  [튜닝] */
+   표: RemixUITable · RemixAudioTable · CastTable · NetaArtTable · ProductArtTable  [튜닝] */
 const Remix=(()=>{
 const ON=query.get('remix')!=='0',L=RemixLogic;
 /* 화면 배치(논리 1920×1080). 가운데 위 스승(chars.master) 아래로 안내 줄(hud.line.y) → 그 아래가 놀이 영역. 왼쪽 340 px = 힙합 고양이 · 오른쪽 340 px = 전통 고양이 */
@@ -1796,7 +1873,8 @@ const RemixUITable={
  judge:{perfect:['딱!','#7FCB5B'],ok:['좋아요','#F7B94E'],miss:['놓쳤어요','#E8503C']},
  marksOf:{perfect:['○','#7FCB5B'],ok:['△','#F7B94E'],miss:['×','#E8503C']},
  pads:['A','S','D','K','L'],sndColor:{tok:'#74C9E6',tak:'#F7B94E',sseuk:'#7FCB5B',kkuk:'#E8503C',chak:'#FFF3DC'},
- kindName:{solo:'기믹 판',combo:'조합 판',boss:'마지막 판'},tierName:{1:'1단계 · 쉬움',2:'2단계 · 조금 어려워요'}};
+ kindName:{practice:'연습',real:'실전'},tierName:{1:'1단계 · 쉬움',2:'2단계 · 조금 어려워요'},stepNo:['','①','②','③','④','⑤','⑥'],
+ steps:{y:1050,w:146,h:36,gap:8},count:{x:410,y:432,w:1100,h:236},served:{x:1500,y:1000,step:132}};
 const RemixAudioTable={busGain:.55,wordGain:.95,liveWordGain:.85,spinNoise:{hz:[900,2600],q:.9,gainMax:.09,tau:.04},topTick:{word:'tokA',gain:.45},catch:{perfect:{word:'chak',gain:.9},ok:{word:'tak',gain:.7}},drop:{word:'dull',gain:1},whiff:{word:'hwik',gain:.25},place:{word:'chak',miss:'dull',gold:{inst:'ting',vel:.9}},lookaheadSec:.25,intervalMs:25,maxLateSec:.05,logMax:6000};
 /* 인물 움직임. nod/shake/brow = 스승 반응 길이(초) · nodGap = 끄덕 사이 최소 간격 · zoom = 마지막 착 확대 배율 · inspectDelay = 착 뒤 검수(윤기·한 줄 평)까지 · spinJudgeEvery = 굴리기는 표본 n개마다 한 번 검수
    hh: kickTau = 킥·스네어 손짓 감쇠 · beckonDeg = 손짓 각 · td: strikeK = 북 짚기 감쇠(박 분수당) · strikeDeg = 북채 각 · rmScale = 움직임 줄이기에서 남는 비율 */
@@ -1822,12 +1900,22 @@ const NetaArtTable={
  seongge:`${[[52,54,28,15,-20],[82,46,30,16,-8],[118,46,30,16,8],[148,54,28,15,20],[100,60,36,15,0]].map(([x,y,a,b,r])=>`<ellipse cx="${x}" cy="${y}" rx="${a}" ry="${b}" transform="rotate(${r} ${x} ${y})" fill="#F2A93B" stroke="#0A1017" stroke-width="3"/><path d="M${x-a*.6},${y} Q${x},${y-b*.8} ${x+a*.6},${y}" stroke="#D9861E" stroke-width="3" fill="none" transform="rotate(${r} ${x} ${y})"/>`).join('')}`,
  yeoneoal:`${[[46,58],[66,58],[86,58],[106,58],[126,58],[146,58],[156,46],[56,46],[76,44],[96,44],[116,44],[136,44],[66,32],[86,30],[106,30],[126,32],[96,64],[116,64],[76,64],[136,64]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="11" fill="#F0652B" stroke="#9C2E0E" stroke-width="2"/><circle cx="${x-3.5}" cy="${y-3.5}" r="3.2" fill="#FFD6C2"/>`).join('')}`,
  daebaetsal:`<path d="${SLAB}" fill="#F5A9B3" stroke="#0A1017" stroke-width="4"/><path d="M30,40 Q50,34 70,42 T110,40 T150,42 T180,44 M24,56 Q46,50 66,58 T106,56 T146,58 T184,58 M32,71 Q52,65 72,73 T112,71 T152,73 T176,71" stroke="#FFF2F4" stroke-width="4" fill="none" stroke-linecap="round" opacity=".9"/>`};
-const netaSvgDoc=id=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="400" height="200">${NetaArtTable[id]||NetaArtTable.yeoneo}</svg>`;
-const NETA_IMG={};function loadNetaImages(){for(const id of Object.keys(NetaArtTable)){const im=new Image();im.decoding='async';im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(netaSvgDoc(id));NETA_IMG[id]=im;}}
+/* T71-a 연습 결과물(네타 없음, 200×100) */
+const PILLOW='M26,60 C26,34 50,28 100,28 C150,28 174,34 174,60 C174,82 150,88 100,88 C50,88 26,82 26,60Z',GRAINS=[[60,50],[84,62],[110,48],[136,60],[98,74],[70,72],[128,76],[150,52],[50,64]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="4" fill="#E7DCC4"/>`).join('');
+const ProductArtTable={
+ bowl:`<path d="M28,44 L172,44 C168,82 140,96 100,96 C60,96 32,82 28,44Z" fill="#9A6A40" stroke="#0A1017" stroke-width="4"/><path d="M40,66 C80,74 120,74 160,66" stroke="#6B3D1D" stroke-width="4" fill="none"/><ellipse cx="100" cy="44" rx="72" ry="14" fill="#74C9E6" stroke="#0A1017" stroke-width="4"/><ellipse cx="100" cy="44" rx="40" ry="6" fill="none" stroke="#DFF4FB" stroke-width="3"/><path d="M62,8 C70,18 72,24 66,28 C60,30 56,24 62,8Z M136,4 C144,14 146,20 140,24 C134,26 130,20 136,4Z M100,14 C106,22 107,26 102,29 C97,30 95,25 100,14Z" fill="#9ED8EE" stroke="#0A1017" stroke-width="2.5"/>`,
+ shari:`<ellipse cx="100" cy="58" rx="78" ry="34" fill="#F6EEDD" stroke="#0A1017" stroke-width="4"/>${GRAINS}<path d="M52,44 Q100,26 150,44" stroke="#fff" stroke-width="5" fill="none" opacity=".7" stroke-linecap="round"/>`,
+ pressed:`<path d="${PILLOW}" fill="#F6EEDD" stroke="#0A1017" stroke-width="4"/>${GRAINS}<path d="M64,36 Q100,48 136,36 M64,48 Q100,60 136,48" stroke="#CDBE9F" stroke-width="6" fill="none" stroke-linecap="round"/>`,
+ flipped:`<path d="${PILLOW}" fill="#F6EEDD" stroke="#0A1017" stroke-width="4"/>${GRAINS}<path d="M150,30 C140,6 60,4 52,24" stroke="#F7B94E" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M40,18 L58,14 L54,32Z" fill="#F7B94E" stroke="#0A1017" stroke-width="2"/>`,
+ finished:`<path d="${PILLOW}" fill="#FBF5E8" stroke="#0A1017" stroke-width="4"/>${GRAINS}<path d="M40,52 C70,40 130,40 160,52" stroke="#fff" stroke-width="6" fill="none" opacity=".85" stroke-linecap="round"/><path d="M168,20 l4,-10 l4,10 l10,4 l-10,4 l-4,10 l-4,-10 l-10,-4Z" fill="#F7B94E"/>`};
+const ART={...NetaArtTable,...ProductArtTable};
+const netaSvgDoc=id=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="400" height="200">${ART[id]||NetaArtTable.yeoneo}</svg>`;
+const NETA_IMG={};function loadNetaImages(){for(const id of Object.keys(ART)){const im=new Image();im.decoding='async';im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(netaSvgDoc(id));NETA_IMG[id]=im;}}
 /* 완성 한 점(접시 + 밥/군함 + 네타). o.dx·o.rot = 네타 어긋남 · o.gloss = 윤기(0~1) */
-function sushiSvg(id,o={}){const k=L.NetaTable[id]?.kind||'nigiri',dx=o.dx||0,rot=o.rot||0,gl=o.gloss??1,art=NetaArtTable[id]||'';
+function sushiSvg(id,o={}){const k=ProductArtTable[id]?'product':L.NetaTable[id]?.kind||'nigiri',dx=o.dx||0,rot=o.rot||0,gl=o.gloss??1,art=ART[id]||'';
  const shine=gl>0?`<ellipse cx="${92+dx}" cy="${k==='gunkan'?40:44}" rx="40" ry="6" transform="rotate(-6 ${92+dx} 44)" fill="#fff" opacity="${(.55*gl).toFixed(2)}"/>${gl>=.9?`<path d="M178,30 l4,-10 l4,10 l10,4 l-10,4 l-4,10 l-4,-10 l-10,-4Z M62,26 l3,-7 l3,7 l7,3 l-7,3 l-3,7 l-3,-7 l-7,-3Z" fill="#FFF6D8"/>`:''}`:'';
  const plate=`<ellipse cx="120" cy="134" rx="106" ry="15" fill="#E9E2D2" stroke="#0A1017" stroke-width="4"/>`;
+ if(k==='product')return `<svg viewBox="0 0 240 150" width="100%" height="100%"><rect x="14" y="116" width="212" height="24" rx="9" fill="#B98455" stroke="#0A1017" stroke-width="4"/><path d="M26,124 h188" stroke="#D3A273" stroke-width="3"/><g transform="translate(${20+dx} 24) rotate(${rot} 100 52)">${art}</g>${shine}</svg>`;
  if(k==='gunkan')return `<svg viewBox="0 0 240 150" width="100%" height="100%">${plate}<ellipse cx="120" cy="72" rx="66" ry="14" fill="#F6EEDD" stroke="#0A1017" stroke-width="3"/><g transform="translate(${20+dx} 8) rotate(${rot} 100 50)">${art}</g><path d="M54,72 A66,14 0 0 0 186,72 L186,122 A66,14 0 0 1 54,122 Z" fill="${C0.nori}" stroke="#0A1017" stroke-width="4"/><path d="M60,92 C100,100 140,100 180,92" stroke="#2F4436" stroke-width="3" fill="none"/>${shine}</svg>`;
  return `<svg viewBox="0 0 240 150" width="100%" height="100%">${plate}<ellipse cx="120" cy="102" rx="74" ry="30" fill="#F6EEDD" stroke="#0A1017" stroke-width="4"/>${[[84,108],[104,118],[132,116],[152,106],[118,124],[96,96],[142,96]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="4" fill="#E7DCC4"/>`).join('')}<g transform="translate(${20+dx} 6) rotate(${rot} 100 52)">${art}</g>${shine}</svg>`;}
 
@@ -1892,18 +1980,23 @@ const ICON={spin:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M19,1
  toss:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M3,21 Q12,-4 21,21" stroke="currentColor" stroke-width="2.6" fill="none" stroke-dasharray="3 3"/><circle cx="12" cy="8" r="3.6" fill="currentColor"/></svg>',
  poly:'<svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="9" width="8" height="12" rx="3" fill="currentColor"/><rect x="14" y="4" width="8" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2.6"/></svg>',
  free:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12,2 l2.6,7.4 l7.4,2.6 l-7.4,2.6 l-2.6,7.4 l-2.6,-7.4 l-7.4,-2.6 l7.4,-2.6Z" fill="currentColor"/></svg>',
- vary:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M2,12 Q6,4 10,12 T18,12 T24,10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>'};
-const LOCK='<svg viewBox="0 0 24 24" width="44" height="44"><rect x="4" y="10" width="16" height="12" rx="3" fill="#9DB4B6" stroke="#0A1017" stroke-width="2"/><path d="M8,10 V7 a4,4 0 0 1 8,0 V10" stroke="#9DB4B6" stroke-width="3" fill="none"/></svg>';
-const verbName=(S,v)=>S?.verbNames?.[v]||L.VerbTable[v].name;
-const shortName=(S,v)=>S?.verbNames?.[v]||L.VerbTable[v].name.replace('던지고 받기','토스').replace('프리스타일','즉흥').replace('양손 폴리','폴리');
+ vary:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M2,12 Q6,4 10,12 T18,12 T24,10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+ tezu:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12,2 C17,9 19,13 19,16 a7,7 0 0 1 -14,0 C5,13 7,9 12,2Z" fill="currentColor"/></svg>',
+ place:'<svg viewBox="0 0 24 24" width="22" height="22"><ellipse cx="12" cy="18" rx="10" ry="3.5" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="5" y="8" width="14" height="7" rx="3.5" fill="currentColor"/></svg>'};
+const LOCK='<svg viewBox="0 0 24 24" width="34" height="34"><rect x="4" y="10" width="16" height="12" rx="3" fill="#9DB4B6" stroke="#0A1017" stroke-width="2"/><path d="M8,10 V7 a4,4 0 0 1 8,0 V10" stroke="#9DB4B6" stroke-width="3" fill="none"/></svg>';
+const PT=L.ProcTable,procName=p=>PT[p]?.name||p,procIcon=p=>ICON[PT[p]?.icon]||'';
+const practiceIds=()=>L.RemixStageTable.filter(s=>s.type==='practice'),realIds=()=>L.RemixStageTable.filter(s=>s.type==='real');
+/* 판 표시 이름: 연습 = 「모양 잡기 — 굴리기」 · 실전 = 횟감 */
+const stageTitle=S=>S.type==='practice'?`${S.name} — ${S.gimmick}`:S.name,stageTag=S=>S.type==='practice'?`연습 ${RemixUITable.stepNo[PT[S.proc].step]}`:`실전 ${S.order}`;
+const keyOf=S=>{const i=L.RemixStageTable.indexOf(S);return String((i+1)%10);};
 
 /* ── 진행(해금) ── */
-const PKEY='nigiriRemix.t69a.progress';
+const PKEY='nigiriRemix.t71a.progress';
 function loadProg(){try{const s=localStorage.getItem(PKEY);const p=s?JSON.parse(s):null;return p&&p.best?p:{best:{}};}catch{return {best:{}};}}
 function saveProg(){try{localStorage.setItem(PKEY,JSON.stringify(X.prog));}catch{}}
 const isOpen=id=>X.all||L.RemixProgress.unlocked(X.prog,id);
-const stageOf=id=>L.RemixStageTable.find(s=>s.id===String(id));
-const nextId=id=>{const i=L.RemixStageTable.findIndex(s=>s.id===String(id));return L.RemixStageTable[i+1]?.id||null;};
+const stageOf=id=>L.stageRow(id);
+const nextId=id=>{const i=L.RemixStageTable.findIndex(s=>s.id===stageOf(id)?.id);return L.RemixStageTable[i+1]?.id||null;};
 
 /* ── 시계 ── */
 function syncOff(){if(!X.clock.audio||!audio)return;let s;const ts=audio.getOutputTimestamp?audio.getOutputTimestamp():null;let src='ts';if(ts&&ts.performanceTime>0&&ts.contextTime>0)s=ts.contextTime-ts.performanceTime/1000;else{src='fb';s=audio.currentTime-(audio.outputLatency||0)-(audio.baseLatency||0)-performance.now()/1000;}X.clock.offRaw=s;if(X.clock.off==null||X.clock.src!==src){if(X.clock.off!=null)X.clock.flips=(X.clock.flips||0)+1;X.clock.off=s;X.clock.src=src;X.clock.n=0;}else{X.clock.n++;X.clock.off+=(X.clock.n<30?.3:.05)*(s-X.clock.off);}if(X.mode==='play'&&X.C&&songNow()>=X.C.timeOf(4)-.5){X.offDev.push((X.clock.off-s)*1000);if(X.offDev.length>20000)X.offDev.splice(0,10000);}}
@@ -1923,8 +2016,8 @@ function stopSpinNoise(){if(!spinN)return;try{spinN.s.stop();}catch{}for(const n
 
 /* ── 입력 ── */
 const KEYMAP={KeyA:'A',KeyS:'S',KeyD:'D',KeyK:'K',KeyL:'L',KeyF:'A',KeyJ:'L',Space:'Space',ArrowUp:'Up',ArrowRight:'Right',ArrowDown:'Down',ArrowLeft:'Left'};
-function onKey(e){if(!X.active)return;e.stopImmediatePropagation();if(e.ctrlKey||e.metaKey||e.altKey)return;const code=e.code;if(KEYMAP[code]||['Enter','Escape','Tab'].includes(code)||/^Digit[1-8]$/.test(code))e.preventDefault();if(e.repeat)return;try{unlockAudio();}catch{}
- if(X.mode==='menu'){const m=/^Digit([1-8])$/.exec(code);if(m)return tryGo(m[1]);if(code==='Enter'||code==='Space')return tryGo(L.RemixProgress.next(X.all?{best:{}}:X.prog));return;}
+function onKey(e){if(!X.active)return;e.stopImmediatePropagation();if(e.ctrlKey||e.metaKey||e.altKey)return;const code=e.code;if(KEYMAP[code]||['Enter','Escape','Tab'].includes(code)||/^Digit[0-9]$/.test(code))e.preventDefault();if(e.repeat)return;try{unlockAudio();}catch{}
+ if(X.mode==='menu'){const m=/^Digit([0-9])$/.exec(code);if(m)return tryGo(m[1]==='0'?'10':m[1]);if(code==='Enter'||code==='Space')return tryGo(L.RemixProgress.next(X.all?{best:{}}:X.prog));return;}
  if(X.mode==='ready'){if(code==='Escape')return toMenu();return go(X.stageId);}
  if(X.mode==='result'){if(code==='Space')return go(X.stageId);if(code==='Enter'){const n=nextId(X.stageId);return go(n&&isOpen(n)?n:X.stageId);}if(code==='Escape')return toMenu();return;}
  if(X.mode==='play'){if(code==='Escape')return toMenu();const k=KEYMAP[code];if(!k||X.bot)return;feed({type:'key',key:k,t:songNow(e.timeStamp)},true);}}
@@ -1936,11 +2029,11 @@ function logicalXY(e){const r=cv.getBoundingClientRect();return {x:(e.clientX-r.
 function pointerEv(e,type){if(X.mode!=='play'||X.bot)return;const S=RemixUITable.spin,list=type==='pointer'&&e.getCoalescedEvents?e.getCoalescedEvents():[e];for(const q of (list.length?list:[e])){const {x,y}=logicalXY(q),a=Math.atan2(x-S.cx,-(y-S.cy)),r=Math.hypot(x-S.cx,y-S.cy);feed({type,a:(a+2*Math.PI)%(2*Math.PI),r,t:songNow(q.timeStamp)});}}
 
 /* ── 판 시작·끝 ── */
-function tryGo(id){if(!stageOf(id))return;if(!isOpen(id)){const c=menuEl.querySelector(`.rxCard[data-stage="${id}"]`);if(c){c.classList.remove('nope');void c.offsetWidth;c.classList.add('nope');}return;}return go(id);}
-async function go(id){if(!stageOf(id))return;X.stageId=String(id);X.mode='starting';showPanels();try{unlockAudio();}catch{}
+function tryGo(id){const S0=stageOf(id);if(!S0)return;id=S0.id;if(!isOpen(id)){const c=menuEl.querySelector(`.rxCard[data-stage="${id}"]`);if(c){c.classList.remove('nope');void c.offsetWidth;c.classList.add('nope');}return;}return go(id);}
+async function go(id){const S0=stageOf(id);if(!S0)return;X.stageId=S0.id;X.mode='starting';showPanels();try{unlockAudio();}catch{}
  if(audio&&audio.state!=='running'){try{await Promise.race([audio.resume(),new Promise(r=>setTimeout(r,400))]);}catch{}}begin();}
 function begin(){cancelAll();X.C=L.buildChart(X.stageId);X.run=L.makeRun(X.C);X.sched={i:0,d:0};X.fxi=0;X.pops=[];X.log=[];X.frames=[];X.offDev=[];X.stats={made:0,live:X.stats.live,maxLive:X.stats.live,late:0,lateMaxMs:0,scheduled:0};X.meters=null;X.meterAt=-9;X.marks=[];X.rm=rmNow();X.tdHit=-9;X.hhHit=-9;X.lastSpinN=0;X.occ={max:0,n:0,hits:{}};
- X.ms={nodT:-9,shakeT:-9,browT:-9,inspected:false};X.disp={th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null};
+ X.ms={nodT:-9,shakeT:-9,browT:-9,inspected:-1};X.disp={th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null};
  if(audio&&audio.state==='running'&&gx()&&px()){X.clock.audio=true;X.clock.off=null;syncOff();X.clock.t0=audio.currentTime+L.RemixTable.leadInSec;ensureBus();startSpinNoise();}else{X.clock.audio=false;X.clock.p0=performance.now()+L.RemixTable.leadInSec*1000;}
  X.botI=0;X.botEv=X.bot?L.botEvents(X.C,X.bot.kind,X.bot.seed):null;X.mode='play';X.started=performance.now();showPanels();log('rx_start',{stage:X.stageId,audio:X.clock.audio,bot:X.bot?.kind||null});}
 function finish(){X.mode='result';stopSpinNoise();const R=X.run.result,nx=nextId(X.stageId),wasOpen=nx?isOpen(nx):false;X.prog=L.RemixProgress.record(X.prog,X.stageId,R);saveProg();R.unlocked=nx&&!wasOpen&&isOpen(nx)?nx:null;
@@ -1954,22 +2047,24 @@ function css(){const st=document.createElement('style');st.textContent=`#rxRoot{
 .rxCast{position:absolute;pointer-events:none;transform-origin:50% 0}.rxBub{position:absolute;font:800 28px 'Malgun Gothic',sans-serif;color:#1c1915;background:#f2e6cc;border:4px solid #0d1520;border-radius:18px;padding:5px 16px;box-shadow:0 5px 0 #0d1520;white-space:nowrap;pointer-events:none}
 #rxMsBub{background:${C0.paper};color:${C0.paperInk};border-color:${C0.stamp};box-shadow:0 5px 0 #0d1520;font-size:30px}#rxHhBub{background:#1E2A33;color:${C0.sky};border-color:${C0.sky}}#rxTdBub{background:#FFF6E6;color:#7A2E22;border-color:#C8352C}
 .rxPanel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 50% 40%,#1E3746f2,#0A1017fa 70%)}.rxPanel[hidden]{display:none}
-.rxTitle{font:900 76px 'Malgun Gothic',sans-serif;color:${C0.gold};margin-top:40px;letter-spacing:3px;text-shadow:0 6px 0 #0A1017}.rxSub{font:700 28px 'Malgun Gothic',sans-serif;color:${C0.sub};margin-top:8px}
-.rxCards{display:grid;grid-template-columns:repeat(4,404px);gap:22px;margin-top:30px}.rxCard{position:relative;height:330px;border:5px solid #0A1017;border-radius:26px;background:${C0.navy};box-shadow:0 9px 0 #0A1017;padding:14px 20px;text-align:left;display:flex;flex-direction:column;gap:6px;color:${C0.cream};cursor:pointer;overflow:hidden}
-.rxCard:hover,.rxCard:focus-visible{background:#1E3746;outline:4px solid ${C0.gold}}.rxCardTop{display:flex;justify-content:space-between;align-items:center}.rxCardTop b{font:900 24px 'Malgun Gothic',sans-serif;color:#0A1017;background:${C0.gold};border-radius:12px;padding:1px 12px}
-.rxStars{font:900 24px 'Malgun Gothic',sans-serif;color:${C0.gold};letter-spacing:2px}.rxStars i{font-style:normal;color:#3E5A60}.rxArt{height:120px;display:flex;justify-content:center}.rxArt svg{width:200px;height:125px}
-.rxCard h3{margin:0;font:900 36px 'Malgun Gothic',sans-serif;line-height:1.1}.rxCard p{margin:0;font:600 19px 'Malgun Gothic',sans-serif;color:${C0.sub}}
+.rxTitle{font:900 66px 'Malgun Gothic',sans-serif;color:${C0.gold};margin-top:22px;letter-spacing:3px;text-shadow:0 6px 0 #0A1017}.rxSub{font:700 25px 'Malgun Gothic',sans-serif;color:${C0.sub};margin-top:4px}
+.rxRowHead{width:1790px;margin-top:20px;display:flex;align-items:center;gap:14px;font:900 32px 'Malgun Gothic',sans-serif;color:${C0.cream}}.rxRowHead small{font:700 20px 'Malgun Gothic',sans-serif;color:${C0.sub};margin-left:8px}.rxRowTag{font:900 24px 'Malgun Gothic',sans-serif;color:#0A1017;background:${C0.sky};border:3px solid #0A1017;border-radius:12px;padding:1px 14px}.rxRowHead.real .rxRowTag{background:${C0.gold}}
+.rxCards{display:grid;grid-template-columns:repeat(5,342px);gap:20px;margin-top:10px}.rxCard>*{flex-shrink:0}.rxCard{position:relative;height:312px;border:5px solid #0A1017;border-radius:26px;background:${C0.navy};box-shadow:0 9px 0 #0A1017;padding:14px 20px;text-align:left;display:flex;flex-direction:column;gap:6px;color:${C0.cream};cursor:pointer;overflow:hidden}
+.rxCard:hover,.rxCard:focus-visible{background:#1E3746;outline:4px solid ${C0.gold}}.rxCardTop{display:flex;justify-content:space-between;align-items:center}.rxCardTop b{font:900 20px 'Malgun Gothic',sans-serif;color:#0A1017;background:${C0.gold};border-radius:12px;padding:1px 12px}
+.rxStars{font:900 21px 'Malgun Gothic',sans-serif;color:${C0.gold};letter-spacing:1px}.rxStars i{font-style:normal;color:#3E5A60}.rxArt{height:92px;display:flex;justify-content:center}.rxArt svg{width:150px;height:94px}.rxCard.prac{background:#12303A}.rxProc{white-space:nowrap;display:flex;align-items:center;gap:6px;font:800 18px 'Malgun Gothic',sans-serif;color:${C0.sub}}.rxGim{white-space:nowrap;display:inline-flex;align-items:center;gap:5px;font:900 19px 'Malgun Gothic',sans-serif;background:#0A1017;color:${C0.cream};border-radius:11px;padding:3px 10px 3px 6px}.rxGim svg{color:${C0.gold}}
+.rxCard p.rxWhy{font:600 16px/1.3 'Malgun Gothic',sans-serif;color:${C0.sub};height:42px;overflow:hidden}.rxFlow{display:flex;align-items:center;gap:3px;background:#0A1017;border-radius:12px;padding:3px 8px;width:max-content}.rxFlow i{display:inline-flex}.rxFlow b{color:#3E5A60;font:900 16px sans-serif}
+.rxCard h3{margin:0;font:900 32px 'Malgun Gothic',sans-serif;line-height:1.1}.rxCard p{margin:0;font:600 18px 'Malgun Gothic',sans-serif;color:${C0.sub}}
 .rxChips{display:flex;flex-wrap:wrap;gap:6px}.rxChips span{display:inline-flex;align-items:center;gap:5px;font:800 18px 'Malgun Gothic',sans-serif;background:#0A1017;color:${C0.cream};border-radius:11px;padding:3px 10px 3px 6px}.rxChips svg{color:${C0.gold}}
 .rxCard.first{border-color:${C0.gold}}.rxCard.first:after{content:'다음 판';position:absolute;right:16px;bottom:14px;font:900 18px 'Malgun Gothic',sans-serif;color:#0A1017;background:${C0.gold};border-radius:10px;padding:2px 10px}
-.rxBest{position:absolute;right:16px;top:52px;font:900 20px 'Malgun Gothic',sans-serif;border:3px solid currentColor;border-radius:50%;width:58px;height:58px;display:flex;align-items:center;justify-content:center;transform:rotate(-12deg);color:${C0.stamp};background:#F4EAD5ee;line-height:1;text-align:center}
-.rxCard.locked{cursor:default;background:#0E1A22}.rxCard.locked .rxArt,.rxCard.locked h3,.rxCard.locked .rxChips{filter:grayscale(1) brightness(.55)}.rxLock{position:absolute;left:0;right:0;top:66px;display:flex;flex-direction:column;align-items:center;gap:6px;font:800 20px 'Malgun Gothic',sans-serif;color:${C0.cream};text-shadow:0 2px 0 #0A1017}
+.rxBest{position:absolute;right:14px;top:46px;font:900 20px 'Malgun Gothic',sans-serif;border:3px solid currentColor;border-radius:50%;width:58px;height:58px;display:flex;align-items:center;justify-content:center;transform:rotate(-12deg);color:${C0.stamp};background:#F4EAD5ee;line-height:1;text-align:center}
+.rxCard.locked{cursor:default;background:#0E1A22}.rxCard.locked .rxArt,.rxCard.locked h3,.rxCard.locked .rxChips,.rxCard.locked .rxProc,.rxCard.locked .rxFlow,.rxCard.locked .rxWhy{filter:grayscale(1) brightness(.55)}.rxLock{position:absolute;left:14px;right:14px;top:44px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;border-radius:14px;background:#0A1017d9;font:800 18px/1.25 'Malgun Gothic',sans-serif;color:${C0.cream};text-shadow:0 2px 0 #0A1017}
 .rxCard.nope{animation:rxNope .32s}@keyframes rxNope{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}@media (prefers-reduced-motion: reduce){.rxCard.nope{animation:none;outline:4px solid ${C0.bad}}}
-.rxHint{margin-top:22px;font:700 23px 'Malgun Gothic',sans-serif;color:${C0.sub}}.rxOld{position:absolute;right:40px;bottom:24px;text-align:right}.rxOld>button{background:none;border:2px solid #3E5A60;border-radius:14px;padding:8px 18px;font:700 22px 'Malgun Gothic',sans-serif;color:${C0.sub}}
+.rxHint{margin-top:16px;font:700 22px 'Malgun Gothic',sans-serif;color:${C0.sub}}.rxOld{position:absolute;right:40px;bottom:24px;text-align:right}.rxOld>button{background:none;border:2px solid #3E5A60;border-radius:14px;padding:8px 18px;font:700 22px 'Malgun Gothic',sans-serif;color:${C0.sub}}
 .rxOldBox{margin-top:10px;background:#0A1017;border:2px solid #3E5A60;border-radius:14px;padding:14px 18px;font:600 20px/1.5 'Malgun Gothic',sans-serif;color:${C0.sub};max-width:520px}.rxOldBox button{margin-top:8px;background:${C0.navy};border:2px solid ${C0.sub};border-radius:12px;padding:8px 16px;font:800 22px 'Malgun Gothic',sans-serif;color:${C0.cream}}
-.rxSheet{margin-top:60px;width:1500px;min-height:560px;background:${C0.paper};color:${C0.paperInk};border:6px solid #0A1017;border-radius:22px;box-shadow:0 12px 0 #0A1017;display:grid;grid-template-columns:900px 1fr;overflow:hidden;position:relative}
+.rxSheet{margin-top:40px;width:1500px;min-height:560px;background:${C0.paper};color:${C0.paperInk};border:6px solid #0A1017;border-radius:22px;box-shadow:0 12px 0 #0A1017;display:grid;grid-template-columns:900px 1fr;overflow:hidden;position:relative}
 .rxSheet:before{content:'';position:absolute;left:900px;top:30px;bottom:30px;border-left:3px dashed #C9B48E}.rxSL{padding:30px 40px}.rxSR{padding:30px 34px;display:flex;flex-direction:column;align-items:center;position:relative}
-.rxSH{display:flex;align-items:baseline;gap:18px;border-bottom:4px solid ${C0.paperInk};padding-bottom:10px}.rxSH em{font:900 26px 'Malgun Gothic',sans-serif;font-style:normal;color:#F4EAD5;background:${C0.stamp};border-radius:8px;padding:2px 12px}.rxSH h2{margin:0;font:900 58px 'Malgun Gothic',sans-serif}.rxSH span{font:800 24px 'Malgun Gothic',sans-serif;color:#7A6A52}.rxSH .rxStars{color:${C0.stamp}}.rxSH .rxStars i{color:#D8C8A8}.rxTier{margin-top:10px;font:800 22px 'Malgun Gothic',sans-serif;color:#5E4E38;background:#EADBBD;border-radius:12px;padding:8px 14px}
-.rxRows{margin-top:18px;display:flex;flex-direction:column;gap:12px}.rxRow{display:grid;grid-template-columns:52px 170px 470px 70px;gap:14px;align-items:center;font:800 27px 'Malgun Gothic',sans-serif}.rxRow small{grid-column:2/5;font:600 19px 'Malgun Gothic',sans-serif;color:#7A6A52;margin-top:-8px}
+.rxSH{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;white-space:nowrap;border-bottom:4px solid ${C0.paperInk};padding-bottom:10px}.rxSH em{font:900 26px 'Malgun Gothic',sans-serif;font-style:normal;color:#F4EAD5;background:${C0.stamp};border-radius:8px;padding:2px 12px}.rxSH h2{margin:0;font:900 54px 'Malgun Gothic',sans-serif}.rxSH span{font:800 24px 'Malgun Gothic',sans-serif;color:#7A6A52}.rxSH .rxStars{color:${C0.stamp}}.rxSH .rxStars i{color:#D8C8A8}.rxTier{margin-top:10px;font:800 22px 'Malgun Gothic',sans-serif;color:#5E4E38;background:#EADBBD;border-radius:12px;padding:8px 14px}
+.rxRows{margin-top:14px;display:flex;flex-direction:column;gap:10px}.rxSheet.real .rxRows{gap:4px}.rxWhyLine{margin-top:10px;font:700 21px/1.4 'Malgun Gothic',sans-serif;color:#5E4E38}.rxSheet.real .rxPlates.n2~.rxStamp,.rxSheet.real .rxPlates.n3~.rxStamp{top:330px;right:auto;left:18px;width:136px;height:136px;font-size:46px}.rxPlates{display:flex;align-items:flex-end;justify-content:center;gap:4px}.rxPlates>div{flex:1;height:100%}.rxPlates.n2>div{height:80%}.rxPlates.n3>div{height:66%}.rxRow{display:grid;grid-template-columns:52px 170px 470px 70px;gap:14px;align-items:center;font:800 27px 'Malgun Gothic',sans-serif}.rxRow small{grid-column:2/5;font:600 19px 'Malgun Gothic',sans-serif;color:#7A6A52;margin-top:-8px}
 .rxMark{font:900 40px 'Malgun Gothic',sans-serif;text-align:center;line-height:1}.rxBar{height:26px;border-radius:13px;background:#E2D3B5;overflow:hidden;border:3px solid ${C0.paperInk}}.rxBar i{display:block;height:100%}
 .rxMemo{margin-top:20px;border-top:3px dashed #C9B48E;padding-top:14px;font:700 25px/1.55 'Malgun Gothic',sans-serif;color:${C0.paperInk}}.rxMemo b{color:${C0.stamp}}
 .rxPlate{width:430px;height:270px;margin-top:6px}.rxStamp{position:absolute;right:40px;top:200px;width:150px;height:150px;border:9px solid ${C0.stamp};border-radius:50%;color:${C0.stamp};display:flex;flex-direction:column;align-items:center;justify-content:center;font:900 52px 'Malgun Gothic',sans-serif;transform:rotate(-14deg);opacity:.88;line-height:1;background:#F4EAD599}.rxStamp small{font:900 26px 'Malgun Gothic',sans-serif;margin-top:4px}
@@ -1988,10 +2083,17 @@ function buildDom(){css();loadNetaImages();root=el('div',{id:'rxRoot'});stage=el
  cv.addEventListener('pointerdown',e=>{if(e.button!==0)return;try{cv.setPointerCapture(e.pointerId);}catch{}pointerEv(e,'pointerdown');pointerEv(e,'pointer');});cv.addEventListener('pointermove',e=>pointerEv(e,'pointer'));cv.addEventListener('pointerup',e=>pointerEv(e,'pointerup'));cv.addEventListener('pointercancel',e=>pointerEv(e,'pointerup'));
  document.body.append(root);fit();window.addEventListener('resize',fit);document.addEventListener('visibilitychange',()=>{if(document.hidden&&X.mode==='play'&&!X.bot)toMenu();});}
 function buildMenu(){if(!menuEl)return;const P=X.prog,nx=L.RemixProgress.next(X.all?{best:{}}:P);
- const cards=L.RemixStageTable.map((s,i)=>{const open=isOpen(s.id),b=P.best?.[s.id],secs=Math.round(L.buildChart(s.id).end),bpm2=Math.max(0,...s.sections.map(x=>x.bpmTo||0)),prev=L.RemixStageTable[i-1];
-  const chips=s.scoreVerbs.map(v=>`<span>${ICON[v]}${shortName(s,v)}</span>`).join('');
-  return `<button class="rxCard${open?'':' locked'}${s.id===nx&&open?' first':''}" data-stage="${s.id}"${open?'':' aria-disabled="true"'}><div class="rxCardTop"><b>${s.id}</b><span class="rxStars" aria-label="난이도 ${s.stars}">${'★'.repeat(s.stars)}<i>${'★'.repeat(5-s.stars)}</i></span></div><div class="rxArt">${sushiSvg(s.neta,{gloss:b?.pass?1:.5})}</div><h3>${s.name}</h3><div class="rxChips">${chips}</div><p>${s.bpm}${bpm2?' → '+bpm2:''} BPM · 약 ${secs}초 · ${RemixUITable.kindName[s.kind]}</p>${b?`<em class="rxBest">${b.grade}<br>${b.total}</em>`:''}${open?'':`<div class="rxLock">${LOCK}<span>「${prev.name}」${josa(prev.name,'을','를')} 통과하면 열려요</span></div>`}</button>`;}).join('');
- const nS=stageOf(nx);menuEl.innerHTML=`<div class="rxTitle">니기리 리믹스 · 오늘의 횟감</div><div class="rxSub">기믹 하나씩 쉬운 판부터 → 섞은 판 → 마지막은 참치 대뱃살 · 앞 판을 통과하면 다음 횟감이 열려요</div><div class="rxCards">${cards}</div><div class="rxHint">숫자 1~8 또는 클릭 · Enter = 다음 판 「${nS.name}」 · 마우스와 키보드를 함께 써요</div>
+ const card=(s)=>{const open=isOpen(s.id),b=P.best?.[s.id],C=L.buildChart(s.id),secs=Math.round(C.end),bpm2=Math.max(0,...s.sections.map(x=>x.bpmTo||0)),pr=s.type==='practice',T=PT[s.proc];
+  const why=X.all?null:L.RemixProgress.why(P,s.id),need=why?why.need.map(id=>stageOf(id).name):[];
+  const lockTxt=!need.length?'':s.type==='real'&&s.order===1?`연습 다섯 과정을 모두 통과하면 열려요${need.length<5?` · 남은 ${need.length}개`:''}`:`「${need[0]}」${josa(need[0],'을','를')} 통과하면 열려요`;
+  const art=pr?sushiSvg(s.product,{gloss:b?.pass?1:.5}):sushiSvg(s.neta,{gloss:b?.pass?1:.5});
+  const mid=pr?`<div class="rxProc"><span class="rxGim">${procIcon(s.proc)}${s.gimmick}</span><span>= 니기리 과정 ${RemixUITable.stepNo[T.step]}</span></div><p class="rxWhy">${T.why.split(' · ')[0]}</p>`
+   :`<div class="rxFlow">${L.ProcOrder.map(p=>`<i title="${procName(p)}" style="color:${PT[p].color}">${procIcon(p)}</i>`).join('<b>›</b>')}</div><p class="rxWhy">손님 주문 ${C.pieces}점 · 과정 순서대로 쥐고 마지막 착에 ${s.name}${josa(s.name,'이','가')} 딱</p>`;
+  return `<button class="rxCard${pr?' prac':' real'}${open?'':' locked'}${s.id===nx&&open?' first':''}" data-stage="${s.id}"${open?'':' aria-disabled="true"'}><div class="rxCardTop"><b>${keyOf(s)} · ${stageTag(s)}</b><span class="rxStars" aria-label="난이도 ${s.stars}">${'★'.repeat(s.stars)}<i>${'★'.repeat(5-s.stars)}</i></span></div><div class="rxArt">${art}</div><h3>${s.name}</h3>${mid}<p>${s.bpm}${bpm2?' → '+bpm2:''} BPM · 약 ${secs}초</p>${b?`<em class="rxBest">${b.grade==='한 번 더'?'다시':b.grade}<br>${b.total}</em>`:''}${open?'':`<div class="rxLock">${LOCK}<span>${lockTxt}</span></div>`}</button>`;};
+ const nS=stageOf(nx);menuEl.innerHTML=`<div class="rxTitle">니기리 리믹스</div><div class="rxSub">먼저 니기리를 만드는 과정을 하나씩 익히고 → 오늘의 횟감으로 한 점을 처음부터 끝까지 쥐어요</div>
+ <div class="rxRowHead"><span class="rxRowTag">연습</span>과정 익히기<small>손놀림 하나 = 니기리 과정 하나 · 네타 없이 과정 결과물만 · 앞 과정을 통과하면 다음 과정</small></div><div class="rxCards">${practiceIds().map(card).join('')}</div>
+ <div class="rxRowHead real"><span class="rxRowTag">실전</span>오늘의 횟감<small>손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착 · 마지막 착에 그 횟감이 딱</small></div><div class="rxCards">${realIds().map(card).join('')}</div>
+ <div class="rxHint">숫자 1~5 = 연습 · 6~9, 0 = 실전 · 클릭 · Enter = 다음 판 「${stageTitle(nS)}」</div>
  <div class="rxOld"><button id="rxOldBtn" aria-expanded="false">옛 판 ▸</button><div class="rxOldBox" id="rxOldBox" hidden>예전 실험(손 문장 · 그루브 · 수련 판)은 그대로 남아 있어요.<br><button id="rxOldGo">옛 판 화면으로</button></div></div>`;
  menuEl.querySelectorAll('.rxCard').forEach(b=>b.addEventListener('click',()=>tryGo(b.dataset.stage)));menuEl.querySelector('#rxOldBtn').addEventListener('click',e=>{const box=menuEl.querySelector('#rxOldBox');box.hidden=!box.hidden;e.currentTarget.textContent=box.hidden?'옛 판 ▸':'옛 판 ▾';e.currentTarget.setAttribute('aria-expanded',String(!box.hidden));});
  menuEl.querySelector('#rxOldGo').addEventListener('click',()=>setActive(false));}
@@ -2003,15 +2105,21 @@ function tierScores(run){const C=run.C,acc={},gv=g=>L.RemixScoreTable[g]??0,add=
  for(const x of run.tosses)add(x.sec,gv(x.res?.g||'miss'));for(const x of [...run.pulses,...run.rights])add(x.sec,gv(x.res?.g||'miss'));for(const s of run.spin.samples)add(s.sec,s.q);for(const b of run.free.bars)if(b.role==='play'&&b.score)add(b.sec,b.score.score);
  return Object.keys(acc).sort().map(t=>({tier:+t,score:Math.round(100*acc[t].reduce((a,b)=>a+b,0)/acc[t].length),n:acc[t].length}));}
 const markOf=v=>v>=85?RemixUITable.marksOf.perfect:v>=55?RemixUITable.marksOf.ok:RemixUITable.marksOf.miss;
-function buildResult(R){const S=stageOf(X.stageId),V=L.VerbTable,D=R.detail,F=R.finale||{},line={spin:D.spin&&`위상 오차 평균 ${D.spin.meanAbsErrMs} ms · 납작 ${D.spin.flat} · 흩어짐 ${D.spin.scatter}`,toss:D.toss&&`딱 ${D.toss.perfect} · 좋아요 ${D.toss.ok} · 놓침 ${D.toss.miss} / ${D.toss.n}`,
-  poly:D.poly&&(S.verbNames?.poly?`박 ${D.poly.pulses}번 · 놓침 ${D.poly.leftMiss} · 흔들림 ${D.poly.leftSigmaMs} ms`:`왼손 ${D.poly.left} (흔들림 ${D.poly.leftSigmaMs} ms) · 오른손 ${D.poly.right}`),free:D.free&&`그루브 ${D.free.groove} · 다양성 ${D.free.diversity} · 응답 ${D.free.response}${D.free.spam?' · 같은 키 반복':''}`,vary:D.vary&&`변주 경계 ${D.vary.transitions.length}곳 · 브레이크 복귀 ${D.vary.transitions.filter(t=>t.kind==='return').map(t=>Math.round(t.q*100)).join('·')||'-'}`};
- const rows=Object.keys(R.verbs).map(k=>{const [m,mc]=markOf(R.verbs[k]);return `<div class="rxRow"><span class="rxMark" style="color:${mc}">${m}</span><span>${verbName(S,k)}</span><div class="rxBar"><i style="width:${R.verbs[k]}%;background:${V[k].color}"></i></div><span>${R.verbs[k]}</span><small>${line[k]||''}</small></div>`;}).join('');
- const pg=F.placeG||R.places?.[0]||'miss',[pm,pmc]=RemixUITable.marksOf[pg],pRow=`<div class="rxRow"><span class="rxMark" style="color:${pmc}">${pm}</span><span>마지막 착</span><span style="grid-column:3/5;font-size:24px">${RemixUITable.judge[pg][0]}${F.err!=null?` · ${F.err>0?'+':''}${Math.round(F.err)} ms`:''} · 네타 ${Math.abs(F.dx||0)<3?'가운데':F.dx>0?'오른쪽으로 '+Math.round(F.dx)+' px':'왼쪽으로 '+Math.round(-F.dx)+' px'}${F.rot?` · ${Math.abs(F.rot).toFixed(0)}° 기움`:''}</span></div>`;
- const tiers=tierScores(X.run);const nx=nextId(X.stageId),nS=nx&&stageOf(nx),open=nx&&isOpen(nx),face={nod:{eyes:'closed',mouth:'smile'},hmm:{eyes:'open',mouth:'flat'},shake:{eyes:'narrow',mouth:'frown'}}[F.react||'hmm'];
- const unlock=R.unlocked?`<div class="rxUnlock">다음 횟감 「${nS.name}」${josa(nS.name,'이','가')} 열렸어요!</div>`:!R.pass?`<div class="rxUnlock no">「동」 이상이면 통과 · 다음 판이 열려요</div>`:nx?'':`<div class="rxUnlock">마지막 판까지 통과했어요!</div>`;
- resultEl.innerHTML=`<div class="rxSheet"><div class="rxSL"><div class="rxSH"><em>검수표</em><h2>${S.name}</h2><span class="rxStars">${'★'.repeat(S.stars)}<i>${'★'.repeat(5-S.stars)}</i></span><span>${S.gimmick} · ${RemixUITable.kindName[S.kind]}</span></div><div class="rxRows">${rows}${pRow}</div>
- ${tiers.length>1?`<div class="rxTier">단계별 — ${tiers.map(t=>`${RemixUITable.tierName[t.tier]} <b>${t.score}</b>`).join(' · ')}</div>`:''}<div class="rxMemo">검수 메모 — 「${R.comment[0]}」<br>「${R.comment[1]}」</div></div>
- <div class="rxSR"><div class="rxPlate">${sushiSvg(S.neta,{dx:F.dx||0,rot:F.rot||0,gloss:F.gloss??.5})}</div><div class="rxStamp" aria-label="등급 ${R.grade}">${R.grade==='한 번 더'?'다시':R.grade}<small>${R.total}</small></div><div class="rxFace">${masterSvg('rxmr',face)}</div><div class="rxSay">「${F.line||''}」</div>${unlock}</div></div>
+function buildResult(R){const S=stageOf(X.stageId),D=R.procDetail||{},F=R.finale||{},pr=S.type==='practice',U=RemixUITable;
+ const lineOf=(p,d)=>{if(!d)return '';const v=PT[p].verb;return v==='spin'?`위상 오차 평균 ${d.meanAbsErrMs} ms · 납작 ${d.flat} · 흩어짐 ${d.scatter}`:v==='toss'?`딱 ${d.perfect} · 좋아요 ${d.ok} · 놓침 ${d.miss} / ${d.n}`:v==='poly'?(p==='tezu'?`박 ${d.pulses}번 · 놓침 ${d.leftMiss} · 흔들림 ${d.leftSigmaMs} ms`:`왼손 ${d.left} (흔들림 ${d.leftSigmaMs} ms) · 오른손 ${d.right}`):v==='free'?`그루브 ${d.groove} · 다양성 ${d.diversity} · 응답 ${d.response}${d.spam?' · 같은 키 반복':''}`:v==='vary'?`변주 경계 ${d.transitions.length}곳 · 브레이크 복귀 ${d.transitions.filter(t=>t.kind==='return').map(t=>Math.round(t.q*100)).join('·')||'-'}`:'';};
+ const rows=Object.keys(R.procs).map(k=>{const [m,mc]=markOf(R.procs[k]);return `<div class="rxRow"><span class="rxMark" style="color:${mc}">${m}</span><span>${procName(k)}</span><div class="rxBar"><i style="width:${R.procs[k]}%;background:${PT[k].color}"></i></div><span>${R.procs[k]}</span><small>${PT[k].gimmick} · ${lineOf(k,D[k])}</small></div>`;}).join('');
+ const fins=(R.finales||[]).filter(Boolean),pg=F.placeG||R.places?.[0]||'miss',[pm,pmc]=U.marksOf[pg];
+ const pDesc=pr?`${U.judge[pg][0]}${F.err!=null?` · ${F.err>0?'+':''}${Math.round(F.err)} ms`:''}`:fins.length>1?fins.map((f,i)=>`${i+1}점째 ${U.judge[f.placeG][0]}`).join(' · '):`${U.judge[pg][0]}${F.err!=null?` · ${F.err>0?'+':''}${Math.round(F.err)} ms`:''} · 네타 ${Math.abs(F.dx||0)<3?'가운데':F.dx>0?'오른쪽으로 '+Math.round(F.dx)+' px':'왼쪽으로 '+Math.round(-F.dx)+' px'}${F.rot?` · ${Math.abs(F.rot).toFixed(0)}° 기움`:''}`;
+ const pRow=`<div class="rxRow"><span class="rxMark" style="color:${pmc}">${pm}</span><span>${pr?'내려놓기':'착 · 올리기'}</span><span style="grid-column:3/5;font-size:23px">${pDesc}</span></div>`;
+ const tiers=pr?tierScores(X.run):[],pieces=pr?[]:L.pieceScores(X.run);const nx=nextId(X.stageId),nS=nx&&stageOf(nx),open=nx&&isOpen(nx),face={nod:{eyes:'closed',mouth:'smile'},hmm:{eyes:'open',mouth:'flat'},shake:{eyes:'narrow',mouth:'frown'}}[F.react||'hmm'];
+ const nName=nS?(nS.type==='practice'?`다음 과정 「${nS.name}」${josa(nS.name,'이','가')}`:nS.order===1?`실전 「${nS.name}」${josa(nS.name,'이','가')}`:`다음 횟감 「${nS.name}」${josa(nS.name,'이','가')}`):'';
+ const unlock=R.unlocked?`<div class="rxUnlock">${nName} 열렸어요!</div>`:!R.pass?`<div class="rxUnlock no">「동」 이상이면 통과 · 다음 판이 열려요</div>`:nx&&!open&&nS.type==='real'&&nS.order===1?`<div class="rxUnlock no">연습 다섯 과정을 다 통과하면 실전이 열려요</div>`:nx?'':`<div class="rxUnlock">오마카세 마지막 판까지 통과했어요!</div>`;
+ const plate=pr?`<div class="rxPlate">${sushiSvg(S.product,{dx:F.dx||0,rot:F.rot||0,gloss:F.gloss??.5})}</div>`:`<div class="rxPlate rxPlates n${Math.max(1,fins.length)}">${(fins.length?fins:[F]).map(f=>`<div>${sushiSvg(S.neta,{dx:f.dx||0,rot:f.rot||0,gloss:f.gloss??.5})}</div>`).join('')}</div>`;
+ const extra=tiers.length>1?`<div class="rxTier">단계별 — ${tiers.map(t=>`${U.tierName[t.tier]} <b>${t.score}</b>`).join(' · ')}</div>`:pieces.length>1?`<div class="rxTier">한 점씩 — ${pieces.map(t=>`${t.piece+1}점째 <b>${t.score}</b>`).join(' · ')}</div>`:'';
+ const head=pr?`<em>과정 검수</em><h2>${S.name}</h2><span class="rxStars">${'★'.repeat(S.stars)}<i>${'★'.repeat(5-S.stars)}</i></span><span>${S.gimmick} · 니기리 과정 ${U.stepNo[PT[S.proc].step]}</span>`:`<em>검수표</em><h2>${S.name}</h2><span class="rxStars">${'★'.repeat(S.stars)}<i>${'★'.repeat(5-S.stars)}</i></span><span>실전 ${S.order} · 손님 주문 ${X.C.pieces}점</span>`;
+ resultEl.innerHTML=`<div class="rxSheet${pr?'':' real'}"><div class="rxSL"><div class="rxSH">${head}</div>${pr?`<div class="rxWhyLine">이 손놀림은 니기리의 「${S.name}」 과정이에요 — ${PT[S.proc].why}</div>`:''}<div class="rxRows">${rows}${pRow}</div>
+ ${extra}<div class="rxMemo">검수 메모 — 「${R.comment[0]}」<br>「${R.comment[1]}」</div></div>
+ <div class="rxSR">${plate}<div class="rxStamp" aria-label="등급 ${R.grade}">${R.grade==='한 번 더'?'다시':R.grade}<small>${R.total}</small></div><div class="rxFace">${masterSvg('rxmr',face)}</div><div class="rxSay">「${F.line||''}」</div>${unlock}</div></div>
  <div class="rxBtns"><button data-a="next">${open?`다음 판 「${nS.name}」 (Enter)`:'한 번 더 (Enter)'}</button><button data-a="retry">다시 (Space)</button><button data-a="menu">메뉴 (Esc)</button></div>`;
  resultEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.a;if(a==='retry')go(X.stageId);else if(a==='next')go(open?nx:X.stageId);else toMenu();}));}
 
@@ -2040,15 +2148,15 @@ function bg(now,sec){ctx.clearRect(0,0,1920,1080);/* 매 프레임 비움(배경
  /* 세 자리: 왼쪽 힙합 무대(네온 바닥) · 오른쪽 전통 무대(나무 마루) · 가운데 위 검수대 */
  rr(16,690,356,24,10,'#1E2A33','#74C9E6',3);rr(1548,690,356,24,10,'#6B3D1D','#C8352C',3);rr(300,930,1320,180,30,'#2a2018','#0A1017',6);}
 function drawHud(now,B,sec){const C=X.C,S=C.stage,T=C.secs,H=RemixUITable.hud,bx=H.bar.x,bw=H.bar.w,by=H.bar.y,bh=H.bar.h,total=C.endBeat;rr(bx-8,by-6,bw+16,bh+12,14,'#0A1017cc');
- for(const s of T){const a=bx+bw*s.b0/total,b=bx+bw*s.b1/total,v=L.VerbTable[s.verb];const brk=s.feel==='break';rr(a+1,by,b-a-2,bh,8,brk?'#3E5A60':v.color+(s===sec?'':'99'));if(brk){ctx.save();ctx.beginPath();ctx.rect(a+1,by,b-a-2,bh);ctx.clip();ctx.strokeStyle='#0A101788';ctx.lineWidth=4;for(let k=a-30;k<b;k+=12){ctx.beginPath();ctx.moveTo(k,by+bh);ctx.lineTo(k+28,by);ctx.stroke();}ctx.restore();}
-  if(b-a>50&&s.verb!=='count')text(brk?'쉿':s.verb==='place'?'착':shortName(S,s.verb),(a+b)/2,by+bh/2+1,16,'#0A1017','center',900);}
+ for(const s of T){const a=bx+bw*s.b0/total,b=bx+bw*s.b1/total,v=L.VerbTable[s.verb];const brk=s.feel==='break';rr(a+1,by,b-a-2,bh,8,brk?'#3E5A60':(PT[s.proc]?.color||v.color)+(s===sec?'':'99'));if(brk){ctx.save();ctx.beginPath();ctx.rect(a+1,by,b-a-2,bh);ctx.clip();ctx.strokeStyle='#0A101788';ctx.lineWidth=4;for(let k=a-30;k<b;k+=12){ctx.beginPath();ctx.moveTo(k,by+bh);ctx.lineTo(k+28,by);ctx.stroke();}ctx.restore();}
+  if(b-a>50&&s.verb!=='count')text(brk?'쉿':PT[s.proc]?.short||'',(a+b)/2,by+bh/2+1,16,'#0A1017','center',900);}
  const ph=bx+bw*clamp(B/total);rr(ph-3,by-8,6,bh+16,3,C0.cream);
- fitText(`${S.name} · ${S.gimmick}`,40,40,400,32,C0.gold,'left',900,'#0A1017');const tier=sec?.tier?RemixUITable.tierName[sec.tier]:S.kind!=='solo'?RemixUITable.kindName[S.kind]:'';if(tier){ctx.font=`900 21px 'Malgun Gothic',sans-serif`;const w=ctx.measureText(tier).width;rr(36,66,w+24,34,12,sec?.tier===2?C0.bad:'#1E3746','#0A1017',3);text(tier,48,84,21,C0.cream,'left',900);}
+ fitText(`${stageTag(S)} · ${stageTitle(S)}`,40,40,400,32,C0.gold,'left',900,'#0A1017');const pc=S.type==='real'&&sec&&sec.piece!=null?sec.piece:null,tier=sec?.tier?RemixUITable.tierName[sec.tier]:pc!=null?`주문 ${C.pieces}점 중 ${pc+1}점째`:S.type==='real'?`손님 주문 ${C.pieces}점`:'';if(tier){ctx.font=`900 21px 'Malgun Gothic',sans-serif`;const w=ctx.measureText(tier).width;rr(36,66,w+24,34,12,sec?.tier===2?C0.bad:pc!=null?'#6B3D1D':'#1E3746','#0A1017',3);text(tier,48,84,21,C0.cream,'left',900);}
  const line=sec?.line||'';X.lineW=line?fitText(line,960,H.line.y,1100,H.line.size,C0.cream,'center',800,'#0A1017'):0;
  const f=sec?(sec.feel==='break'?'break':sec.feel==='count'?'count':L.feelOf(sec)):'count',F=L.FeelTable[f],bpm=Math.round(60/C.beatDur(Math.max(0,Math.floor(B))));rr(1478,12,410,92,20,'#0A1017cc',F.color,4);text(F.name,1500,42,30,F.color,'left',900);text(F.short,1500,80,21,C0.sub,'left',700);text(bpm+' BPM',1868,42,26,C0.cream,'right',900);
  const bi=Math.floor(B),inBar=((bi%4)+4)%4,fr=B-bi;for(let i=0;i<4;i++){const on=i===inBar&&sec?.feel!=='break',r=on?12-6*fr:7;oval(1770+i*28,82,r,r,on?F.color:'#3E5A60');}}
-function drawMeters(now){const M=RemixUITable.meters,keys=X.C.stage.scoreVerbs;if(now-X.meterAt>.25){X.meterAt=now;X.meters=L.results(X.run);}const R=X.meters;if(!R)return;const y0=M.bottom-keys.length*M.row-14;rr(M.x-6,y0-14,M.w+12,M.row*keys.length+20,18,'#0A1017cc');let y=y0+8;
- for(const k of keys){const v=L.VerbTable[k],has=R.verbs[k]!=null,val=has?R.verbs[k]:0;text(verbName(X.C.stage,k),M.x+8,y+8,20,has?C0.cream:'#3E5A60','left',800);rr(M.x+150,y,220,16,8,'#1E3746');if(has)rr(M.x+150,y,220*val/100,16,8,v.color);text(has?String(val):'-',M.x+M.w-6,y+8,20,C0.cream,'right',900);y+=M.row;}}
+function drawMeters(now){const M=RemixUITable.meters,keys=X.C.stage.procs;if(now-X.meterAt>.25){X.meterAt=now;X.meters=L.results(X.run,now<0?0:X.C.secAt(X.C.beatAt(now)).i);}/* T71-a: 지금 구간까지만(아직 안 온 과정은 -) */const R=X.meters;if(!R)return;const y0=M.bottom-keys.length*M.row-14;rr(M.x-6,y0-14,M.w+12,M.row*keys.length+20,18,'#0A1017cc');let y=y0+8;
+ for(const k of keys){const v=PT[k],has=R.procs[k]!=null,val=has?R.procs[k]:0;text(procName(k),M.x+8,y+8,20,has?C0.cream:'#3E5A60','left',800);rr(M.x+150,y,220,16,8,'#1E3746');if(has)rr(M.x+150,y,220*val/100,16,8,v.color);text(has?String(val):'-',M.x+M.w-6,y+8,20,C0.cream,'right',900);y+=M.row;}}
 function popAdd(t,txt,x,y,color,size=40){ctx.font=`900 ${size}px 'Malgun Gothic',sans-serif`;X.pops.push({t,txt,x,y,color,size,w:ctx.measureText(txt).width+size*.3});if(X.pops.length>40)X.pops.shift();}
 function drawPops(now){for(const p of X.pops){const age=now-p.t;if(age<0||age>.75)continue;ctx.globalAlpha=1-age/.75;text(p.txt,p.x,p.y-(X.rm?0:age*60),p.size,p.color,'center',900,'#0A1017');}ctx.globalAlpha=1;X.pops=X.pops.filter(p=>now-p.t<.8);}
 /* 스승 검수: 판정 하나하나를 표시(○△×)하고 끄덕/눈썹 */
@@ -2056,7 +2164,7 @@ function judge(g,now,quiet){const M=X.ms;X.marks.push({t:now,g});if(X.marks.leng
 function consumeFx(now){const F=X.run.fx,U=RemixUITable,J=U.judge;for(;X.fxi<F.length;X.fxi++){const e=F[X.fxi];
  if(e.type==='catch'){popAdd(now,J[e.g][0],U.toss.handX,U.toss.handY-170,J[e.g][1]);judge(e.g,now);}
  else if(e.type==='drop'){popAdd(now,'놓쳤어요',U.toss.handX,U.toss.handY-170,J.miss[1]);judge('miss',now);liveSound({word:RemixAudioTable.drop.word,vel:RemixAudioTable.drop.gain});}
- else if(e.type==='pulse'){const tilt=Math.abs(X.run.tilt)>12;if(e.g!=='perfect'||tilt)popAdd(now,e.g==='miss'?'왼손!':tilt?'기울어요!':J[e.g][0],U.poly.lx,U.poly.ly-200,J[e.g][1],32);judge(e.g,now);}
+ else if(e.type==='pulse'){const tilt=Math.abs(X.run.tilt)>12&&X.C.secs[X.run.pulses[e.id]?.sec]?.proc!=='tezu';if(e.g!=='perfect'||tilt)popAdd(now,e.g==='miss'?'왼손!':tilt?'기울어요!':J[e.g][0],U.poly.lx,U.poly.ly-200,J[e.g][1],32);judge(e.g,now);}
  else if(e.type==='right'){popAdd(now,J[e.g][0],U.poly.rx,U.poly.ry-190,J[e.g][1],32);judge(e.g,now);}
  else if(e.type==='place'){if(e.g==='miss')liveSound({word:RemixAudioTable.place.miss,vel:1});judge(e.g,now,true);X.landAt=now;}
  else if(e.type==='freeBar'){const s=e.score;popAdd(now,s.flags.includes('spam')?'같은 키만…':s.score>.75?'그루브!':s.score>.5?'좋아요':'더 섞어 봐요',960,U.free.popY,s.score>.75?C0.good:s.score>.5?C0.gold:C0.warn,40);if(s.flags.includes('spam')){X.ms.shakeT=now;X.marks.push({t:now,g:'miss'});}else judge(s.score>.75?'perfect':s.score>.5?'ok':'miss',now);}
@@ -2083,14 +2191,15 @@ function drawToss(now){const U=RemixUITable.toss,R=X.run,nid=X.C.stage.neta,toss
   if(u<=1){const sh=.25+.75*u;oval(x1,y1+60,48*sh,12*sh,`rgba(10,16,23,${.25+.5*u})`);const xx=x0+(x1-x0)*u,yy=y1-4*x.h*u*(1-u);toss(x,xx,yy,u*TAU*x.flightBeats*.5);continue;}
   const age=now-x.tLand;if(x.res&&x.res.g!=='miss'){ctx.globalAlpha=Math.max(0,1-age/.9);toss(x,x1,y1-8,0);if(age<.25)oval(x1,y1-10,60+age*200,30+age*90,null,x.res.g==='perfect'?C0.good:C0.gold,6);ctx.globalAlpha=1;}
   else if(x.res){const k=Math.min(1,age/.5),yy=y1+k*150-Math.sin(k*Math.PI)*40;ctx.globalAlpha=Math.max(0,1-age/.9);toss(x,x1+30*k,yy,k*2);ctx.globalAlpha=1;}}
- const caught=R.tosses.filter(x=>x.res&&x.res.g!=='miss').length,done=R.tosses.filter(x=>x.res).length;text(`받은 개수 ${caught} / ${done}`,U.handX,U.handY+150,26,C0.sub,'center',800,'#0A1017');}
+ const caught=R.tosses.filter(x=>x.res&&x.res.g!=='miss').length,done=R.tosses.filter(x=>x.res).length;text(`뒤집어 받은 개수 ${caught} / ${done}`,U.handX,U.handY+150,26,C0.sub,'center',800,'#0A1017');}
 function drawPoly(now,B,sec){const U=RemixUITable.poly,R=X.run;X.disp.tilt+=(R.tilt-X.disp.tilt)*.12;const la=now-X.disp.leftAt,ra=now-X.disp.rightAt;
- handShape(U.lx,U.ly+30,1,la<.12?-10*(1-la/.12):0,.2);riceBall(U.lx-10,U.ly-50,170,112,0,1,Math.abs(X.disp.tilt)>14?.5:0,X.disp.tilt);
- handShape(U.rx,U.ry,-1,ra<.12?-26*(1-ra/.12):12,.8);
+ if(sec.proc==='tezu'){/* 손 적시기: 왼손이 박마다 물그릇에 손끝을 톡(물결) — 밥·오른손 없음 */const dip=la<.16?1-la/.16:0,bx=U.lx+300,by=U.ly+10;drawNeta('bowl',bx,by,250,0,{});if(dip>0)oval(bx,by-30,50+120*(1-dip),10+18*(1-dip),null,'#DFF4FB',4);handShape(U.lx+60,U.ly+30,1,-18*dip,.3);}
+ else{handShape(U.lx,U.ly+30,1,la<.12?-10*(1-la/.12):0,.2);riceBall(U.lx-10,U.ly-50,170,112,0,1,Math.abs(X.disp.tilt)>14?.5:0,X.disp.tilt);
+ handShape(U.rx,U.ry,-1,ra<.12?-26*(1-ra/.12):12,.8);}
  /* 왼손 박 줄: 이 마디의 펄스 자리(스윙·셋잇단이면 실제 시각대로 밀림) · 지난 것은 판정 색 · 방금 박은 번쩍(브레이크엔 번쩍 없음) */
  const brk=sec.feel==='break',Ln=U.lane,lx0=U.lx-Ln.w/2,ly=U.ly+Ln.dy,bar0=sec.b0+4*Math.floor((B-sec.b0)/4),t0=X.C.timeOf(bar0),t1=X.C.timeOf(bar0+4);rr(lx0-16,ly-16,Ln.w+32,32,16,'#0A1017cc','#3E5A60',3);
  for(const p of R.pulses){if(p.b<bar0-1e-9||p.b>=bar0+4-1e-9)continue;const x=lx0+Ln.w*(p.t-t0)/(t1-t0),on=!brk&&now>=p.t&&now<p.t+.15,col=p.res?(p.res.g==='miss'?C0.bad:p.res.g==='perfect'?C0.good:C0.gold):on?C0.sky:'#3E5A60';oval(x,ly,on?13:9,on?13:9,col,'#0A1017',2);}
- text((sec.leftOnly&&X.C.stage.verbNames?.poly?'A · 박 짚기':'왼손 A')+(brk?' · 소리 없이':''),U.lx,U.ly+196,24,C0.sky,'center',800,'#0A1017');if(!sec.leftOnly)text('오른손 L',U.rx,U.ry+170,24,C0.good,'center',800,'#0A1017');if(Math.abs(X.disp.tilt)>12)text('밥이 기울어요!',U.lx,U.ly-170,28,C0.warn,'center',900,'#0A1017');
+ text((sec.proc==='tezu'?'A · 손 적시며 박 짚기':'왼손 A · 받치기')+(brk?' · 소리 없이':''),U.lx,U.ly+196,24,C0.sky,'center',800,'#0A1017');if(!sec.leftOnly)text('오른손 L · 누르기',U.rx,U.ry+170,24,C0.good,'center',800,'#0A1017');if(sec.proc!=='tezu'&&Math.abs(X.disp.tilt)>12)text('밥이 기울어요!',U.lx,U.ly-170,28,C0.warn,'center',900,'#0A1017');
  const G=U.ring,k=Math.floor((B-sec.b0)/4),phase=((B-sec.b0)%4+4)%4/4;if(!sec.leftOnly&&(sec.right||[]).length){oval(G.x,G.y,G.r,G.r,'#0A1017cc','#3E5A60',4);for(let i=0;i<4;i++){const a=i/4*TAU;ctx.strokeStyle='#3E5A60';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(G.x+Math.sin(a)*(G.r-16),G.y-Math.cos(a)*(G.r-16));ctx.lineTo(G.x+Math.sin(a)*G.r,G.y-Math.cos(a)*G.r);ctx.stroke();}
   const preview=k<(sec.rightFromBar??0);for(const p of sec.right){const a=p/4*TAU,B0=sec.b0+4*k+p,r=R.rights.find(x=>Math.abs(x.b-B0)<1e-6),col=preview?'#FFF3DC':r?.res?(r.res.g==='miss'?C0.bad:r.res.g==='perfect'?C0.good:C0.gold):'#FFF3DCaa';oval(G.x+Math.sin(a)*(G.r-32),G.y-Math.cos(a)*(G.r-32),14,14,col,'#0A1017',3);}
   const a=phase*TAU;ctx.strokeStyle=C0.cream;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(G.x,G.y);ctx.lineTo(G.x+Math.sin(a)*(G.r-10),G.y-Math.cos(a)*(G.r-10));ctx.stroke();text(preview?'고양이 시범 · 들어 봐요':'오른손 고리',G.x,G.y+G.r+26,22,preview?C0.gold:C0.sub,'center',800,'#0A1017');}}
@@ -2104,22 +2213,33 @@ function drawFree(now,B,sec){const U=RemixUITable.free,R=X.run,bars=R.free.bars.
  const sc=[...bars].reverse().find(b=>b.score);if(sc){const s=sc.score,x=U.score.x,y=U.score.y;rr(x,y,300,150,16,'#0A1017cc');[['그루브',s.pocket,C0.good],['다양성',s.diversity,C0.gold],['응답',s.response,C0.sky]].forEach(([n,v,c],i)=>{text(n,x+16,y+28+i*44,22,C0.cream,'left',800);rr(x+110,y+18+i*44,170,18,9,'#1E3746');rr(x+110,y+18+i*44,170*v,18,9,c);});}
  const pw=U.padW,gap=U.padGap,x0=960-(5*pw+4*gap)/2;RemixUITable.pads.forEach((k,i)=>{const K=L.KeySoundTable[k],age=now-(X.disp.padAt[k]??-9),on=age<.15,x=x0+i*(pw+gap),y=U.padY-(on?8:0);rr(x,y,pw,pw*.92,22,on?RemixUITable.sndColor[K.snd]:'#132430','#0A1017',5);text(k,x+pw/2,y+42,44,on?'#0A1017':C0.cream,'center',900);text(K.label+' · '+K.cook,x+pw/2,y+100,22,on?'#0A1017':C0.sub,'center',800);});
  const ha=now-X.disp.catHit,bump=ha<.15?1-ha/.15:0;riceBall(U.rice.x,U.rice.y,150,100,X.C.beatAt(now)*.6,1+bump*.18,0);}
-/* 마지막 착: 네타가 1박 전부터 위에서 미끄러져 와 밥 위에 떠 있다가, 착(스페이스)에 딱 앉는다. 위치·기울기·윤기 = run.finale(등급·착 오차) */
-function drawPlace(now,B,sec,pre=1){const U=RemixUITable.place,C=X.C,S=C.stage,p=X.run.places.find(x=>x.sec===sec.i);if(!p)return;const nk=L.NetaTable[S.neta]?.kind||'nigiri',bd=C.beatDur(Math.floor(p.b)),F=X.run.finale,rm=X.rm;
- /* pre < 1 = 착 1박 전(앞 구간 마지막 박): 접시·밥이 서서히 나타나고 네타가 위에서 미끄러져 온다 */ctx.globalAlpha=pre;oval(U.x,U.y+44,200,48,'#E9E2D2','#0A1017',5);oval(U.x,U.y+38,160,32,'#F6F1E6');if(nk==='gunkan')gunkanBack(U.x,U.y);else riceBall(U.x,U.y,160,84,0);ctx.globalAlpha=1;
- const from=U.from,hov={x:U.x,y:U.y+U.hoverDy},land={x:U.x+(F?.dx||0),y:U.y+(nk==='gunkan'?-34:U.landDy)+(F?.dy||0)};let x,y,rot=0,sq=1,gloss=0,gt=9;
+/* 착: 1박 전부터 위에서 미끄러져 와 떠 있다가, 착(스페이스)에 딱 앉는다. 실전 = 그 판 횟감 네타가 밥 위에(점마다 한 번) · 연습 = 그 과정 결과물이 도마 위에(네타 없음). 위치·기울기·윤기 = 그 착의 p.fin(등급·착 오차) */
+function finText(p){const S=X.C.stage;if(S.type==='practice')return S.finale;return p.piece<X.C.pieces-1?`${S.name} ${p.piece+1}점째, 착!`:S.finale;}
+function drawPlace(now,B,sec,pre=1){const U=RemixUITable.place,C=X.C,S=C.stage,p=X.run.places.find(x=>x.sec===sec.i);if(!p)return;const pr=S.type==='practice',id=pr?S.product:S.neta,nk=pr?'product':L.NetaTable[S.neta]?.kind||'nigiri',bd=C.beatDur(Math.floor(p.b)),F=p.fin,rm=X.rm;
+ /* pre < 1 = 착 1박 전(앞 구간 마지막 박): 접시(연습 = 도마)·밥이 서서히 나타나고 결과물이 위에서 미끄러져 온다 */ctx.globalAlpha=pre;if(pr){rr(U.x-210,U.y+18,420,46,14,'#B98455','#0A1017',5);rr(U.x-196,U.y+28,392,6,3,'#D3A273');}else{oval(U.x,U.y+44,200,48,'#E9E2D2','#0A1017',5);oval(U.x,U.y+38,160,32,'#F6F1E6');if(nk==='gunkan')gunkanBack(U.x,U.y);else riceBall(U.x,U.y,160,84,0);}ctx.globalAlpha=1;
+ const from=U.from,hov={x:U.x,y:U.y+U.hoverDy},land={x:U.x+(F?.dx||0),y:U.y+(pr?-24:nk==='gunkan'?-34:U.landDy)+(F?.dy||0)};let x,y,rot=0,sq=1,gloss=0,gt=9;
  if(!p.res){const u=clamp((now-(p.t-bd))/bd),e=rm?(u>0?1:0):ease(u);x=from.x+(hov.x-from.x)*e;y=from.y+(hov.y-from.y)*e-(rm?0:Math.sin(Math.PI*e)*40);rot=-.25*(1-e);if(now>p.t&&!rm)y+=Math.sin(now*18)*3;
-  oval(U.x,U.y-36,70*e,12*e,'#0A101744');const dt=p.t-now;if(dt>-.25&&dt<2*bd){const r=40+U.r0*Math.max(0,dt)/(2*bd);oval(U.x,U.y-30,r,r*.45,null,dt<.08?C0.good:C0.gold,6);text('스페이스 · 착!',U.x,U.y+120,30,C0.cream,'center',900,'#0A1017');}}
+  oval(U.x,U.y-36,70*e,12*e,'#0A101744');const dt=p.t-now;if(dt>-.25&&dt<2*bd){const r=40+U.r0*Math.max(0,dt)/(2*bd);oval(U.x,U.y-30,r,r*.45,null,dt<.08?C0.good:C0.gold,6);text(pr?'스페이스 · 내려놓기!':'스페이스 · 착!',U.x,U.y+120,30,C0.cream,'center',900,'#0A1017');}}
  else{const lt=F?.t??p.res.t,age=now-lt,k=rm?1:clamp(age/.08);x=hov.x+(land.x-hov.x)*k;y=hov.y+(land.y-hov.y)*k;rot=(F?.rot||0)*k*Math.PI/180;if(!rm&&age>=.08&&age<.3)sq=1-.14*Math.sin(Math.PI*(age-.08)/.22);
   if(age>0&&age<.3&&p.res.g!=='miss'&&!rm)oval(U.x,U.y-30,90+age*260,30+age*90,null,p.res.g==='perfect'?C0.good:C0.gold,6);const insp=age-CastTable.master.inspectDelay;if(F&&insp>=0){gloss=F.gloss;gt=insp;}}
- drawNeta(S.neta,x,y,nk==='gunkan'?170:190,rot,{sq,gloss,t:gt,now});if(nk==='gunkan'){ctx.globalAlpha=pre;gunkanFront(U.x,U.y);ctx.globalAlpha=1;}
- if(p.res&&now>=(F?.t??p.res.t)+.3)text(S.finale,960,U.textY,60,p.res.g==='miss'?C0.warn:C0.gold,'center',900,'#0A1017');}
+ drawNeta(id,x,y,nk==='gunkan'?170:190,rot,{sq,gloss,t:gt,now});if(nk==='gunkan'){ctx.globalAlpha=pre;gunkanFront(U.x,U.y);ctx.globalAlpha=1;}
+ if(p.res&&now>=(F?.t??p.res.t)+.3)text(finText(p),960,U.textY,60,p.res.g==='miss'?C0.warn:C0.gold,'center',900,'#0A1017');}
+/* 실전: 앞서 낸 점(마지막 점 전)은 오른쪽 아래 「내놓은 접시」 줄에 작게 남는다 */
+function servedList(now){const C=X.C;if(C.stage.type!=='real')return [];return X.run.places.filter(p=>p.fin&&p.piece<C.pieces-1&&now>=C.timeOf(C.secs[p.sec].b1));}
+function drawServed(now){const V=RemixUITable.served,L2=servedList(now);if(!L2.length)return;text('내놓은 접시',V.x+60,V.y-62,20,C0.sub,'center',800,'#0A1017');
+ for(const p of L2){const x=V.x+60+p.piece*V.step,y=V.y,F=p.fin;oval(x,y+26,60,14,'#E9E2D2','#0A1017',3);oval(x,y+8,44,20,C0.rice,'#0A1017',3);drawNeta(X.C.stage.neta,x+(F.dx||0)*.4,y-6,100,(F.rot||0)*Math.PI/180,{gloss:F.gloss,t:9,now});text(`${p.piece+1}점째`,x,y+56,18,C0.cream,'center',800,'#0A1017');}}
+/* 과정 줄(아래 가운데): 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착 · 지금 과정이 켜짐(연습은 그 판의 과정) */
+function drawSteps(now,sec){const T=RemixUITable.steps,S=X.C.stage,n=L.ProcOrder.length,x0=960-(n*T.w+(n-1)*T.gap)/2,cur=S.type==='practice'?(sec?.proc==='place'?'place':S.proc):sec?.proc;
+ for(const [i,p] of L.ProcOrder.entries()){const x=x0+i*(T.w+T.gap),on=p===cur,P=PT[p];rr(x,T.y-T.h/2,T.w,T.h,T.h/2,on?P.color:'#0A1017cc',on?'#0A1017':'#3E5A60',3);fitText(`${RemixUITable.stepNo[P.step]} ${p==='place'?'착':P.name}`,x+T.w/2,T.y+1,T.w-14,19,on?'#0A1017':'#9DB4B6','center',900);if(i<n-1)text('›',x+T.w+T.gap/2,T.y,20,'#3E5A60','center',900);}}
 function preSlide(now){const C=X.C;for(const p of X.run.places){if(p.res)continue;const bd=C.beatDur(Math.floor(p.b));if(now>=p.t-bd&&now<p.t)return {p,a:clamp((now-(p.t-bd))/bd*1.6)};}return null;}
-function drawCount(now,B){const i=Math.floor(B);if(i<0||i>3)return;const fr=B-i;text(['하나','둘','셋','넷'][i],960,600,150*(1.1-(X.rm?0:.1*fr)),C0.cream,'center',900,'#0A1017');}
+function countIntro(){const S=X.C.stage;if(S.type==='practice'){const T=PT[S.proc];return [`이 손놀림은 니기리의 「${S.name}」 과정이에요`,T.why,`${S.gimmick} — ${S.sub}`];}
+ return [`${S.boss?'오마카세 마지막 · ':''}손님 주문 — ${S.name} ${X.C.pieces}점`,`한 점 = 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착`,`연습한 과정을 순서대로 이어서 · 착마다 ${S.name}${josa(S.name,'이','가')} 딱 올라가요`];}
+function drawCount(now,B){const cb=X.C.countBeats||4,i=Math.floor(B)-(cb-4);if(B>=cb)return;if(i<0){const K=RemixUITable.count,[a,b,c]=countIntro();rr(K.x,K.y,K.w,K.h,26,'#0A1017e6',X.C.stage.type==='practice'?C0.sky:C0.gold,5);fitText(a,960,K.y+56,K.w-60,44,X.C.stage.type==='practice'?C0.sky:C0.gold,'center',900);fitText(b,960,K.y+122,K.w-60,28,C0.cream,'center',800);fitText(c,960,K.y+178,K.w-60,25,C0.sub,'center',800);return;}
+ const fr=B-Math.floor(B);text(['하나','둘','셋','넷'][i],960,600,150*(1.1-(X.rm?0:.1*fr)),C0.cream,'center',900,'#0A1017');}
 /* 변주 예고판: 왼쪽 힙합 고양이 위 네온판(「스윙 · n박 뒤」) */
 function drawWarn(now){const w=X.C.warnings.find(w=>now>=w.tFrom&&now<w.tTo);if(!w)return null;const W=RemixUITable.warn,left=X.C.beatAt(w.t)-X.C.beatAt(now),blink=X.rm?true:(left%1+1)%1>.5;const col=L.FeelTable[w.kind]?.color||(w.kind==='return'?C0.good:w.kind==='accel'?C0.bad:C0.sky);
  rr(W.x,W.y,W.w,W.h,22,'#0A1017ee',blink?col:col+'88',6);const [a,b]=w.label.split(' — ');fitText(a,W.x+W.w/2,W.y+40,W.w-28,34,col,'center',900);fitText(left>0?`${Math.ceil(left)}박 뒤`+(b?' · '+b:''):'지금!',W.x+W.w/2,W.y+86,W.w-28,22,C0.cream,'center',800);return {w,left};}
-function drawBreak(now,B,sec){if(sec.feel!=='break')return;text('쉿 — 소리 없이 박을 지켜요',960,1040,32,C0.sub,'center',800,'#0A1017');}
+function drawBreak(now,B,sec){if(sec.feel!=='break')return;text('쉿 — 소리 없이 박을 지켜요',1220,1006,26,C0.sub,'center',800,'#0A1017');}
 /* 스승의 ○△× 줄(검수대 오른쪽): 방금 것은 크게, 지난 8개는 작게 */
 function drawMarks(now){const M=RemixUITable.marks,last=X.marks[X.marks.length-1];if(last&&now-last.t<CastTable.master.markSec){const [s,c]=RemixUITable.marksOf[last.g],age=now-last.t;ctx.globalAlpha=1-age/CastTable.master.markSec;text(s,M.x,M.y-(X.rm?0:age*14),52,c,'center',900,'#0A1017');ctx.globalAlpha=1;}
  const row=X.marks.slice(-M.rowN);row.forEach((m,i)=>{const [s,c]=RemixUITable.marksOf[m.g];text(s,M.rowX+i*M.rowStep,M.rowY,22,c,'center',900,'#0A1017');});}
@@ -2135,8 +2255,8 @@ function hhFrame(now,B,sec,warn){const E=X.el.hh,H=CastTable.hh,k=X.rm?CastTable
  if(sec?.verb==='poly'&&!sec.leftOnly&&X.C.previews.length){const pv=X.C.previews.filter(p=>p.sec===sec.i);if(pv.length&&B<pv[pv.length-1].b+.5&&B>=sec.b0){b='오른손은 이렇게!';const near=pv.find(p=>now>=p.t&&now<p.t+.18);if(near){paw=H.beckonDeg*1.5;mouth='grin';}}}
  if(warn){const n=Math.max(1,Math.min(4,Math.ceil(warn.left)));fingers=warn.left>0?n:0;paw=-24;b=warn.left>0?'':'지금!';eyes='wide';mouth='grin';}/* 예고판이 이미 말하므로 말풍선은 「지금!」만 · 남은 박은 손가락 */
  if(brk){const i=((Math.floor(B)%4)+4)%4;paw=-24;ears=.3;mouth='o';if(X.C.stage.guide==='full'){fingers=i+1;b=['하나','둘','셋','넷'][i]+'…';}else{b='쉿!';eyes='closed';}}
- if(sec?.verb==='count'){const i=Math.floor(B);if(i>=0&&i<4){b=['하나!','둘!','셋!','넷!'][i];fingers=i+1;paw=-24;}}
- if(sec?.verb==='place'&&X.run.finale&&now>=X.run.finale.t){paw=-40;eyes='happy';mouth='grin';b=X.run.finale.placeG==='miss'?'앗!':'착!';}
+ if(sec?.verb==='count'){const i=Math.floor(B)-((X.C.countBeats||4)-4);if(i>=0&&i<4){b=['하나!','둘!','셋!','넷!'][i];fingers=i+1;paw=-24;}else if(i<0&&B>=0){b='잘 봐요!';}}
+ const pf=sec?.verb==='place'?X.run.places.find(x=>x.sec===sec.i)?.fin:null;if(pf&&now>=pf.t){paw=-40;eyes='happy';mouth='grin';b=pf.placeG==='miss'?'앗!':X.C.stage.type==='practice'?'좋아요!':'착!';}
  setT(E.Body,`translate(0 ${(bob*.4*k).toFixed(2)})`);setT(E.Head,`translate(0 ${(bob*k).toFixed(2)}) rotate(${(head*k).toFixed(2)} 170 150)`);setT(E.Paw,`rotate(${(X.rm?(paw>8?H.beckonDeg:paw<-8?-24:0):paw).toFixed(1)} 262 254)`);setT(E.EarL,`rotate(${(-30*ears).toFixed(1)} 124 96)`);setT(E.EarR,`rotate(${(30*ears).toFixed(1)} 216 96)`);
  for(let i=1;i<=4;i++)show(E['F'+i],fingers>=i);for(const [s,id] of [['open','EyesOpen'],['happy','EyesHappy'],['wide','EyesWide'],['closed','EyesClosed']])show(E[id],eyes===s);for(const [s,id] of [['smile','MouthSmile'],['grin','MouthGrin'],['o','MouthO']])show(E[id],mouth===s);
  bub(hhBub,b);X.hhState={paw,fingers,b};}
@@ -2144,22 +2264,23 @@ function tdFrame(now,B,sec){const E=X.el.td,T=CastTable.td,k=X.rm?CastTable.rmSc
  const brk=sec?.feel==='break',fr=((B%1)+1)%1,beatOn=sec&&!brk&&sec.verb!=='free'&&now>=0;if(beatOn)strike=Math.exp(-fr*T.strikeK);
  if(sec?.verb==='free'){const bar=X.run.free.bars.find(b=>b.sec===sec.i&&now>=b.t0&&now<b.t1);if(bar&&(bar.role==='answer'||bar.role==='mix')){b=bar.role==='mix'?'섞어서 돌려줄게요!':'이렇게요!';eyes='open';mouth='open';const st=Math.floor((X.C.beatAt(now)-bar.b0)/4*bar.steps),hit=(bar.dyn||[]).find(p=>p[0]===st);if(hit){const tt=bar.grid[st];strike=Math.exp(-(now-tt)/.09);}}else if(bar?.role==='play'){eyes='open';}else if(bar?.role==='call'){eyes='open';b='';}}
  if(brk){eyes='closed';b=X.C.stage.guide==='full'?'쉿…':'';}
- if(sec?.verb==='place'&&X.run.finale&&now>=X.run.finale.t){eyes='open';mouth='open';glint=Math.max(0,1-(now-X.run.finale.t)/.8);b=X.run.finale.placeG==='miss'?'':'좋아요!';}
+ const pf=sec?.verb==='place'?X.run.places.find(x=>x.sec===sec.i)?.fin:null;if(pf&&now>=pf.t){eyes='open';mouth='open';glint=Math.max(0,1-(now-pf.t)/.8);b=pf.placeG==='miss'?'':'좋아요!';}
  const ang=T.restDeg*(1-strike)+T.strikeDeg*strike;setT(E.Paw,`rotate(${(X.rm?(strike>.5?T.strikeDeg:T.restDeg):ang).toFixed(1)} 122 250)`);setT(E.Bell,`rotate(${(X.rm||brk?0:7*Math.sin(B*Math.PI)).toFixed(1)} 180 236)`);if(E.DrumHit)E.DrumHit.setAttribute('opacity',(beatOn||sec?.verb==='free'?.9*strike:0).toFixed(2));if(E.Glint)E.Glint.setAttribute('opacity',glint.toFixed(2));
  setT(E.Body,`translate(0 ${(1.5*strike*k).toFixed(2)})`);setT(E.Head,`translate(0 ${(3*strike*k).toFixed(2)})`);for(const [s,id] of [['closed','EyesClosed'],['open','EyesOpen'],['wide','EyesWide']])show(E[id],eyes===s);for(const [s,id] of [['smile','MouthSmile'],['open','MouthOpen']])show(E[id],mouth===s);
  bub(tdBub,b);X.tdState={strike,b};}
-function msFrame(now){const E=X.el.ms,M=X.ms,T=CastTable.master;if(!E||!M)return;let ty=0,rot=0,eyes='narrow',mouth='flat',browL=0,browR=0,scale=1,b='';const F=X.run?.finale;
- if(F&&now>=F.t){const age=now-F.t;scale=X.rm?1:1+(T.zoom-1)*clamp(age/T.zoomSec);eyes='wide';if(age>=T.inspectDelay){if(!M.inspected){M.inspected=true;if(F.react==='nod')M.nodT=now;else if(F.react==='shake')M.shakeT=now;if(F.grade==='금'&&F.placeG!=='miss')liveSound(RemixAudioTable.place.gold);}
+function lastFin(now){const P=X.run?.places;if(!P)return null;let f=null;for(const p of P)if(p.fin&&now>=p.fin.t&&(!f||p.fin.t>=f.t))f=p.fin;return f;}
+function msFrame(now){const E=X.el.ms,M=X.ms,T=CastTable.master;if(!E||!M)return;let ty=0,rot=0,eyes='narrow',mouth='flat',browL=0,browR=0,scale=1,b='';const F=lastFin(now),showF=F&&(F.last||now-F.t<T.inspectDelay+2.4);
+ if(showF){const age=now-F.t;scale=X.rm||!F.last?1:1+(T.zoom-1)*clamp(age/T.zoomSec);eyes='wide';if(age>=T.inspectDelay){if(M.inspected!==F.piece){M.inspected=F.piece;if(F.react==='nod')M.nodT=now;else if(F.react==='shake')M.shakeT=now;if(F.grade==='금'&&F.placeG!=='miss')liveSound(RemixAudioTable.place.gold);}
   b=F.line;if(F.react==='nod'){eyes='closed';mouth='smile';}else if(F.react==='hmm'){eyes='open';mouth='flat';browL=-9;}else{eyes='narrow';mouth='frown';}}}
- const na=now-M.nodT;if(na>=0&&na<T.nodSec)ty=T.nodPx*Math.sin(Math.PI*na/T.nodSec);const ba=now-M.browT;if(ba>=0&&ba<T.browSec&&!(F&&now>=F.t)){browL=-9;browR=3;eyes='open';mouth='frown';}
- const sa=now-M.shakeT;if(sa>=0&&sa<T.shakeSec){rot=T.shakeDeg*Math.sin(sa*22)*Math.exp(-sa*2.5);if(!(F&&now>=F.t))mouth='frown';}
+ const na=now-M.nodT;if(na>=0&&na<T.nodSec)ty=T.nodPx*Math.sin(Math.PI*na/T.nodSec);const ba=now-M.browT;if(ba>=0&&ba<T.browSec&&!showF){browL=-9;browR=3;eyes='open';mouth='frown';}
+ const sa=now-M.shakeT;if(sa>=0&&sa<T.shakeSec){rot=T.shakeDeg*Math.sin(sa*22)*Math.exp(-sa*2.5);if(!showF)mouth='frown';}
  const k=X.rm?CastTable.rmScale:1;setT(E.Head,`translate(0 ${(ty*(X.rm?.4:1)).toFixed(2)}) rotate(${(rot*k).toFixed(2)} 140 130)`);setT(E.Body,`translate(0 ${(X.rm?0:1.2*Math.sin(now*2.2)).toFixed(2)})`);setT(E.BrowL,`translate(0 ${browL}) rotate(${browL?-8:0} 119 70)`);setT(E.BrowR,`translate(0 ${browR})`);
  for(const [s,id] of [['narrow','EyesNarrow'],['open','EyesOpen'],['wide','EyesWide'],['closed','EyesClosed']])show(E[id],eyes===s);for(const [s,id] of [['flat','MouthFlat'],['smile','MouthSmile'],['frown','MouthFrown'],['open','MouthOpen']])show(E[id],mouth===s);
  const tf=scale!==1?`scale(${scale.toFixed(3)})`:'';if(msEl.style.transform!==tf)msEl.style.transform=tf;bub(msBub,b);X.msState={ty,rot,eyes,mouth,scale,b};}
 function draw(now){const C=X.C,B=C.beatAt(now),sec=now<0?C.secs[0]:C.secAt(B);bg(now,sec);
  if(sec.verb==='spin')drawSpin(now,B,sec);else if(spinN&&audio)spinN.g.gain.setTargetAtTime(0,audio.currentTime,.05);
- if(sec.verb==='toss'||X.run.tosses.some(x=>now>=x.tToss-.15&&now<=x.tLand+.9))drawToss(now);if(sec.verb==='poly')drawPoly(now,B,sec);if(sec.verb==='free')drawFree(now,B,sec);if(sec.verb==='place')drawPlace(now,B,sec);else{const pp=preSlide(now);if(pp)drawPlace(now,B,C.secs[pp.p.sec],pp.a);}if(sec.verb==='count'||now<0)drawCount(now,B);
- drawBreak(now,B,sec);drawHud(now,B,sec);const warn=drawWarn(now);drawMeters(now);drawPops(now);drawMarks(now);hhFrame(now,B,sec,warn);tdFrame(now,B,sec);msFrame(now);
+ if(sec.verb==='toss'||X.run.tosses.some(x=>now>=x.tToss-.15&&now<=x.tLand+.9))drawToss(now);if(sec.verb==='poly')drawPoly(now,B,sec);if(sec.verb==='free')drawFree(now,B,sec);if(sec.verb==='place')drawPlace(now,B,sec);else{const pp=preSlide(now);if(pp)drawPlace(now,B,C.secs[pp.p.sec],pp.a);}if(sec.verb==='count'||now<0)drawCount(now,Math.max(-.001,B));
+ drawServed(now);drawSteps(now,sec);drawBreak(now,B,sec);drawHud(now,B,sec);const warn=drawWarn(now);drawMeters(now);drawPops(now);drawMarks(now);hhFrame(now,B,sec,warn);tdFrame(now,B,sec);msFrame(now);
  const o=occlusion(now);if(o){X.occ.n++;if(o.px>X.occ.max)X.occ.max=o.px;for(const h of o.hits)X.occ.hits[h]=(X.occ.hits[h]||0)+1;}}
 
 /* ── 가림 검사: 인물·말풍선 사각형 vs 이 프레임에 그려진 놀이 요소 사각형(논리 좌표) ── */
@@ -2173,7 +2294,10 @@ function playRects(now){const C=X.C,B=C.beatAt(now),sec=now<0?C.secs[0]:C.secAt(
  if(sec.verb==='poly'){const P=U.poly;R('왼손·밥',P.lx-160,P.ly-120,260,250);R('오른손',P.rx-100,P.ry-90,250,190);R('박 줄',P.lx-P.lane.w/2-20,P.ly+P.lane.dy-20,P.lane.w+40,90);if(!sec.leftOnly&&(sec.right||[]).length)R('오른손 고리',P.ring.x-P.ring.r-10,P.ring.y-P.ring.r-10,2*P.ring.r+20,2*P.ring.r+50);}
  if(sec.verb==='free'){const F=U.free,S=F.strip;R('즉흥 줄',S.x-100,F.line.y-24,S.w+100,S.y+2*S.h+S.gap-F.line.y+30);R('즉흥 밥',F.rice.x-90,F.rice.y-60,180,130);R('점수판',F.score.x,F.score.y,300,150);R('패드',960-430,F.padY-10,860,160);}
  if(sec.verb==='place'||preSlide(now)){const P=U.place;R('접시',P.x-210,P.y-80,420,180);R('네타 길',P.from.x-110,P.from.y-60,P.x-P.from.x+260,P.y-P.from.y+60);if(sec.verb==='place')R('완성 글',960-380,P.textY-40,760,80);}
- if(sec.verb==='count')R('카운트',960-140,600-90,280,180);
+ if(sec.verb==='count'||now<0){const cb=C.countBeats||4;if(B<cb-4){const K=U.count;R('과정 안내',K.x,K.y,K.w,K.h);}else R('카운트',960-140,600-90,280,180);}
+ { const T=U.steps,n=L.ProcOrder.length,w=n*T.w+(n-1)*T.gap;R('과정 줄',960-w/2,T.y-T.h/2,w,T.h);}
+ for(const p of servedList(now)){const V=U.served;R('내놓은 접시',V.x+p.piece*V.step,V.y-74,120,140);}
+ if(sec.feel==='break')R('브레이크 글',1220-200,1006-18,400,36);
  for(const p of X.pops)if(now-p.t>=0&&now-p.t<.75)R('판정 글',p.x-p.w/2,p.y-p.size*.7-(X.rm?0:45),p.w,p.size*1.4+(X.rm?0:45));
  return out;}
 function occlusion(now=X.lastNow){if(X.mode!=='play'||!X.C)return null;const A=castRects(),P=playRects(now);let px=0;const hits=[];for(const a of A)for(const p of P){const w=Math.min(a.x+a.w,p.x+p.w)-Math.max(a.x,p.x),h=Math.min(a.y+a.h,p.y+p.h)-Math.max(a.y,p.y);if(w>.5&&h>.5){px+=w*h;hits.push(a.n+'×'+p.n);}}return {px:Math.round(px),hits,cast:A.length,play:P.length};}
@@ -2184,7 +2308,7 @@ function frame(ts){requestAnimationFrame(frame);if(!X.active)return;const dt=ts-
  L.update(X.run,now);schedule();consumeFx(now);if(X.mode!=='play')return;draw(now);}
 
 /* ── 공개(봇·검사) ── */
-const api={ON,X,L,go,begin,toMenu,setActive,songNow,schedule,frameStats,occlusion,tierScores,castRects,playRects,UI:RemixUITable,AUDIO:RemixAudioTable,CAST:CastTable,sushiSvg,
+const api={ON,X,L,go,begin,toMenu,setActive,songNow,schedule,frameStats,occlusion,tierScores,castRects,playRects,UI:RemixUITable,AUDIO:RemixAudioTable,CAST:CastTable,sushiSvg,lastFin,servedList,
  startBot(id,kind,seed=1){X.bot={kind,seed};return go(id);},stats:()=>({...X.stats,voices:X.voices.size,mode:X.mode,stage:X.stageId}),
  progress:()=>JSON.parse(JSON.stringify(X.prog)),setProgress(p){X.prog=p&&p.best?p:{best:{}};saveProg();if(X.mode==='menu')buildMenu();},isOpen,castState:()=>({ms:X.msState,hh:X.hhState,td:X.tdState}),
  /* 출력 시각 검사: 같은 voice()로 드럼을 오프라인 렌더해 박 위 소리의 시작 시각을 잰다(변주 경계 앞뒤 ±2박) */
@@ -2193,7 +2317,7 @@ const api={ON,X,L,go,begin,toMenu,setActive,songNow,schedule,frameStats,occlusio
    const d=(await ctxO.startRendering()).getChannelData(0);for(const k of kicks){const t0=k.t-from+pad;let i=Math.floor((t0-.01)*sr),base=0;for(let j=i-40;j<i;j++)base=Math.max(base,Math.abs(d[j]||0));while(i<d.length&&Math.abs(d[i])<=Math.max(thr,base*1.5))i++;out.push({tr:tr.kind,b:+k.b.toFixed(3),errMs:+((i/sr-t0)*1000).toFixed(3)});}}
   return {thr,n:out.length,maxAbsMs:out.length?Math.max(...out.map(o=>Math.abs(o.errMs))):0,list:out};},
  init(){if(!ON)return;X.prog=loadProg();X.all=query.get('rall')==='1';if(query.get('rreset')==='1'){X.prog={best:{}};saveProg();}X.rm=rmNow();buildDom();setActive(true);requestAnimationFrame(frame);setInterval(()=>{if(X.active&&X.mode==='play')schedule();},RemixAudioTable.intervalMs);
-  const qs=query.get('rstage'),qb=query.get('rbot');if(qs&&stageOf(qs)){if(qb&&L.BotTable[qb])setTimeout(()=>api.startBot(qs,qb,Number(query.get('rseed'))||1),300);else{X.stageId=qs;X.mode='ready';const S=stageOf(qs);startEl.innerHTML=`<div class="rxArt" style="height:220px;margin-top:120px">${sushiSvg(S.neta,{gloss:1}).replace('width="100%" height="100%"','width="352" height="220"')}</div><div class="rxTitle" style="margin-top:10px">${S.name}</div><div class="rxSub">${S.gimmick} · ${S.sub}</div><div class="rxHint" style="margin-top:60px;font-size:34px;color:#FFF3DC">아무 키나 누르거나 클릭하면 시작해요</div>`;startEl.addEventListener('click',()=>go(qs));showPanels();}}}};
+  const qs0=query.get('rstage'),qb=query.get('rbot'),qs=qs0&&stageOf(qs0)?stageOf(qs0).id:null;if(qs){if(qb&&L.BotTable[qb])setTimeout(()=>api.startBot(qs,qb,Number(query.get('rseed'))||1),300);else{X.stageId=qs;X.mode='ready';const S=stageOf(qs);const pr=S.type==='practice';startEl.innerHTML=`<div class="rxArt" style="height:220px;margin-top:110px">${sushiSvg(pr?S.product:S.neta,{gloss:1}).replace('width="100%" height="100%"','width="352" height="220"')}</div><div class="rxTitle" style="margin-top:10px">${stageTag(S)} · ${stageTitle(S)}</div><div class="rxSub">${pr?`이 손놀림은 니기리의 「${S.name}」 과정이에요 — ${PT[S.proc].why}`:`손님 주문 ${L.buildChart(S.id).pieces}점 · 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착`}</div><div class="rxSub">${S.sub}</div><div class="rxHint" style="margin-top:60px;font-size:34px;color:#FFF3DC">아무 키나 누르거나 클릭하면 시작해요</div>`;startEl.addEventListener('click',()=>go(qs));showPanels();}}}};
 if(ON){window.addEventListener('keydown',onKey,true);window.addEventListener('keyup',e=>{if(X.active)e.stopImmediatePropagation();},true);}
 window.__rx=api;return api;})();
 /*REMIX-END*/
