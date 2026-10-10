@@ -1436,7 +1436,8 @@ return api;})();
     실전 — 오늘의 횟감(r1 광어 → r2 연어 → r3 새우 → r4 아나고 → r5 참치 대뱃살, 한 판 = 손님 주문 1~3점, 한 점 = 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착 순서, 착마다 그 횟감이 딱).
    해금(RemixProgress): 연습은 앞 과정을 통과하면 다음 과정 · 실전 첫 판은 연습 다섯 개를 모두 통과해야 · 실전은 앞 판 통과 → 다음 판. 점수 = 과정별(procScores) 평균.
    시간 단위: 곡 시각 t(초, 0 = 카운트인 첫 박) · 박 B(실수, 마디 = 4박). 판정 기준 시각은 모두 timeOf(B) 하나에서 나오고, 오디오 예약도 같은 함수로 만든다(박 ↔ 판정 기준 일치).
-   표: RemixTable · FeelTable · VerbTable · ProcTable · KeySoundTable · CallTable · NetaTable · ProductTable · RemixStageTable · RemixScoreTable · CatLineTable · ProcLineTable · FinaleTable · BotTable  [튜닝] */
+   T73-a: 박 바뀜 예고(TempoCueTable) — 한 마디 전 예고 + 고스트 미리 듣기 · 고양이 시범 · 경계 뒤 2박 적응 구간(창 ×1.6 · 감점 절반) · 가속은 연속 램프 · 첫 등장 카드.
+   표: TempoCueTable · RemixTable · FeelTable · VerbTable · ProcTable · KeySoundTable · CallTable · NetaTable · ProductTable · RemixStageTable · RemixScoreTable · CatLineTable · ProcLineTable · FinaleTable · BotTable  [튜닝] */
 const RemixLogic=(()=>{
 /* 전역 규칙. spin: sampleDiv = 한 박에 위상 표본 몇 번 · lagSec = 표본을 이만큼 늦게 채점(키보드 사이 보간이 끝나도록) · stallGapSec = 입력 간격이 이보다 길면 멈춘 것으로 봄
    perfectMs/zeroMs = 위상 오차(시간 환산)가 perfect 이하면 1, zero 이상이면 0 · speedTol/speedSpan = |log2(속도비)|가 tol 이하면 1, tol+span에서 0 · flat/scatter = 속도비가 이보다 크면 납작 / 작으면 흩어짐
@@ -1449,6 +1450,21 @@ const RemixTable={lookaheadSec:.25,leadInSec:.7,endTailSec:1.2,
  transition:{windowBeats:2,warnBeats:4},
  mkDrum:{strong:1,weak:.55,strongHz:128,weakHz:176},/* 전통 고양이 북 세기(마디 첫 박 / 나머지 정박) */
  grade:[[85,'금'],[70,'은'],[55,'동'],[0,'한 번 더']]};
+/* T73-a 박 바뀜 예고. previewBeats = 변주 경계 몇 박 전부터 예고(한 마디) · basic 판(변주 기초)은 previewBasicBeats(두 마디, 브레이크 복귀만 브레이크 한 마디) · 예고가 겹치면 가까운 경계가 먼저(앞 경계 전에는 시작하지 않음)
+   adapt = 경계부터 beats 박 안 판정 창 × widen · 실수 감점 × penaltyScale(딱 1 · 좋아요 .6 → .8 · 놓침 0 → .5, 회전 q·즉흥 포켓도 같은 식) — 표시 「적응 중」
+   ghost = 예고 마디에 다음 마디 드럼 패턴을 작게 겹쳐 들려줌(하이햇·고스트 칸 → 높은 나무 소리 · 킥 → 낮은 북 · 스네어 → 중간 북, 세기 = 칸 세기 X/x/o × velScale) · 판정 기준은 그대로(소리만)
+   kinds = 예고 종류: name · short(예고 띠 한 줄) · card(처음 나올 때만 한 줄 설명) · say(입소리 — 시범 고양이 말풍선) · cat(시범: hh 힙합 = 앞발 · td 전통 = 북) · ghost(미리 듣기 여부) · first(첫 등장 카드 여부) */
+const TempoCueTable={previewBeats:4,previewBasicBeats:8,basic:['p1'],adapt:{beats:2,widen:1.6,penaltyScale:.5},
+ ghost:{hat:{inst:'tom',hz:760,vel:.7},ghost:{inst:'tom',hz:760,vel:.45},kick:{inst:'tom',hz:240,vel:1},snare:{inst:'tom',hz:380,vel:.85},velScale:{X:1,x:.8,o:.55}},
+ kinds:{
+  swing:{name:'스윙',short:'뒷박이 살짝 늦게 와요',card:'스윙: 뒷박이 살짝 늦게 와요',say:'따라라 따라라',cat:'hh',ghost:true,first:true},
+  half:{name:'하프타임',short:'느긋하게 크게 · 2박에 한 번',card:'하프타임: 박은 그대로, 손은 크게 2박에 한 번 움직여요',say:'쿵 — 짝 —',cat:'td',ghost:true,first:true},
+  double:{name:'더블타임',short:'반 박마다 두 배로',card:'더블타임: 반 박마다 두 배로 바빠져요',say:'따다다다 따다다다',cat:'hh',ghost:true,first:true},
+  triplet:{name:'셋잇단',short:'한 박을 셋으로',card:'셋잇단: 한 박을 셋으로 쪼개요',say:'따다닥 따다닥',cat:'hh',ghost:true,first:true},
+  break:{name:'브레이크',short:'소리가 멈춰도 박은 계속',card:'브레이크: 소리가 멈춰도 박은 마음속으로 계속 세요',say:'하나 둘 셋 넷 (속으로)',cat:'td',ghost:false,first:true},
+  return:{name:'돌아와요',short:'브레이크 끝 · 첫 박에 바로',card:'복귀: 브레이크가 끝나면 첫 박에 바로 들어가요',say:'쉿 … 쿵!',cat:'td',ghost:false,first:true},
+  accel:{name:'빨라져요',short:'두 마디 동안 조금씩 빨라져요',card:'가속: 두 마디에 걸쳐 조금씩 빨라져요',say:'쿵 짝 쿵짝 쿵짝짝',cat:'hh',ghost:false,first:true},
+  straight:{name:'곧은 박',short:'다시 고르게',card:'',say:'톡 톡 톡 톡',cat:'td',ghost:true,first:false}}};
 /* 느낌(음악 변주). swing = 8분 뒷박 위치(.5 = 곧게) · grid = 프리스타일 한 마디 칸 수 · revBeats = 굴리기 한 바퀴가 몇 박 · drums = 한 마디 패턴(X 강 · x 보통 · o 약) */
 const FeelTable={
  straight:{name:'스트레이트',short:'곧은 박',color:'#74C9E6',swing:.5,grid:16,revBeats:1,drums:{kick:'X......x..x.....',snare:'....X.......X...',hat:'x.o.x.o.x.o.x.o.'},bass:[[0,1],[10,.5]]},
@@ -1510,7 +1526,7 @@ const RemixStageTable=[
    SEC('tezu',2,'half',{tier:1,left:H2,line:'하프타임 · 2박마다 A — 느긋하게'}),
    SEC('tezu',2,'straight',{tier:1,line:'다시 박마다 A'}),
    SEC('tezu',1,'break',{tier:1,line:'브레이크! 소리 없이 박마다 A'}),
-   SEC('tezu',1,'straight',{tier:1,line:'돌아와요 · 첫 박!'}),
+   SEC('tezu',2,'straight',{tier:1,line:'돌아와요 · 첫 박부터 다시 박마다 A'}),/* T73-a 1 → 2마디: 더블타임 예고가 두 마디 들어갈 자리 */
    SEC('tezu',3,'double',{tier:2,left:E8,line:'2단계! 더블타임 · 반 박마다 A'}),
    SEC('tezu',2,'straight',{tier:2,line:'다시 박마다 A'}),
    SEC('tezu',1,'break',{tier:2,line:'마지막 브레이크!'}),
@@ -1662,13 +1678,17 @@ function mapFrac(f,feel){const s=FeelTable[feel]?.swing??.5;if(!s||s===.5)return
 function buildChart(stageId){const S=stageRow(stageId);if(!S)throw Error('no stage '+stageId);const secs=[];let beat=0,bpm=S.bpm,prevFeel='straight';
  for(const [i,raw] of S.sections.entries()){const bars=raw.roles?raw.roles.length:raw.bars,nb=bars*4,bpm0=raw.bpm??bpm,bpm1=raw.bpmTo??bpm0;
   const sec={...raw,i,bars,b0:beat,b1:beat+nb,bpm0,bpm1,breakOf:raw.feel==='break'?prevFeel:null};secs.push(sec);beat+=nb;bpm=bpm1;if(raw.feel!=='break'&&raw.feel!=='count')prevFeel=raw.feel;}
- const endBeat=beat,bt=[0];for(const s of secs){const nb=s.b1-s.b0;for(let i=0;i<nb;i++){const b=s.bpm0+(s.bpm1-s.bpm0)*(i/nb);bt.push(bt[bt.length-1]+60/b);}}
+ /* T73-a 가속 = 연속 램프: 구간 안 템포가 박 위치에 따라 bpm0 → bpm1 로 곧게 변함(박마다 계단 없음 · 구간 끝 = 다음 구간 템포). 시각 = ∫60/bpm(b)db = 60·nb/Δ·ln(bpm(b)/bpm0) */
+ const endBeat=beat,bt=[0],ramp=[];for(const s of secs){const nb=s.b1-s.b0,d=s.bpm1-s.bpm0;for(let i=0;i<nb;i++){const r=d?{b0:s.b0,nb,p0:s.bpm0,d}:null;ramp.push(r);bt.push(bt[bt.length-1]+(r?60*nb/d*Math.log((s.bpm0+d*(i+1)/nb)/(s.bpm0+d*i/nb)):60/s.bpm0));}}
+ const rampBpm=(r,B)=>r.p0+r.d*(B-r.b0)/r.nb;
  const secAt=B=>{const b=Math.floor(B+1e-9);for(const s of secs)if(b>=s.b0&&b<s.b1)return s;return b<0?secs[0]:secs[secs.length-1];};
  const beatDur=i=>{i=Math.max(0,Math.min(endBeat-1,i));return bt[i+1]-bt[i];};
- const linTime=B=>{const i=Math.floor(B+1e-9);if(i<0)return B*beatDur(0);if(i>=endBeat)return bt[endBeat]+(B-endBeat)*beatDur(endBeat-1);return bt[i]+(B-i)*(bt[i+1]-bt[i]);};
- const timeOf=B=>{const i=Math.floor(B+1e-9),f=B-i;if(f<1e-9)return linTime(i);const s=secAt(i);return linTime(i)+mapFrac(f,feelOf(s)==='count'?'straight':feelOf(s))*beatDur(i);};
- const beatAt=t=>{if(t<0)return t/beatDur(0);if(t>=bt[endBeat])return endBeat+(t-bt[endBeat])/beatDur(endBeat-1);let lo=0,hi=endBeat;while(hi-lo>1){const m=(lo+hi)>>1;if(bt[m]<=t)lo=m;else hi=m;}return lo+(t-bt[lo])/(bt[lo+1]-bt[lo]);};
- const C={stage:S,secs,endBeat,bt,timeOf,linTime,beatAt,beatDur,secAt,end:bt[endBeat],tosses:[],pulses:[],rights:[],previews:[],places:[],spinSamples:[],freeBars:[],transitions:[],warnings:[],audio:[],lines:[]};
+ const linTime=B=>{const i=Math.floor(B+1e-9);if(i<0)return B*beatDur(0);if(i>=endBeat)return bt[endBeat]+(B-endBeat)*beatDur(endBeat-1);const r=ramp[i];if(r)return bt[i]+60*r.nb/r.d*Math.log(rampBpm(r,B)/rampBpm(r,i));return bt[i]+(B-i)*(bt[i+1]-bt[i]);};
+ const timeAs=(B,feel)=>{const i=Math.floor(B+1e-9),f=B-i;if(f<1e-9)return linTime(i);return linTime(i+mapFrac(f,feel==='count'?'straight':feel));};/* 스윙 사상은 박 안에서 연속 시간 곡선을 따라(가속 박도 같은 식) */
+ const timeOf=B=>{const i=Math.floor(B+1e-9),f=B-i;if(f<1e-9)return linTime(i);return timeAs(B,feelOf(secAt(i)));};
+ const beatAt=t=>{if(t<0)return t/beatDur(0);if(t>=bt[endBeat])return endBeat+(t-bt[endBeat])/beatDur(endBeat-1);let lo=0,hi=endBeat;while(hi-lo>1){const m=(lo+hi)>>1;if(bt[m]<=t)lo=m;else hi=m;}const r=ramp[lo];if(r){const p=rampBpm(r,lo)*Math.exp((t-bt[lo])*r.d/(60*r.nb));return r.b0+(p-r.p0)*r.nb/r.d;}return lo+(t-bt[lo])/(bt[lo+1]-bt[lo]);};
+ const bpmAt=B=>{const i=Math.max(0,Math.min(endBeat-1,Math.floor(B+1e-9))),r=ramp[i];return r?rampBpm(r,Math.max(i,Math.min(i+1,B))):60/beatDur(i);};
+ const C={stage:S,secs,endBeat,bt,timeOf,timeAs,linTime,beatAt,beatDur,bpmAt,secAt,end:bt[endBeat],tosses:[],pulses:[],rights:[],previews:[],places:[],spinSamples:[],freeBars:[],transitions:[],warnings:[],audio:[],lines:[]};
  const W=S.win;
  for(const s of secs){const f=feelOf(s);C.lines.push({t:timeOf(s.b0),sec:s.i,verb:s.verb,line:s.line||'',feel:s.feel});
   if(s.verb==='toss')for(const [k,[a,l]] of (s.tosses||[]).entries()){const tT=timeOf(s.b0+a),tL=timeOf(s.b0+l),T=tL-tT,h=RemixTable.toss.hMin+RemixTable.toss.hSpan*(1-Math.exp(-((T/RemixTable.toss.hTau)**2)));C.tosses.push({id:C.tosses.length,sec:s.i,bToss:s.b0+a,bLand:s.b0+l,tToss:tT,tLand:tL,flightBeats:l-a,flightSec:T,h,obj:'shari',side:k%2?1:-1,feel:f});}
@@ -1681,10 +1701,35 @@ function buildChart(stageId){const S=stageRow(stageId);if(!S)throw Error('no sta
     if(role==='play')bar.callRef=callRef;if(role==='mix'||role==='answer'){bar.from=callRef;if(role==='mix')callRef=bar.id;}C.freeBars.push(bar);}}}
  /* 변주 경계: 느낌이 바뀌거나 가속이 시작되는 곳, 브레이크 시작·끝 */
  for(let i=1;i<secs.length;i++){const a=secs[i-1],b=secs[i];if(a.verb==='count')continue;const fa=a.feel,fb=b.feel,accel=b.bpm1!==b.bpm0;if(fa===fb&&!accel)continue;
-  const kind=fb==='break'?'break':fa==='break'?'return':accel&&fa===fb?'accel':fb;const label=kind==='break'?'브레이크! 박을 마음속으로':kind==='return'?'돌아와요 · 첫 박!':kind==='accel'?'빨라져요!':(FeelTable[fb].name+' — '+FeelTable[fb].short)+(accel?' · 빨라져요!':'');
+  const kind=fb==='break'?'break':fa==='break'?'return':accel&&fa===fb?'accel':fb;const label=kind==='break'?'브레이크! 박을 마음속으로':kind==='return'?(fb!==a.breakOf?`돌아와요 · ${FeelTable[fb].name}!`:'돌아와요 · 첫 박!'):kind==='accel'?'빨라져요!':(FeelTable[fb].name+' — '+FeelTable[fb].short)+(accel?' · 빨라져요!':'');
   const tr={id:C.transitions.length,b:b.b0,t:timeOf(b.b0),kind,label,from:fa,to:fb,accel};C.transitions.push(tr);C.warnings.push({tr:tr.id,tFrom:timeOf(b.b0-RemixTable.transition.warnBeats),tTo:timeOf(b.b0)+beatDur(b.b0)*.9,t:tr.t,label,kind});}
- C.pieces=C.places.length;C.countBeats=secs[0].verb==='count'?secs[0].b1:0;/* T71-a 실전 = 손님 주문 n점(착 n번) · 카운트 = 2마디(첫 마디 과정 안내 · 둘째 마디 하나 둘 셋 넷) */
- buildAudio(C);C.audio.sort((a,b)=>a.t-b.t);return C;}
+ C.pieces=C.places.length;C.countBeats=secs[0].verb==='count'?secs[0].b1:0;
+ buildCues(C);/* T71-a 실전 = 손님 주문 n점(착 n번) · 카운트 = 2마디(첫 마디 과정 안내 · 둘째 마디 하나 둘 셋 넷) */
+ buildAudio(C);buildGhosts(C);C.audio.sort((a,b)=>a.t-b.t);markAdapt(C);return C;}
+/* T73-a 예고 목록(cues): 변주 경계마다 + 카운트 → 첫 구간이 곧은 박이 아니면(예: 모양 잡기 하프 · 아나고 스윙) 시작 예고. 점수용 경계(transitions)는 T71-a 그대로 · 시작 예고는 cueOnly(흐름 점수 없음, 적응 구간만)
+   kind = 화면 종류(브레이크 뒤 다른 느낌이면 그 느낌 — 예: 「돌아와요 → 하프타임」) · b0 = 예고 시작 박(한 마디 전 · 기초 판 두 마디 · 앞 경계·두 번째 카운트 마디보다 앞으로는 안 감) · tAdaptTo = 적응 구간 끝 */
+function buildCues(C){const TC=TempoCueTable,K=TC.kinds,S=C.stage,secs=C.secs,src=[];
+ const s1=secs[1];if(s1&&secs[0].verb==='count'&&s1.feel!=='straight')src.push({tr:null,b:s1.b0,show:s1.feel,from:'count',to:s1.feel,accel:s1.bpm1!==s1.bpm0,ret:false,cueOnly:true});
+ for(const tr of C.transitions){const sec=C.secAt(tr.b),pv=C.secAt(tr.b-1),ret=tr.kind==='return',show=ret?(sec.feel!==pv.breakOf&&K[sec.feel]?sec.feel:'return'):tr.kind;src.push({tr:tr.id,b:tr.b,show,from:tr.from,to:tr.to,accel:tr.accel,ret,cueOnly:false});}
+ src.sort((a,b)=>a.b-b.b);C.cues=[];let prevB=C.countBeats?C.countBeats-4:0;
+ for(const q of src){const sec=C.secAt(q.b),pv=C.secAt(q.b-1),afterBreak=pv.feel==='break',want=q.b-(TC.basic.includes(S.id)&&!afterBreak?TC.previewBasicBeats:TC.previewBeats),b0=Math.max(want,prevB),k=K[q.show]||K.straight;
+  const name=q.ret&&q.show!=='return'?`돌아와요 → ${k.name}`:q.accel&&q.show!=='accel'?`${k.name} · 빨라져요`:k.name;
+  const ghost=!!k.ghost&&!(q.accel&&q.from===q.to)&&sec.feel!=='break';
+  C.cues.push({id:C.cues.length,tr:q.tr,b:q.b,t:C.timeOf(q.b),b0,tFrom:C.timeOf(b0),tAdaptTo:C.timeOf(q.b+TC.adapt.beats),kind:q.show,name,short:q.accel&&q.show!=='accel'?K.accel.short:k.short,say:q.accel&&q.show!=='accel'?k.say+' · 점점 빨리':k.say,cat:k.cat,from:q.from,to:q.to,accel:q.accel,ret:q.ret,cueOnly:q.cueOnly,ghost,
+   nextProc:sec.proc!==pv.proc?sec.proc:null,nextLine:sec.line||'',targetFeel:sec.feel==='break'?'break':feelOf(sec),cards:[q.show,q.accel&&q.show!=='accel'?'accel':null].filter(x=>x&&K[x]&&K[x].first)});
+  prevB=q.b;}}
+/* 고스트(미리 듣기): 예고 마디마다 다음 마디(경계 첫 마디)의 실제 드럼 칸(FeelTable drums)을 그 느낌의 스윙 사상으로 옮겨 작게. 브레이크 구간 위에는 얹지 않음(소리 없는 박 지키기) */
+function buildGhosts(C){const G=TempoCueTable.ghost;for(const q of C.cues){if(!q.ghost)continue;const F=FeelTable[q.targetFeel];
+ for(let B0=q.b-4;B0>=q.b0-1e-9;B0-=4){if(C.secAt(B0).feel==='break')continue;for(const [inst,pat] of Object.entries(F.drums||{})){const g=G[inst];if(!g)continue;const n=pat.length;for(let j=0;j<n;j++){const ch=pat[j];if(ch==='.')continue;const B=B0+4*j/n;
+   C.audio.push({t:C.timeAs(B,q.targetFeel),b:B,inst:g.inst,vel:g.vel*(G.velScale[ch]??.6),o:{hz:g.hz},kind:'ghost',gf:q.targetFeel,src:inst,ch,cue:q.id,cat:q.cat});}}}}}
+/* 적응 구간: 경계 박부터 adapt.beats 박 안에 기준 시각이 있는 판정 대상에 adapt(예고 번호) 표시 → 창 넓힘·감점 절반 */
+function adaptAt(C,t){for(const q of C.cues)if(t>=q.t-1e-6&&t<q.tAdaptTo-1e-6)return q.id;return null;}
+function markAdapt(C){for(const x of C.tosses){const a=adaptAt(C,x.tLand);if(a!=null)x.adapt=a;}for(const L of [C.pulses,C.rights,C.places,C.spinSamples])for(const x of L){const a=adaptAt(C,x.t);if(a!=null)x.adapt=a;}}
+const wk=x=>x&&x.adapt!=null?TempoCueTable.adapt.widen:1;
+/* 판정 하나의 점수 값(딱 1 · 좋아요 .6 · 놓침 0) — 적응 구간이면 감점 절반 */
+function itemValue(x){const v=gval(x.res?.g||'miss');return x.adapt!=null?1-(1-v)*TempoCueTable.adapt.penaltyScale:v;}
+/* 첫 등장 카드: 이 판 예고 중 아직 본 적 없는 종류가 처음 나오는 곳만(seen = 이미 본 종류 목록, 브라우저 저장) → {예고 번호: 종류} */
+function cueCards(C,seen=[]){const S=new Set(seen),out={};for(const q of C.cues){const k=q.cards.find(x=>!S.has(x));if(k){out[q.id]=k;S.add(k);}}return out;}
 
 /* 오디오 사건(드럼·베이스·코드·토스 휙·고양이 시범·콜·스크래치 예고·크래시). inst = groove voice() 악기, word = 손 단어 소리. 브레이크 = 드럼·베이스·코드 없음 */
 function buildAudio(C){const A=C.audio,chords=['i','VI','iv','v'],roots=[0,-4,5,7];let barNo=0;
@@ -1715,14 +1760,14 @@ function input(run,ev){const C=run.C,W=C.stage.win,t=ev.t;
   if(S.lastA==null){th=last.th+wrapHalf((ev.a-last.th)/TAU)*TAU;}else th=last.th+wrapHalf((ev.a-S.lastA)/TAU)*TAU;S.lastA=ev.a;pushPath(run,t,th,'mouse');return {kind:'spin'};}
  const k=ev.key;
  if(k==='Up'||k==='Right'||k==='Down'||k==='Left'){const q={Up:0,Right:1,Down:2,Left:3}[k],S=run.spin,last=S.path.length?S.path[S.path.length-1].th:0;let d=(((q*TAU/4-last)%TAU)+TAU)%TAU;if(d>Math.PI+1e-9)d-=TAU;const th=last+d;/* 가까운 쪽으로(반시계 키 = 뒤로), 맞은편 = 앞으로 반 바퀴 */pushPath(run,t,th,'key');return {kind:'spin'};}
- if(k==='Space'){const c=nearest(run.tosses,t,'tLand',W.catchOkMs);if(c){const err=(t-c.tLand)*1000;c.res={err,g:grade(err,W.catchPerfectMs,W.catchOkMs),t};fx(run,{type:'catch',id:c.id,g:c.res.g,err,t});return {kind:'catch',g:c.res.g,err};}
-  const p=nearest(run.places,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};if(!p.fin){p.fin=finaleOf(run,p);run.finale=p.fin;}fx(run,{type:'place',id:p.id,g:p.res.g,err,t,finale:p.fin});return {kind:'place',g:p.res.g,err};}
+ if(k==='Space'){const c=nearest(run.tosses,t,'tLand',W.catchOkMs);if(c){const err=(t-c.tLand)*1000;c.res={err,g:grade(err,W.catchPerfectMs*wk(c),W.catchOkMs*wk(c)),t};fx(run,{type:'catch',id:c.id,g:c.res.g,err,t,adapt:c.adapt!=null});return {kind:'catch',g:c.res.g,err,adapt:c.adapt!=null};}
+  const p=nearest(run.places,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs*wk(p),W.okMs*wk(p)),t};if(!p.fin){p.fin=finaleOf(run,p);run.finale=p.fin;}fx(run,{type:'place',id:p.id,g:p.res.g,err,t,finale:p.fin,adapt:p.adapt!=null});return {kind:'place',g:p.res.g,err,adapt:p.adapt!=null};}
   run.stray++;fx(run,{type:'whiff',t});return {kind:'stray'};}
- if(k==='A'){const p=nearest(run.pulses,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};fx(run,{type:'pulse',id:p.id,g:p.res.g,err,t});return {kind:'pulse',g:p.res.g,err};}}
- if(k==='L'){const p=nearest(run.rights,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs,W.okMs),t};fx(run,{type:'right',id:p.id,g:p.res.g,err,t});return {kind:'right',g:p.res.g,err};}}
+ if(k==='A'){const p=nearest(run.pulses,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs*wk(p),W.okMs*wk(p)),t};fx(run,{type:'pulse',id:p.id,g:p.res.g,err,t,adapt:p.adapt!=null});return {kind:'pulse',g:p.res.g,err,adapt:p.adapt!=null};}}
+ if(k==='L'){const p=nearest(run.rights,t,'t',W.okMs);if(p){const err=(t-p.t)*1000;p.res={err,g:grade(err,W.perfectMs*wk(p),W.okMs*wk(p)),t};fx(run,{type:'right',id:p.id,g:p.res.g,err,t,adapt:p.adapt!=null});return {kind:'right',g:p.res.g,err,adapt:p.adapt!=null};}}
  if(KeySoundTable[k]){const h=freeHit(run,k,t);if(h)return h;run.stray++;return {kind:'stray'};}
  return null;}
-function nearest(list,t,field,okMs){let best=null,bd=1e9;for(const x of list){if(x.res)continue;const d=Math.abs(t-x[field])*1000;if(d-1e-6<=okMs&&d<bd){bd=d;best=x;}}return best;}
+function nearest(list,t,field,okMs){let best=null,bd=1e9;for(const x of list){if(x.res)continue;const d=Math.abs(t-x[field])*1000;if(d-1e-6<=okMs*wk(x)&&d<bd){bd=d;best=x;}}return best;}/* T73-a: 적응 구간 대상은 창 × widen */
 function fx(run,e){run.fx.push(e);if(run.fx.length>4000)run.fx.splice(0,2000);}
 function pushPath(run,t,th,src){const P=run.spin.path;if(P.length&&t<P[P.length-1].t)t=P[P.length-1].t;P.push({t,th,src});const prev=P.length>1?P[P.length-2].th:th;if(Math.floor(th/TAU)>Math.floor(prev/TAU)||src==='key'&&Math.abs(((th%TAU)+TAU)%TAU)<1e-6&&th>prev){run.spin.cross.push(t);fx(run,{type:'top',t});}}
 function thetaAt(run,t){const P=run.spin.path;if(!P.length)return null;if(t<=P[0].t)return P[0].th;const L=P[P.length-1];if(t>=L.t)return L.th;let lo=0,hi=P.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(P[m].t<=t)lo=m;else hi=m;}const a=P[lo],b=P[hi],gap=b.t-a.t;if(gap<=1e-9)return b.th;
@@ -1730,15 +1775,16 @@ function thetaAt(run,t){const P=run.spin.path;if(!P.length)return null;if(t<=P[0
 /* 회전 표본 하나 채점: 위상(박마다 위를 지나는가) × 속도(한 바퀴 = revBeats 박) */
 function spinSample(run,s){const C=run.C,R=RemixTable.spin,th=thetaAt(run,s.t),bd=C.beatDur(Math.floor(s.b)),wT=TAU/(s.rev*bd);
  if(th==null)return {...s,q:0,errMs:null,ratio:0,state:'idle'};const w=R.speedWinSec,th1=thetaAt(run,s.t+w/2),th0=thetaAt(run,s.t-w/2),ratio=((th1-th0)/w)/wT;
- const phase=wrapHalf(th/TAU-s.b/s.rev),errMs=-phase*s.rev*bd*1000;/* + = 박보다 늦음(키 판정과 같은 부호) */const pq=clamp((R.zeroMs-Math.abs(errMs))/(R.zeroMs-R.perfectMs)),sq=ratio<=0?0:clamp(1-(Math.abs(Math.log2(ratio))-R.speedTol)/R.speedSpan);
- const state=ratio>R.flatRatio?'flat':ratio<R.scatterRatio?'scatter':'good';return {...s,q:pq*sq,pq,sq,errMs,ratio,state};}
+ const phase=wrapHalf(th/TAU-s.b/s.rev),errMs=-phase*s.rev*bd*1000;/* + = 박보다 늦음(키 판정과 같은 부호) */const k=wk(s),pq=clamp((R.zeroMs*k-Math.abs(errMs))/((R.zeroMs-R.perfectMs)*k)),sq=ratio<=0?0:clamp(1-(Math.abs(Math.log2(ratio))-R.speedTol)/R.speedSpan);
+ const state=ratio>R.flatRatio?'flat':ratio<R.scatterRatio?'scatter':'good',q0=pq*sq,q=s.adapt!=null?1-(1-q0)*TempoCueTable.adapt.penaltyScale:q0;return {...s,q,q0,pq,sq,errMs,ratio,state};}
 /* 프리스타일 */
 function freeHit(run,k,t){const R=RemixTable.free,early=R.assignEarlyMs/1000;for(const bar of run.free.bars){if(bar.role!=='play')continue;if(t<bar.t0-early||t>=bar.t1-early)continue;
-  let j=0,bd=1e9;for(let i=0;i<bar.grid.length;i++){const d=Math.abs(t-bar.grid[i]);if(d<bd){bd=d;j=i;}}j=Math.min(j,bar.steps-1);const err=(t-bar.grid[j])*1000,snd=KeySoundTable[k].snd;bar.hits.push({t,k,snd,step:j,err});fx(run,{type:'free',bar:bar.id,k,snd,step:j,err,t});return {kind:'free',bar:bar.id,step:j,err};}
+  let j=0,bd=1e9;for(let i=0;i<bar.grid.length;i++){const d=Math.abs(t-bar.grid[i]);if(d<bd){bd=d;j=i;}}j=Math.min(j,bar.steps-1);const err=(t-bar.grid[j])*1000,snd=KeySoundTable[k].snd;const ad=adaptAt(run.C,bar.grid[j]);bar.hits.push({t,k,snd,step:j,err,...(ad!=null?{adapt:ad}:{})});fx(run,{type:'free',bar:bar.id,k,snd,step:j,err,t,adapt:ad!=null});return {kind:'free',bar:bar.id,step:j,err};}
  return null;}
+function pocketOf(h){const R=RemixTable.free,k=wk(h),q=clamp((R.pocketZeroMs*k-Math.abs(h.err))/((R.pocketZeroMs-R.pocketPerfectMs)*k));return h.adapt!=null?1-(1-q)*TempoCueTable.adapt.penaltyScale:q;}/* T73-a: 즉흥 칸 하나의 포켓(적응 구간이면 창 넓힘·감점 절반) */
 function jaccard(a,b){const A=new Set(a),B=new Set(b);if(!A.size&&!B.size)return 1;let i=0;for(const x of A)if(B.has(x))i++;return i/(A.size+B.size-i);}
 function scoreFreeBar(hits,steps,callPattern,prevPattern){const R=RemixTable.free;if(!hits.length)return {pocket:0,diversity:0,response:0,density:0,score:0,sim:0,n:0,pattern:[],flags:['empty']};
- const pocket=mean(hits.map(h=>clamp((R.pocketZeroMs-Math.abs(h.err))/(R.pocketZeroMs-R.pocketPerfectMs))));
+ const pocket=mean(hits.map(pocketOf));
  const pat=[...new Set(hits.map(h=>h.step+':'+h.snd))].map(x=>{const [s,n]=x.split(':');return [Number(s),n];}).sort((a,b)=>a[0]-b[0]);
  const sounds=new Set(hits.map(h=>h.snd)),cnt={};for(const h of hits)cnt[h.snd]=(cnt[h.snd]||0)+1;const maxFrac=Math.max(...Object.values(cnt))/hits.length;
  const on=[...new Set(pat.map(p=>p[0]))].sort((a,b)=>a-b),ioi=new Set();for(let i=0;i<on.length;i++)ioi.add(i+1<on.length?on[i+1]-on[i]:steps-on[i]+on[0]);
@@ -1756,8 +1802,8 @@ function patternOf(run,id){const b=run.free.bars[id];return b?(b.role==='call'?b
 
 /* 시간 진행: 놓친 토스·펄스·오른손·놓기 확정, 회전 표본(늦춰서), 프리스타일 마디 채점, 고양이 섞기 */
 function update(run,t){const C=run.C,W=C.stage.win,R=RemixTable;run.t=t;
- for(const x of run.tosses)if(!x.res&&t>x.tLand+W.catchOkMs/1000){x.res={err:null,g:'miss',t};fx(run,{type:'drop',id:x.id,g:'miss',t});}
- for(const [list,type] of [[run.pulses,'pulse'],[run.rights,'right'],[run.places,'place']])for(const x of list)if(!x.res&&t>x.t+W.okMs/1000){x.res={err:null,g:'miss',t};if(type==='place'&&!x.fin){x.fin=finaleOf(run,x);run.finale=x.fin;}fx(run,{type,id:x.id,g:'miss',t,finale:type==='place'?x.fin:undefined});}
+ for(const x of run.tosses)if(!x.res&&t>x.tLand+W.catchOkMs*wk(x)/1000){x.res={err:null,g:'miss',t};fx(run,{type:'drop',id:x.id,g:'miss',t,adapt:x.adapt!=null});}
+ for(const [list,type] of [[run.pulses,'pulse'],[run.rights,'right'],[run.places,'place']])for(const x of list)if(!x.res&&t>x.t+W.okMs*wk(x)/1000){x.res={err:null,g:'miss',t};if(type==='place'&&!x.fin){x.fin=finaleOf(run,x);run.finale=x.fin;}fx(run,{type,id:x.id,g:'miss',t,finale:type==='place'?x.fin:undefined,adapt:x.adapt!=null});}
  const S=run.spin;while(S.next<C.spinSamples.length&&C.spinSamples[S.next].t<=t-R.spin.lagSec){const r=spinSample(run,C.spinSamples[S.next++]);S.samples.push(r);if(r.state==='flat')S.flat++;if(r.state==='scatter')S.scatter++;}
  if(S.path.length>400){const cut=t-R.spin.pruneSec;let n=0;while(n<S.path.length-2&&S.path[n+1].t<cut)n++;if(n>0)S.path.splice(0,n);}
  const bars=run.free.bars;for(const bar of bars){if(bar.role==='play'&&bar.score==null&&t>=bar.t1+.1){const prev=[...bars].reverse().find(b=>b.role==='play'&&b.id<bar.id&&b.score);bar.score=scoreFreeBar(bar.hits,bar.steps,patternOf(run,bar.callRef),prev?prev.score.pattern:null);fx(run,{type:'freeBar',bar:bar.id,score:bar.score,t});}
@@ -1772,8 +1818,8 @@ function update(run,t){const C=run.C,W=C.stage.win,R=RemixTable;run.t=t;
    maxSec = 이 구간까지만(실전 중간 착의 「지금까지」 검수) */
 function verbScore(run,verb,ids){const inn=x=>!ids||ids.has(x.sec);
  if(verb==='spin'){const s=run.spin.samples.filter(inn);if(!s.length)return null;const q=s.map(x=>x.q),er=s.filter(x=>x.errMs!=null).map(x=>Math.abs(x.errMs));return {score:Math.round(mean(q)*100),detail:{samples:q.length,meanAbsErrMs:Math.round(mean(er)),flat:s.filter(x=>x.state==='flat').length,scatter:s.filter(x=>x.state==='scatter').length,meanRatio:+mean(s.map(x=>x.ratio)).toFixed(3)}};}
- if(verb==='toss'){const T=run.tosses.filter(inn);if(!T.length)return null;const n=k=>T.filter(x=>x.res?.g===k).length;return {score:Math.round(mean(T.map(x=>gval(x.res?.g||'miss')))*100),detail:{n:T.length,perfect:n('perfect'),ok:n('ok'),miss:n('miss')}};}
- if(verb==='poly'){const L=run.pulses.filter(inn),Rr=run.rights.filter(inn);if(!L.length&&!Rr.length)return null;const lg=mean(L.map(p=>gval(p.res?.g||'miss'))),errs=L.filter(p=>p.res&&p.res.err!=null).map(p=>p.res.err),sd=std(errs),left=lg*(1-Math.min(RemixTable.poly.sigmaCap,sd/RemixTable.poly.sigmaRef)),right=Rr.length?mean(Rr.map(p=>gval(p.res?.g||'miss'))):left;
+ if(verb==='toss'){const T=run.tosses.filter(inn);if(!T.length)return null;const n=k=>T.filter(x=>x.res?.g===k).length;return {score:Math.round(mean(T.map(itemValue))*100),detail:{n:T.length,perfect:n('perfect'),ok:n('ok'),miss:n('miss')}};}
+ if(verb==='poly'){const L=run.pulses.filter(inn),Rr=run.rights.filter(inn);if(!L.length&&!Rr.length)return null;const lg=mean(L.map(itemValue)),errs=L.filter(p=>p.res&&p.res.err!=null).map(p=>p.res.err),sd=std(errs),left=lg*(1-Math.min(RemixTable.poly.sigmaCap,sd/RemixTable.poly.sigmaRef)),right=Rr.length?mean(Rr.map(itemValue)):left;
   return {score:Math.round((RemixTable.poly.leftW*left+RemixTable.poly.rightW*right)*100),detail:{left:Math.round(left*100),right:Math.round(right*100),leftSigmaMs:Math.round(sd),pulses:L.length,rights:Rr.length,leftMiss:L.filter(p=>p.res?.g==='miss').length,rightMiss:Rr.filter(p=>p.res?.g==='miss').length}};}
  if(verb==='free'){const bars=run.free.bars.filter(b=>b.role==='play'&&inn(b));if(!bars.length)return null;const sc=bars.map(b=>b.score||scoreFreeBar(b.hits,b.steps,patternOf(run,b.callRef),null));
   return {score:Math.round(mean(sc.map(s=>s.score))*100),detail:{bars:sc.length,groove:Math.round(mean(sc.map(s=>s.pocket))*100),diversity:Math.round(mean(sc.map(s=>s.diversity))*100),response:Math.round(mean(sc.map(s=>s.response))*100),hits:sc.reduce((a,s)=>a+s.n,0),spam:sc.some(s=>s.flags.includes('spam')),repeat:sc.filter(s=>s.flags.includes('repeat')).length,variation:sc.filter(s=>s.flags.includes('variation')).length}};}
@@ -1812,9 +1858,9 @@ const RemixProgress={
  next(state){const ids=RemixStageTable.map(s=>s.id);return ids.find(id=>RemixProgress.unlocked(state,id)&&!state?.best?.[id]?.pass)||ids[0];}};
 /* 변주 복귀: 경계 시각부터 windowBeats 박 안의 모든 판정 품질 평균(브레이크 = 소리 없는 구간 안 펄스·회전 포함) */
 function transitionScores(run){const C=run.C,out=[];for(const tr of C.transitions){const a=tr.t-.05,sec=C.secAt(tr.b),span=sec.feel==='break'?(sec.b1-sec.b0):RemixTable.transition.windowBeats,b=C.timeOf(tr.b+span)+.001,q=[];
- for(const x of run.tosses)if(x.tLand>=a&&x.tLand<b)q.push(gval(x.res?.g||'miss'));for(const L of [run.pulses,run.rights,run.places])for(const x of L)if(x.t>=a&&x.t<b)q.push(gval(x.res?.g||'miss'));
- for(const s of run.spin.samples)if(s.t>=a&&s.t<b)q.push(s.q);for(const bar of run.free.bars)for(const h of bar.hits)if(h.t>=a&&h.t<b)q.push(clamp((RemixTable.free.pocketZeroMs-Math.abs(h.err))/(RemixTable.free.pocketZeroMs-RemixTable.free.pocketPerfectMs)));
- if(sec.feel==='break'){const nb=C.secs[sec.i+1];if(nb)for(const L of [run.pulses,run.places,run.rights])for(const x of L)if(x.b>=nb.b0&&x.b<nb.b0+1)q.push(gval(x.res?.g||'miss'));}
+ for(const x of run.tosses)if(x.tLand>=a&&x.tLand<b)q.push(itemValue(x));for(const L of [run.pulses,run.rights,run.places])for(const x of L)if(x.t>=a&&x.t<b)q.push(itemValue(x));
+ for(const s of run.spin.samples)if(s.t>=a&&s.t<b)q.push(s.q);for(const bar of run.free.bars)for(const h of bar.hits)if(h.t>=a&&h.t<b)q.push(pocketOf(h));
+ if(sec.feel==='break'){const nb=C.secs[sec.i+1];if(nb)for(const L of [run.pulses,run.places,run.rights])for(const x of L)if(x.b>=nb.b0&&x.b<nb.b0+1)q.push(itemValue(x));}
  if(q.length)out.push({id:tr.id,kind:tr.kind,b:tr.b,n:q.length,q:mean(q)});}return out;}
 
 /* ── 봇: 같은 악보를 읽어 입력 목록을 만든다(사람이 아니라 검증용) ── */
@@ -1839,7 +1885,7 @@ function botEvents(C,kind,seed=1){const B=BotTable[kind],r=rngOf(seed*7919+kind.
  ev.sort((a,b)=>a.t-b.t);return ev;}
 /* 가상 시계로 한 판 끝까지(오디오·화면 없음) */
 function simRun(stageId,kind,seed=1,dt=1/120){const C=buildChart(stageId),run=makeRun(C),ev=botEvents(C,kind,seed);let i=0;for(let t=-.5;!run.done;t+=dt){while(i<ev.length&&ev[i].t<=t)input(run,ev[i++]);update(run,t);if(t>C.end+10)break;}return {run,result:run.result};}
-return {RemixTable,FeelTable,VerbTable,ProcTable,ProcOrder,ProductTable,ProcLineTable,KeySoundTable,SoundKey,CallTable,NetaTable,RemixStageTable,RemixScoreTable,CatLineTable,FinaleTable,RemixProgress,BotTable,finaleOf,flushSpin,stageRow,verbScore,procScores,pieceScores,
+return {TempoCueTable,itemValue,adaptAt,cueCards,pocketOf,RemixTable,FeelTable,VerbTable,ProcTable,ProcOrder,ProductTable,ProcLineTable,KeySoundTable,SoundKey,CallTable,NetaTable,RemixStageTable,RemixScoreTable,CatLineTable,FinaleTable,RemixProgress,BotTable,finaleOf,flushSpin,stageRow,verbScore,procScores,pieceScores,
  buildChart,makeRun,input,update,results,thetaAt,spinSample,scoreFreeBar,jaccard,mixPattern,transitionScores,botEvents,simRun,grade,mapFrac,feelOf,rngOf};})();
 /*REMIX-LOGIC-END*/
 /*REMIX-BEGIN*/
@@ -1853,6 +1899,8 @@ return {RemixTable,FeelTable,VerbTable,ProcTable,ProcOrder,ProductTable,ProcLine
    기존 블록과 닿는 곳: CORE의 audio(AudioContext)·unlockAudio() · GROOVE G.ext(voice·makeBus·noiseBuf) · PATAPON api.ext(wordVoice) · VIEW2D가 그린 #roomBackdrop(배경 그림 재사용).
    입력은 창 캡처 단계에서 먼저 받아 리믹스가 켜져 있으면 기존 블록으로 넘기지 않는다. ?remix=0 → 이 블록이 아무것도 만들지 않음(patapon2d와 같은 동작).
    시계: 곡 시각 = 성능 시계 + (오디오 출력 시각 − 성능 시각, getOutputTimestamp 지수 평균) − t0. 소리 예약 = t0 + 악보 시각(같은 timeOf) → 들리는 박 = 판정 기준 박.
+   T73-a 박 바뀜 예고: 왼쪽 위 예고 띠(「다음 마디 · 스윙」 + 남은 박 4·3·2·1 박마다 펄스 + 처음 나오는 변주는 한 줄 카드) · 그 아래 박 줄(지금 박 1박 전 ~ 7박 뒤, 다음 마디 드럼 칸·손 칸이 그 느낌 색으로 미리 보이고 경계선·적응 구간 표시)
+   · 예고 마디에 고스트(다음 박 드럼을 작게 — 로직 buildGhosts) · 시범 고양이(힙합 = 스윙·더블·셋잇단·가속은 앞발 · 전통 = 하프·브레이크·복귀는 북) · 경계 뒤 2박 「적응 중」.
    표: RemixUITable · RemixAudioTable · CastTable · NetaArtTable · ProductArtTable  [튜닝] */
 const Remix=(()=>{
 const ON=query.get('remix')!=='0',L=RemixLogic;
@@ -1865,7 +1913,8 @@ const RemixUITable={
  place:{x:960,y:800,from:{x:620,y:520},hoverDy:-120,landDy:-38,textY:430,r0:250},
  meters:{x:28,w:420,row:40,bottom:1052},
  hud:{bar:{x:478,y:14,w:964,h:30},line:{y:356,size:30}},
- warn:{x:22,y:112,w:356,h:118},
+ warn:{x:22,y:112,w:356,h:118},/* (T71-a 네온판 — T73-a부터 cue.head가 대신함) */
+ cue:{head:{x:22,y:104,w:660,h:70},lane:{x:22,y:180,w:660,h:50},labelW:118,pulseSec:.22,spanBeats:8,backBeats:1,circle:{r:16,gap:44}},/* T73-a 예고 띠 · 박 줄(시간 축: 지금 1박 전 ~ 7박 뒤, 지금 템포 기준 — 빨라지면 칸이 촘촘해짐) · pulseSec = 박마다 펄스 길이 */
  chars:{master:{x:820,y:58,w:280,h:250},hh:{x:24,y:292,w:340,h:410},td:{x:1556,y:292,w:340,h:410}},
  bubbles:{master:{left:1118,top:118},hh:{left:40,top:234},td:{right:24,top:234}},
  marks:{x:1160,y:236,rowX:1132,rowY:292,rowStep:26,rowN:8},
@@ -1881,7 +1930,7 @@ const RemixAudioTable={busGain:.55,wordGain:.95,liveWordGain:.85,spinNoise:{hz:[
 const CastTable={master:{nodSec:.35,nodPx:7,shakeSec:1,shakeDeg:9,browSec:.6,nodGap:.45,zoom:1.1,zoomSec:.25,inspectDelay:.45,markSec:.9,spinJudgeEvery:8},hh:{kickTau:.14,beckonDeg:30,bobPx:4},td:{strikeK:7,strikeDeg:-30,restDeg:4},rmScale:.15};
 const C0=RemixUITable.colors;
 const X={active:false,mode:'menu',stageId:null,C:null,run:null,clock:{audio:false,t0:0,off:null,offRaw:0,p0:0},sched:{i:0,d:0},voices:new Set(),stats:{made:0,live:0,maxLive:0,late:0,lateMaxMs:0,scheduled:0},log:[],frames:[],offDev:[],fxi:0,pops:[],bot:null,botI:0,lastNow:0,
- disp:{th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null},ms:null,marks:[],meters:null,meterAt:-9,started:0,prog:{best:{}},all:false,rm:false,lineW:900,tdHit:-9,hhHit:-9,occ:{max:0,n:0,hits:{}}};
+ disp:{th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null},ms:null,marks:[],meters:null,meterAt:-9,started:0,prog:{best:{}},all:false,rm:false,lineW:900,tdHit:-9,hhHit:-9,occ:{max:0,n:0,hits:{}},cue:null,cards:{},seenNow:new Set()};
 window.__rxLog=[];const log=(type,d={})=>{window.__rxLog.push({type,at:performance.now(),...d});if(window.__rxLog.length>5000)window.__rxLog.splice(0,1000);};
 let root,stage,cv,ctx,menuEl,resultEl,startEl,backBtn,msEl,hhEl,tdEl,msBub,hhBub,tdBub,bus=null,wordOut=null,spinN=null;
 const gx=()=>window.__groove?.ext,px=()=>window.__pt?.ext;
@@ -2008,7 +2057,7 @@ function track(v,at){if(!v)return;const rec={at,v};X.voices.add(rec);let left=v.
 function voiceAt(ev,at){const g=gx(),p=px();if(!audio||!g||!ensureBus())return;let v=null;if(ev.word){if(p)v=p.wordVoice(audio,wordOut,ev.word,at,{gain:ev.vel??1,len:ev.len});}else v=g.voice(audio,bus.input,ev.inst,at,ev.vel??1,ev.o||{});track(v,at);}
 function liveSound(ev){if(!X.clock.audio||!audio||audio.state!=='running')return;voiceAt({...ev,vel:(ev.vel??1)*RemixAudioTable.liveWordGain},audio.currentTime+.002);}
 function schedule(){if(X.mode!=='play'||!X.clock.audio||!audio||audio.state!=='running')return;const now=audio.currentTime,h=now+RemixAudioTable.lookaheadSec,A=X.C.audio,D=X.run.dyn;
- const go=ev=>{const at=X.clock.t0+ev.t;if(at<now){X.stats.late++;X.stats.lateMaxMs=Math.max(X.stats.lateMaxMs,(now-at)*1000);if(now-at>RemixAudioTable.maxLateSec)return;}voiceAt(ev,Math.max(at,now));X.stats.scheduled++;if(X.log.length<RemixAudioTable.logMax)X.log.push({t:ev.t,b:ev.b,inst:ev.inst||ev.word,kind:ev.kind,at,lead:at-now});};
+ const go=ev=>{const at=X.clock.t0+ev.t;if(at<now){X.stats.late++;X.stats.lateMaxMs=Math.max(X.stats.lateMaxMs,(now-at)*1000);if(now-at>RemixAudioTable.maxLateSec)return;}voiceAt(ev,Math.max(at,now));X.stats.scheduled++;if(X.log.length<RemixAudioTable.logMax)X.log.push({t:ev.t,b:ev.b,inst:ev.inst||ev.word,kind:ev.kind,at,lead:at-now,gf:ev.gf});};
  while(X.sched.i<A.length&&X.clock.t0+A[X.sched.i].t<h)go(A[X.sched.i++]);while(X.sched.d<D.length&&X.clock.t0+D[X.sched.d].t<h)go(D[X.sched.d++]);}
 function cancelAll(){if(!audio)return;const t=audio.currentTime;for(const r of [...X.voices]){try{r.v.out.gain.cancelScheduledValues(0);r.v.out.gain.setValueAtTime(0,t);}catch{}for(const s of r.v.sources)try{s.stop(t+.01);}catch{}}stopSpinNoise();}
 function startSpinNoise(){if(!audio||!gx()||!ensureBus())return;stopSpinNoise();const T=RemixAudioTable.spinNoise,s=audio.createBufferSource();s.buffer=gx().noiseBuf(audio);s.loop=true;const f=audio.createBiquadFilter();f.type='bandpass';f.frequency.value=T.hz[0];f.Q.value=T.q;const g=audio.createGain();g.gain.value=0;s.connect(f);f.connect(g);g.connect(bus.input);s.start();spinN={s,f,g};}
@@ -2033,7 +2082,7 @@ function tryGo(id){const S0=stageOf(id);if(!S0)return;id=S0.id;if(!isOpen(id)){c
 async function go(id){const S0=stageOf(id);if(!S0)return;X.stageId=S0.id;X.mode='starting';showPanels();try{unlockAudio();}catch{}
  if(audio&&audio.state!=='running'){try{await Promise.race([audio.resume(),new Promise(r=>setTimeout(r,400))]);}catch{}}begin();}
 function begin(){cancelAll();X.C=L.buildChart(X.stageId);X.run=L.makeRun(X.C);X.sched={i:0,d:0};X.fxi=0;X.pops=[];X.log=[];X.frames=[];X.offDev=[];X.stats={made:0,live:X.stats.live,maxLive:X.stats.live,late:0,lateMaxMs:0,scheduled:0};X.meters=null;X.meterAt=-9;X.marks=[];X.rm=rmNow();X.tdHit=-9;X.hhHit=-9;X.lastSpinN=0;X.occ={max:0,n:0,hits:{}};
- X.ms={nodT:-9,shakeT:-9,browT:-9,inspected:-1};X.disp={th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null};
+ X.ms={nodT:-9,shakeT:-9,browT:-9,inspected:-1};X.cue=null;X.seenNow=new Set();X.cards=L.cueCards(X.C,X.prog.seen||[]);X.disp={th:0,tilt:0,squash:1,scatter:0,padAt:{},rightAt:-9,leftAt:-9,catHit:-9,catSnd:null};
  if(audio&&audio.state==='running'&&gx()&&px()){X.clock.audio=true;X.clock.off=null;syncOff();X.clock.t0=audio.currentTime+L.RemixTable.leadInSec;ensureBus();startSpinNoise();}else{X.clock.audio=false;X.clock.p0=performance.now()+L.RemixTable.leadInSec*1000;}
  X.botI=0;X.botEv=X.bot?L.botEvents(X.C,X.bot.kind,X.bot.seed):null;X.mode='play';X.started=performance.now();showPanels();log('rx_start',{stage:X.stageId,audio:X.clock.audio,bot:X.bot?.kind||null});}
 function finish(){X.mode='result';stopSpinNoise();const R=X.run.result,nx=nextId(X.stageId),wasOpen=nx?isOpen(nx):false;X.prog=L.RemixProgress.record(X.prog,X.stageId,R);saveProg();R.unlocked=nx&&!wasOpen&&isOpen(nx)?nx:null;
@@ -2102,7 +2151,7 @@ function setActive(on){X.active=on;root.hidden=!on;backBtn.hidden=on;if(!on&&X.m
 function showPanels(){menuEl.hidden=X.mode!=='menu';resultEl.hidden=X.mode!=='result';startEl.hidden=X.mode!=='ready';if(X.mode!=='play')for(const b of [msBub,hhBub,tdBub])b.hidden=true;}
 /* 기믹 판의 단계별 점수(1단계 쉬움 · 2단계 조금 어려움): 그 단계 구간 안 판정 품질 평균 */
 function tierScores(run){const C=run.C,acc={},gv=g=>L.RemixScoreTable[g]??0,add=(sec,q)=>{const t=C.secs[sec]?.tier;if(t)(acc[t]??=[]).push(q);};
- for(const x of run.tosses)add(x.sec,gv(x.res?.g||'miss'));for(const x of [...run.pulses,...run.rights])add(x.sec,gv(x.res?.g||'miss'));for(const s of run.spin.samples)add(s.sec,s.q);for(const b of run.free.bars)if(b.role==='play'&&b.score)add(b.sec,b.score.score);
+ for(const x of run.tosses)add(x.sec,L.itemValue(x));for(const x of [...run.pulses,...run.rights])add(x.sec,L.itemValue(x));for(const s of run.spin.samples)add(s.sec,s.q);for(const b of run.free.bars)if(b.role==='play'&&b.score)add(b.sec,b.score.score);
  return Object.keys(acc).sort().map(t=>({tier:+t,score:Math.round(100*acc[t].reduce((a,b)=>a+b,0)/acc[t].length),n:acc[t].length}));}
 const markOf=v=>v>=85?RemixUITable.marksOf.perfect:v>=55?RemixUITable.marksOf.ok:RemixUITable.marksOf.miss;
 function buildResult(R){const S=stageOf(X.stageId),D=R.procDetail||{},F=R.finale||{},pr=S.type==='practice',U=RemixUITable;
@@ -2160,13 +2209,13 @@ function drawMeters(now){const M=RemixUITable.meters,keys=X.C.stage.procs;if(now
 function popAdd(t,txt,x,y,color,size=40){ctx.font=`900 ${size}px 'Malgun Gothic',sans-serif`;X.pops.push({t,txt,x,y,color,size,w:ctx.measureText(txt).width+size*.3});if(X.pops.length>40)X.pops.shift();}
 function drawPops(now){for(const p of X.pops){const age=now-p.t;if(age<0||age>.75)continue;ctx.globalAlpha=1-age/.75;text(p.txt,p.x,p.y-(X.rm?0:age*60),p.size,p.color,'center',900,'#0A1017');}ctx.globalAlpha=1;X.pops=X.pops.filter(p=>now-p.t<.8);}
 /* 스승 검수: 판정 하나하나를 표시(○△×)하고 끄덕/눈썹 */
-function judge(g,now,quiet){const M=X.ms;X.marks.push({t:now,g});if(X.marks.length>40)X.marks.splice(0,20);if(quiet)return;if(g==='perfect'){if(now-M.nodT>CastTable.master.nodGap)M.nodT=now;}else if(g==='miss')M.browT=now;}
+function judge(g,now,quiet,adapt){const M=X.ms;X.marks.push({t:now,g,adapt:!!adapt});if(X.marks.length>40)X.marks.splice(0,20);if(quiet)return;if(g==='perfect'){if(now-M.nodT>CastTable.master.nodGap)M.nodT=now;}else if(g==='miss')M.browT=now;}
 function consumeFx(now){const F=X.run.fx,U=RemixUITable,J=U.judge;for(;X.fxi<F.length;X.fxi++){const e=F[X.fxi];
- if(e.type==='catch'){popAdd(now,J[e.g][0],U.toss.handX,U.toss.handY-170,J[e.g][1]);judge(e.g,now);}
- else if(e.type==='drop'){popAdd(now,'놓쳤어요',U.toss.handX,U.toss.handY-170,J.miss[1]);judge('miss',now);liveSound({word:RemixAudioTable.drop.word,vel:RemixAudioTable.drop.gain});}
- else if(e.type==='pulse'){const tilt=Math.abs(X.run.tilt)>12&&X.C.secs[X.run.pulses[e.id]?.sec]?.proc!=='tezu';if(e.g!=='perfect'||tilt)popAdd(now,e.g==='miss'?'왼손!':tilt?'기울어요!':J[e.g][0],U.poly.lx,U.poly.ly-200,J[e.g][1],32);judge(e.g,now);}
- else if(e.type==='right'){popAdd(now,J[e.g][0],U.poly.rx,U.poly.ry-190,J[e.g][1],32);judge(e.g,now);}
- else if(e.type==='place'){if(e.g==='miss')liveSound({word:RemixAudioTable.place.miss,vel:1});judge(e.g,now,true);X.landAt=now;}
+ if(e.type==='catch'){popAdd(now,J[e.g][0],U.toss.handX,U.toss.handY-170,J[e.g][1]);judge(e.g,now,false,e.adapt);}
+ else if(e.type==='drop'){popAdd(now,'놓쳤어요',U.toss.handX,U.toss.handY-170,J.miss[1]);judge('miss',now);liveSound({word:RemixAudioTable.drop.word,vel:RemixAudioTable.drop.gain});X.marks[X.marks.length-1].adapt=!!e.adapt;}
+ else if(e.type==='pulse'){const tilt=Math.abs(X.run.tilt)>12&&X.C.secs[X.run.pulses[e.id]?.sec]?.proc!=='tezu';if(e.g!=='perfect'||tilt)popAdd(now,e.g==='miss'?'왼손!':tilt?'기울어요!':J[e.g][0],U.poly.lx,U.poly.ly-200,J[e.g][1],32);judge(e.g,now,false,e.adapt);}
+ else if(e.type==='right'){popAdd(now,J[e.g][0],U.poly.rx,U.poly.ry-190,J[e.g][1],32);judge(e.g,now,false,e.adapt);}
+ else if(e.type==='place'){if(e.g==='miss')liveSound({word:RemixAudioTable.place.miss,vel:1});judge(e.g,now,true,e.adapt);X.landAt=now;}
  else if(e.type==='freeBar'){const s=e.score;popAdd(now,s.flags.includes('spam')?'같은 키만…':s.score>.75?'그루브!':s.score>.5?'좋아요':'더 섞어 봐요',960,U.free.popY,s.score>.75?C0.good:s.score>.5?C0.gold:C0.warn,40);if(s.flags.includes('spam')){X.ms.shakeT=now;X.marks.push({t:now,g:'miss'});}else judge(s.score>.75?'perfect':s.score>.5?'ok':'miss',now);}
  else if(e.type==='mix'){X.tdCue=now;}
  else if(e.type==='top'){if(X.C.secAt(X.C.beatAt(e.t))?.verb==='spin')liveSound({word:RemixAudioTable.topTick.word,vel:RemixAudioTable.topTick.gain});}
@@ -2236,9 +2285,37 @@ function countIntro(){const S=X.C.stage;if(S.type==='practice'){const T=PT[S.pro
  return [`${S.boss?'오마카세 마지막 · ':''}손님 주문 — ${S.name} ${X.C.pieces}점`,`한 점 = 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착`,`연습한 과정을 순서대로 이어서 · 착마다 ${S.name}${josa(S.name,'이','가')} 딱 올라가요`];}
 function drawCount(now,B){const cb=X.C.countBeats||4,i=Math.floor(B)-(cb-4);if(B>=cb)return;if(i<0){const K=RemixUITable.count,[a,b,c]=countIntro();rr(K.x,K.y,K.w,K.h,26,'#0A1017e6',X.C.stage.type==='practice'?C0.sky:C0.gold,5);fitText(a,960,K.y+56,K.w-60,44,X.C.stage.type==='practice'?C0.sky:C0.gold,'center',900);fitText(b,960,K.y+122,K.w-60,28,C0.cream,'center',800);fitText(c,960,K.y+178,K.w-60,25,C0.sub,'center',800);return;}
  const fr=B-Math.floor(B);text(['하나','둘','셋','넷'][i],960,600,150*(1.1-(X.rm?0:.1*fr)),C0.cream,'center',900,'#0A1017');}
-/* 변주 예고판: 왼쪽 힙합 고양이 위 네온판(「스윙 · n박 뒤」) */
-function drawWarn(now){const w=X.C.warnings.find(w=>now>=w.tFrom&&now<w.tTo);if(!w)return null;const W=RemixUITable.warn,left=X.C.beatAt(w.t)-X.C.beatAt(now),blink=X.rm?true:(left%1+1)%1>.5;const col=L.FeelTable[w.kind]?.color||(w.kind==='return'?C0.good:w.kind==='accel'?C0.bad:C0.sky);
- rr(W.x,W.y,W.w,W.h,22,'#0A1017ee',blink?col:col+'88',6);const [a,b]=w.label.split(' — ');fitText(a,W.x+W.w/2,W.y+40,W.w-28,34,col,'center',900);fitText(left>0?`${Math.ceil(left)}박 뒤`+(b?' · '+b:''):'지금!',W.x+W.w/2,W.y+86,W.w-28,22,C0.cream,'center',800);return {w,left};}
+/* T73-a 예고: 지금 보여 줄 예고(pre = 예고 마디 안, 가장 가까운 경계) · 적응 구간(ad = 경계 뒤 2박) · 남은 박 · 첫 등장 카드(보여 주는 순간 「본 종류」로 저장) */
+function cueNow(now){const C=X.C;let pre=null,ad=null;for(const q of C.cues){if(now>=q.tFrom&&now<q.t&&(!pre||q.t<pre.t))pre=q;if(now>=q.t&&now<q.tAdaptTo)ad=q;}const B=C.beatAt(now),card=pre?X.cards[pre.id]||null:null;
+ if(card&&!X.seenNow.has(card)){X.seenNow.add(card);const seen=new Set(X.prog.seen||[]);if(!seen.has(card)){X.prog={...X.prog,seen:[...seen,card]};saveProg();}}return {pre,ad,left:pre?pre.b-B:0,card,B};}
+const cueColor=q=>q.kind==='return'?C0.good:q.kind==='accel'?C0.bad:L.FeelTable[q.kind]?.color||C0.sky;
+const cueRow2=(c,q)=>{const K=L.TempoCueTable.kinds;if(c.pre&&c.card)return K[c.card].card+' — '+K[c.card].say;if(c.pre)return q.short+(q.nextProc?` · 다음 과정 「${procName(q.nextProc)}」`:'');return '적응 중 · 2박 동안 판정이 너그러워요';};
+/* 예고 띠(왼쪽 위): 「다음 마디」 + 이름(그 느낌 색) + 짧은 말 또는 첫 등장 카드 + 남은 박 동그라미 4·3·2·1(박마다 펄스 — 움직임 줄이기면 크기 대신 색만 바뀜) */
+function drawWarn(now){const c=X.cue||cueNow(now),q=c.pre||c.ad;if(!q)return null;const U=RemixUITable.cue,H=U.head,C=X.C,col=cueColor(q),pre=!!c.pre,B=c.B,bi=Math.floor(B),pulse=pre&&c.left<=4?clamp(1-(now-C.timeOf(bi))/U.pulseSec):0,tick=bi%2===0;
+ rr(H.x,H.y,H.w,H.h,18,'#0A1017ee',pre?(X.rm&&tick?C0.cream:col):C0.gold,pre&&!X.rm?4+5*pulse:5);
+ const tag=pre?(c.left>4?'두 마디 뒤':(c.ad?'적응 중 · ':'')+'다음 마디'):'지금!';ctx.font=`900 18px 'Malgun Gothic',sans-serif`;const tw=ctx.measureText(tag).width+22;rr(H.x+12,H.y+10,tw,30,12,pre?col:C0.gold,null);text(tag,H.x+12+tw/2,H.y+26,18,'#0A1017','center',900);
+ const cr=U.circle,cx0=H.x+H.w-26-3*cr.gap;fitText(q.name,H.x+24+tw,H.y+26,cx0-cr.r-16-(H.x+24+tw),32,col,'left',900,'#0A1017');
+ const r2=cueRow2(c,q);if(c.pre&&c.card){rr(H.x+12,H.y+44,52,22,9,C0.gold,null);text('처음',H.x+38,H.y+56,15,'#0A1017','center',900);fitText(r2,H.x+72,H.y+56,H.w-84,19,C0.gold,'left',800);}else fitText(r2,H.x+14,H.y+56,H.w-28,19,pre?C0.cream:C0.gold,'left',800);
+ for(let i=0;i<4;i++){const n=4-i,x=cx0+i*cr.gap,y=H.y+24,on=pre&&c.left<=4&&Math.ceil(c.left-1e-6)===n,past=pre&&c.left<=4&&Math.ceil(c.left-1e-6)<n,rad=cr.r*(on&&!X.rm?1+.35*pulse:1);
+  oval(x,y,rad,rad,on?(X.rm?(tick?C0.cream:col):col):past?'#3E5A60':'#132430',on?C0.cream:'#3E5A60',3);text(String(n),x,y+1,on?20:16,on?'#0A1017':past?'#9DB4B6':'#9DB4B6','center',900);}
+ return {w:q,left:pre?c.left:0,pre:c.pre,ad:c.ad,card:c.card};}
+/* 박 줄: 시간 축(지금 템포로 1박 전 ~ 7박 뒤). 위 = 하이햇 점 · 가운데 = 손 칸(◆, 펄스·오른손·받기·착·회전 12시) · 아래 = 킥(긴 막대)·스네어(짧은 막대). 칸 색 = 그 구간 느낌 색(지금 구간은 크림) · 다른 느낌 구간은 바탕도 그 색 · 브레이크 = 빗금 「쉿」 · 경계 = 굵은 선 + 이름 · 적응 구간 = 아래 금색 띠 */
+function laneSlice(A,t0,t1){let lo=0,hi=A.length;while(lo<hi){const m=(lo+hi)>>1;if(A[m].t<t0)lo=m+1;else hi=m;}const out=[];for(let i=lo;i<A.length&&A[i].t<=t1;i++)out.push(A[i]);return out;}
+function drawLaneIn(r,now,compact){const C=X.C,U=RemixUITable.cue,B=C.beatAt(now),bd=C.beatDur(Math.max(0,Math.floor(B))),span=U.spanBeats*bd,t0=now-U.backBeats*bd,t1=t0+span,xOf=t=>r.x+r.w*(t-t0)/span,cur=C.secAt(Math.max(0,B)),y=f=>r.y+r.h*f;
+ ctx.save();ctx.beginPath();ctx.roundRect(r.x,r.y,r.w,r.h,compact?8:12);ctx.clip();ctx.fillStyle='#0A1017d9';ctx.fillRect(r.x,r.y,r.w,r.h);
+ const feelCol=s=>{const f=s.feel==='break'?'break':s.feel==='count'?'count':L.feelOf(s);return s===cur||f===(cur.feel==='break'?'break':cur.feel==='count'?'count':L.feelOf(cur))?C0.cream:L.FeelTable[f].color;};
+ for(const s of C.secs){const a=C.timeOf(s.b0),b=C.timeOf(s.b1);if(b<t0||a>t1)continue;const xa=xOf(a),xb=xOf(b),col=feelCol(s);if(s.feel==='break'){ctx.fillStyle='#3E5A6066';ctx.fillRect(xa,r.y,xb-xa,r.h);ctx.strokeStyle='#0A101799';ctx.lineWidth=3;for(let k=xa-r.h;k<xb;k+=10){ctx.beginPath();ctx.moveTo(k,r.y+r.h);ctx.lineTo(k+r.h,r.y);ctx.stroke();}if(!compact&&xb-xa>40)text('쉿',(Math.max(xa,r.x)+Math.min(xb,r.x+r.w))/2,y(.5),18,C0.sub,'center',900,'#0A1017');}else if(col!==C0.cream){ctx.fillStyle=col+'2e';ctx.fillRect(xa,r.y,xb-xa,r.h);}}
+ for(let k=Math.floor(C.beatAt(t0));k<=Math.ceil(C.beatAt(t1));k++){const x=xOf(C.timeOf(k));ctx.fillStyle=k%4===0?'#9DB4B666':'#3E5A6088';ctx.fillRect(x-(k%4===0?1:.5),r.y,k%4===0?2:1,r.h);}
+ for(const q of C.cues){if(q.tAdaptTo<t0||q.t>t1)continue;ctx.fillStyle=C0.gold+'99';ctx.fillRect(xOf(q.t),y(.9),xOf(q.tAdaptTo)-xOf(q.t),r.h*.1);}
+ for(const e of laneSlice(C.audio,t0,t1)){if(e.kind!=='drum')continue;const x=xOf(e.t),col=feelCol(C.secAt(e.b));ctx.fillStyle=col;if(e.inst==='kick')ctx.fillRect(x-2.5,y(.58),5,r.h*.3);else if(e.inst==='snare')ctx.fillRect(x-1.5,y(.68),3,r.h*.2);else{ctx.globalAlpha=e.inst==='ghost'?.5:.85;ctx.fillRect(x-1.5,y(.1),3,r.h*.14);ctx.globalAlpha=1;}}
+ const dia=(t,b,s2)=>{const x=xOf(t),col=feelCol(C.secAt(b)),h=compact?5:7;ctx.beginPath();ctx.moveTo(x,y(.4)-h);ctx.lineTo(x+h,y(.4));ctx.lineTo(x,y(.4)+h);ctx.lineTo(x-h,y(.4));ctx.closePath();ctx.fillStyle=s2?col:'#0A1017';ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke();};
+ for(const L2 of [C.pulses,C.rights,C.places])for(const p of laneSlice(L2,t0,t1))dia(p.t,p.b,true);for(const x of C.tosses)if(x.tLand>=t0&&x.tLand<=t1)dia(x.tLand,x.bLand,false);
+ for(const s of C.secs){if(s.verb!=='spin'||C.timeOf(s.b1)<t0||C.timeOf(s.b0)>t1)continue;const rev=L.FeelTable[L.feelOf(s)].revBeats;for(let b=s.b0;b<s.b1;b+=rev){const t=C.timeOf(b);if(t>=t0&&t<=t1)dia(t,b,false);}}
+ for(const q of C.cues){if(q.t<t0||q.t>t1)continue;const x=xOf(q.t),col=cueColor(q);ctx.fillStyle=col;ctx.fillRect(x-2.5,r.y,5,r.h);if(!compact){ctx.font=`900 15px 'Malgun Gothic',sans-serif`;const w=ctx.measureText(q.name).width+12,lx=Math.min(x+4,r.x+r.w-w-2);rr(lx,r.y+2,w,19,7,col,null);text(q.name,lx+w/2,r.y+12,15,'#0A1017','center',900);}}
+ const px=xOf(now);ctx.fillStyle='#0A101766';ctx.fillRect(r.x,r.y,px-r.x,r.h);ctx.fillStyle=C0.cream;ctx.fillRect(px-1.5,r.y,3,r.h);ctx.restore();}
+function drawLane(now){const U=RemixUITable.cue,R=U.lane,c=X.cue,ad=!!c?.ad,lw=U.labelW;rr(R.x,R.y,R.w,R.h,12,'#0A1017cc',ad?C0.gold:'#3E5A60',3);
+ if(ad){rr(R.x+6,R.y+8,lw-14,R.h-16,10,C0.gold,null);text('적응 중',R.x+lw/2-1,R.y+R.h/2+1,19,'#0A1017','center',900);}else{text('박 줄',R.x+lw/2,R.y+16,17,C0.sub,'center',800);const cur=X.C.secAt(Math.max(0,X.C.beatAt(now))),f=cur.feel==='break'?'break':cur.feel==='count'?'count':L.feelOf(cur);fitText(L.FeelTable[f].short,R.x+lw/2,R.y+36,lw-12,15,L.FeelTable[f].color,'center',800);}
+ drawLaneIn({x:R.x+lw,y:R.y+4,w:R.w-lw-6,h:R.h-8},now,false);}
 function drawBreak(now,B,sec){if(sec.feel!=='break')return;text('쉿 — 소리 없이 박을 지켜요',1220,1006,26,C0.sub,'center',800,'#0A1017');}
 /* 스승의 ○△× 줄(검수대 오른쪽): 방금 것은 크게, 지난 8개는 작게 */
 function drawMarks(now){const M=RemixUITable.marks,last=X.marks[X.marks.length-1];if(last&&now-last.t<CastTable.master.markSec){const [s,c]=RemixUITable.marksOf[last.g],age=now-last.t;ctx.globalAlpha=1-age/CastTable.master.markSec;text(s,M.x,M.y-(X.rm?0:age*14),52,c,'center',900,'#0A1017');ctx.globalAlpha=1;}
@@ -2253,21 +2330,23 @@ function hhFrame(now,B,sec,warn){const E=X.el.hh,H=CastTable.hh,k=X.rm?CastTable
  if(sec?.verb==='free'){const bar=X.run.free.bars.find(b=>b.sec===sec.i&&now>=b.t0&&now<b.t1);if(bar?.role==='call'){b='들어 봐요!';mouth='grin';const st=Math.floor((X.C.beatAt(now)-bar.b0)/4*bar.steps),hit=bar.pattern.find(p=>p[0]===st);if(hit){paw=H.beckonDeg*1.4;head=8;}}
   else if(bar?.role==='play'){b='반쵸 차례!';const ha=now-X.disp.catHit;if(ha<.25){paw=H.beckonDeg*(1-ha/.25);eyes='happy';mouth='grin';}}else if(bar){eyes='happy';head=6*Math.sin(B*Math.PI);}}
  if(sec?.verb==='poly'&&!sec.leftOnly&&X.C.previews.length){const pv=X.C.previews.filter(p=>p.sec===sec.i);if(pv.length&&B<pv[pv.length-1].b+.5&&B>=sec.b0){b='오른손은 이렇게!';const near=pv.find(p=>now>=p.t&&now<p.t+.18);if(near){paw=H.beckonDeg*1.5;mouth='grin';}}}
- if(warn){const n=Math.max(1,Math.min(4,Math.ceil(warn.left)));fingers=warn.left>0?n:0;paw=-24;b=warn.left>0?'':'지금!';eyes='wide';mouth='grin';}/* 예고판이 이미 말하므로 말풍선은 「지금!」만 · 남은 박은 손가락 */
+ let demo=0;if(warn){const n=Math.max(1,Math.min(4,Math.ceil(warn.left)));fingers=warn.pre?n:0;paw=-24;b=warn.pre?'':(warn.ad&&B-warn.ad.b<1?'지금!':'');eyes='wide';mouth='grin';
+  if(warn.pre&&warn.pre.cat==='hh'){b=warn.pre.say;const g=lastAudio(now,e=>e.kind==='ghost'&&e.cue===warn.pre.id,160)||(warn.pre.ghost?null:lastAudio(now,e=>e.inst==='kick'||e.inst==='snare'));demo=g?Math.exp(-(now-g.t)/.1):0;paw=-24+(H.beckonDeg+24)*demo;head=6*demo;}}/* T73-a: 예고 마디 = 손가락으로 남은 박 · 힙합 담당 변주(스윙·더블·셋잇단·가속)면 다음 박을 앞발로 먼저 쳐 보이며 입소리 말풍선 */
  if(brk){const i=((Math.floor(B)%4)+4)%4;paw=-24;ears=.3;mouth='o';if(X.C.stage.guide==='full'){fingers=i+1;b=['하나','둘','셋','넷'][i]+'…';}else{b='쉿!';eyes='closed';}}
  if(sec?.verb==='count'){const i=Math.floor(B)-((X.C.countBeats||4)-4);if(i>=0&&i<4){b=['하나!','둘!','셋!','넷!'][i];fingers=i+1;paw=-24;}else if(i<0&&B>=0){b='잘 봐요!';}}
  const pf=sec?.verb==='place'?X.run.places.find(x=>x.sec===sec.i)?.fin:null;if(pf&&now>=pf.t){paw=-40;eyes='happy';mouth='grin';b=pf.placeG==='miss'?'앗!':X.C.stage.type==='practice'?'좋아요!':'착!';}
  setT(E.Body,`translate(0 ${(bob*.4*k).toFixed(2)})`);setT(E.Head,`translate(0 ${(bob*k).toFixed(2)}) rotate(${(head*k).toFixed(2)} 170 150)`);setT(E.Paw,`rotate(${(X.rm?(paw>8?H.beckonDeg:paw<-8?-24:0):paw).toFixed(1)} 262 254)`);setT(E.EarL,`rotate(${(-30*ears).toFixed(1)} 124 96)`);setT(E.EarR,`rotate(${(30*ears).toFixed(1)} 216 96)`);
  for(let i=1;i<=4;i++)show(E['F'+i],fingers>=i);for(const [s,id] of [['open','EyesOpen'],['happy','EyesHappy'],['wide','EyesWide'],['closed','EyesClosed']])show(E[id],eyes===s);for(const [s,id] of [['smile','MouthSmile'],['grin','MouthGrin'],['o','MouthO']])show(E[id],mouth===s);
- bub(hhBub,b);X.hhState={paw,fingers,b};}
+ bub(hhBub,b);X.hhState={paw,fingers,b,demo};}
 function tdFrame(now,B,sec){const E=X.el.td,T=CastTable.td,k=X.rm?CastTable.rmScale:1;if(!E)return;let strike=0,eyes='closed',mouth='smile',b='',glint=0;
  const brk=sec?.feel==='break',fr=((B%1)+1)%1,beatOn=sec&&!brk&&sec.verb!=='free'&&now>=0;if(beatOn)strike=Math.exp(-fr*T.strikeK);
  if(sec?.verb==='free'){const bar=X.run.free.bars.find(b=>b.sec===sec.i&&now>=b.t0&&now<b.t1);if(bar&&(bar.role==='answer'||bar.role==='mix')){b=bar.role==='mix'?'섞어서 돌려줄게요!':'이렇게요!';eyes='open';mouth='open';const st=Math.floor((X.C.beatAt(now)-bar.b0)/4*bar.steps),hit=(bar.dyn||[]).find(p=>p[0]===st);if(hit){const tt=bar.grid[st];strike=Math.exp(-(now-tt)/.09);}}else if(bar?.role==='play'){eyes='open';}else if(bar?.role==='call'){eyes='open';b='';}}
  if(brk){eyes='closed';b=X.C.stage.guide==='full'?'쉿…':'';}
+ let demo=0;const cq=X.cue?.pre;if(cq&&cq.cat==='td'){b=cq.say;eyes='open';const g=lastAudio(now,e=>e.kind==='ghost'&&e.cue===cq.id,160);if(g){demo=Math.exp(-(now-g.t)/.09);strike=Math.max(strike,demo);}else if(!cq.ghost){demo=Math.exp(-fr*T.strikeK);strike=Math.max(strike,.7*demo);}}/* T73-a: 전통 담당 변주(하프·브레이크·복귀·곧은 박)면 다음 박을 북으로 먼저 쳐 보임(브레이크로 가는 예고·브레이크 중 복귀 예고는 소리 없이 북채만) */
  const pf=sec?.verb==='place'?X.run.places.find(x=>x.sec===sec.i)?.fin:null;if(pf&&now>=pf.t){eyes='open';mouth='open';glint=Math.max(0,1-(now-pf.t)/.8);b=pf.placeG==='miss'?'':'좋아요!';}
- const ang=T.restDeg*(1-strike)+T.strikeDeg*strike;setT(E.Paw,`rotate(${(X.rm?(strike>.5?T.strikeDeg:T.restDeg):ang).toFixed(1)} 122 250)`);setT(E.Bell,`rotate(${(X.rm||brk?0:7*Math.sin(B*Math.PI)).toFixed(1)} 180 236)`);if(E.DrumHit)E.DrumHit.setAttribute('opacity',(beatOn||sec?.verb==='free'?.9*strike:0).toFixed(2));if(E.Glint)E.Glint.setAttribute('opacity',glint.toFixed(2));
+ const ang=T.restDeg*(1-strike)+T.strikeDeg*strike;setT(E.Paw,`rotate(${(X.rm?(strike>.5?T.strikeDeg:T.restDeg):ang).toFixed(1)} 122 250)`);setT(E.Bell,`rotate(${(X.rm||brk?0:7*Math.sin(B*Math.PI)).toFixed(1)} 180 236)`);if(E.DrumHit)E.DrumHit.setAttribute('opacity',(beatOn||sec?.verb==='free'||(demo&&cq?.ghost)?.9*strike:0).toFixed(2));if(E.Glint)E.Glint.setAttribute('opacity',glint.toFixed(2));
  setT(E.Body,`translate(0 ${(1.5*strike*k).toFixed(2)})`);setT(E.Head,`translate(0 ${(3*strike*k).toFixed(2)})`);for(const [s,id] of [['closed','EyesClosed'],['open','EyesOpen'],['wide','EyesWide']])show(E[id],eyes===s);for(const [s,id] of [['smile','MouthSmile'],['open','MouthOpen']])show(E[id],mouth===s);
- bub(tdBub,b);X.tdState={strike,b};}
+ bub(tdBub,b);X.tdState={strike,b,demo};}
 function lastFin(now){const P=X.run?.places;if(!P)return null;let f=null;for(const p of P)if(p.fin&&now>=p.fin.t&&(!f||p.fin.t>=f.t))f=p.fin;return f;}
 function msFrame(now){const E=X.el.ms,M=X.ms,T=CastTable.master;if(!E||!M)return;let ty=0,rot=0,eyes='narrow',mouth='flat',browL=0,browR=0,scale=1,b='';const F=lastFin(now),showF=F&&(F.last||now-F.t<T.inspectDelay+2.4);
  if(showF){const age=now-F.t;scale=X.rm||!F.last?1:1+(T.zoom-1)*clamp(age/T.zoomSec);eyes='wide';if(age>=T.inspectDelay){if(M.inspected!==F.piece){M.inspected=F.piece;if(F.react==='nod')M.nodT=now;else if(F.react==='shake')M.shakeT=now;if(F.grade==='금'&&F.placeG!=='miss')liveSound(RemixAudioTable.place.gold);}
@@ -2280,7 +2359,7 @@ function msFrame(now){const E=X.el.ms,M=X.ms,T=CastTable.master;if(!E||!M)return
 function draw(now){const C=X.C,B=C.beatAt(now),sec=now<0?C.secs[0]:C.secAt(B);bg(now,sec);
  if(sec.verb==='spin')drawSpin(now,B,sec);else if(spinN&&audio)spinN.g.gain.setTargetAtTime(0,audio.currentTime,.05);
  if(sec.verb==='toss'||X.run.tosses.some(x=>now>=x.tToss-.15&&now<=x.tLand+.9))drawToss(now);if(sec.verb==='poly')drawPoly(now,B,sec);if(sec.verb==='free')drawFree(now,B,sec);if(sec.verb==='place')drawPlace(now,B,sec);else{const pp=preSlide(now);if(pp)drawPlace(now,B,C.secs[pp.p.sec],pp.a);}if(sec.verb==='count'||now<0)drawCount(now,Math.max(-.001,B));
- drawServed(now);drawSteps(now,sec);drawBreak(now,B,sec);drawHud(now,B,sec);const warn=drawWarn(now);drawMeters(now);drawPops(now);drawMarks(now);hhFrame(now,B,sec,warn);tdFrame(now,B,sec);msFrame(now);
+ drawServed(now);drawSteps(now,sec);drawBreak(now,B,sec);drawHud(now,B,sec);X.cue=cueNow(now);const warn=drawWarn(now);drawLane(now);drawMeters(now);drawPops(now);drawMarks(now);hhFrame(now,B,sec,warn);tdFrame(now,B,sec);msFrame(now);
  const o=occlusion(now);if(o){X.occ.n++;if(o.px>X.occ.max)X.occ.max=o.px;for(const h of o.hits)X.occ.hits[h]=(X.occ.hits[h]||0)+1;}}
 
 /* ── 가림 검사: 인물·말풍선 사각형 vs 이 프레임에 그려진 놀이 요소 사각형(논리 좌표) ── */
@@ -2298,6 +2377,7 @@ function playRects(now){const C=X.C,B=C.beatAt(now),sec=now<0?C.secs[0]:C.secAt(
  { const T=U.steps,n=L.ProcOrder.length,w=n*T.w+(n-1)*T.gap;R('과정 줄',960-w/2,T.y-T.h/2,w,T.h);}
  for(const p of servedList(now)){const V=U.served;R('내놓은 접시',V.x+p.piece*V.step,V.y-74,120,140);}
  if(sec.feel==='break')R('브레이크 글',1220-200,1006-18,400,36);
+ { const Q=U.cue;R('박 줄',Q.lane.x,Q.lane.y,Q.lane.w,Q.lane.h);if(X.cue&&(X.cue.pre||X.cue.ad))R('예고 띠',Q.head.x,Q.head.y,Q.head.w,Q.head.h);}
  for(const p of X.pops)if(now-p.t>=0&&now-p.t<.75)R('판정 글',p.x-p.w/2,p.y-p.size*.7-(X.rm?0:45),p.w,p.size*1.4+(X.rm?0:45));
  return out;}
 function occlusion(now=X.lastNow){if(X.mode!=='play'||!X.C)return null;const A=castRects(),P=playRects(now);let px=0;const hits=[];for(const a of A)for(const p of P){const w=Math.min(a.x+a.w,p.x+p.w)-Math.max(a.x,p.x),h=Math.min(a.y+a.h,p.y+p.h)-Math.max(a.y,p.y);if(w>.5&&h>.5){px+=w*h;hits.push(a.n+'×'+p.n);}}return {px:Math.round(px),hits,cast:A.length,play:P.length};}
@@ -2308,7 +2388,7 @@ function frame(ts){requestAnimationFrame(frame);if(!X.active)return;const dt=ts-
  L.update(X.run,now);schedule();consumeFx(now);if(X.mode!=='play')return;draw(now);}
 
 /* ── 공개(봇·검사) ── */
-const api={ON,X,L,go,begin,toMenu,setActive,songNow,schedule,frameStats,occlusion,tierScores,castRects,playRects,UI:RemixUITable,AUDIO:RemixAudioTable,CAST:CastTable,sushiSvg,lastFin,servedList,
+const api={cueNow,drawLaneIn,ON,X,L,go,begin,toMenu,setActive,songNow,schedule,frameStats,occlusion,tierScores,castRects,playRects,UI:RemixUITable,AUDIO:RemixAudioTable,CAST:CastTable,sushiSvg,lastFin,servedList,
  startBot(id,kind,seed=1){X.bot={kind,seed};return go(id);},stats:()=>({...X.stats,voices:X.voices.size,mode:X.mode,stage:X.stageId}),
  progress:()=>JSON.parse(JSON.stringify(X.prog)),setProgress(p){X.prog=p&&p.best?p:{best:{}};saveProg();if(X.mode==='menu')buildMenu();},isOpen,castState:()=>({ms:X.msState,hh:X.hhState,td:X.tdState}),
  /* 출력 시각 검사: 같은 voice()로 드럼을 오프라인 렌더해 박 위 소리의 시작 시각을 잰다(변주 경계 앞뒤 ±2박) */
