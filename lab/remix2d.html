@@ -1465,18 +1465,18 @@ const TempoCueTable={previewBeats:4,previewBasicBeats:8,basic:['p0','p1'],/* T74
   double:{name:'더블타임',short:'반 박마다 두 배로',card:'더블타임: 반 박마다 두 배로 바빠져요',say:'따다다다 따다다다',cat:'hh',ghost:true,first:true},
   triplet:{name:'셋잇단',short:'한 박을 셋으로',card:'셋잇단: 한 박을 셋으로 쪼개요',say:'따다닥 따다닥',cat:'hh',ghost:true,first:true},
   break:{name:'브레이크',short:'소리가 멈춰도 박은 계속',card:'브레이크: 소리가 멈춰도 박은 마음속으로 계속 세요',say:'하나 둘 셋 넷 (속으로)',cat:'hh',ghost:false,first:true},
-  return:{name:'돌아와요',short:'브레이크 끝 · 첫 박에 바로',card:'복귀: 브레이크가 끝나면 첫 박에 바로 들어가요',say:'쉿 … 쿵!',cat:'hh',ghost:false,first:true},
-  accel:{name:'빨라져요',short:'두 마디 동안 조금씩 빨라져요',card:'가속: 두 마디에 걸쳐 조금씩 빨라져요',say:'쿵 짝 쿵짝 쿵짝짝',cat:'hh',ghost:false,first:true},
+  return:{name:'복귀',short:'브레이크 끝 · 첫 박에 바로',card:'복귀: 브레이크가 끝나면 첫 박에 바로 들어가요',say:'쉿 … 쿵!',cat:'hh',ghost:false,first:true},
+  accel:{name:'가속',short:'두 마디 동안 조금씩 빨라져요',card:'가속: 두 마디에 걸쳐 조금씩 빨라져요',say:'쿵 짝 쿵짝 쿵짝짝',cat:'hh',ghost:false,first:true},
   straight:{name:'곧은 박',short:'다시 고르게',card:'',say:'톡 톡 톡 톡',cat:'hh',ghost:true,first:false},
   proc:{name:'과정 바꾸기',short:'한 마디 뒤 손을 바꿔요',card:'',say:'다음은',cat:'hh',ghost:false,first:false}},/* T77-a 실전: 과정이 바뀌는 곳(박은 그대로)마다 예고 · 경계 뒤 2박 적응 · say 뒤에 다음 과정 이름 */
  procCue:['real']};
 /* 느낌(음악 변주). swing = 8분 뒷박 위치(.5 = 곧게) · grid = 프리스타일 한 마디 칸 수 · revBeats = 굴리기 한 바퀴가 몇 박 · drums = 한 마디 패턴(X 강 · x 보통 · o 약) */
 const FeelTable={
- straight:{name:'스트레이트',short:'곧은 박',color:'#74C9E6',swing:.5,grid:16,revBeats:1,drums:{kick:'X......x..x.....',snare:'....X.......X...',hat:'x.o.x.o.x.o.x.o.'},bass:[[0,1],[10,.5]]},
+ straight:{name:'곧은 박',short:'곧은 박',color:'#74C9E6',swing:.5,grid:16,revBeats:1,drums:{kick:'X......x..x.....',snare:'....X.......X...',hat:'x.o.x.o.x.o.x.o.'},bass:[[0,1],[10,.5]]},
  swing:{name:'스윙',short:'출렁이는 박',color:'#F7B94E',swing:.66,grid:16,revBeats:1,drums:{kick:'X......x..x.....',snare:'....X.......X...',hat:'x.x.x.x.x.x.x.x.',ghost:'.......o.......o'},bass:[[0,1],[10,.5]]},
  half:{name:'하프타임',short:'느긋하게 크게',color:'#7FCB5B',swing:.5,grid:16,revBeats:2,drums:{kick:'X.........x.....',snare:'........X.......',hat:'x.o.x.o.x.o.x.o.'},bass:[[0,2]]},
  double:{name:'더블타임',short:'두 배로 바쁘게',color:'#E8503C',swing:.5,grid:16,revBeats:1,drums:{kick:'X...x...X...x...',snare:'..X...X...X...X.',hat:'xoxoxoxoxoxoxoxo'},bass:[[0,.5],[4,.5],[8,.5],[12,.5]]},
- triplet:{name:'셋잇단',short:'셋으로 쪼개요',color:'#C89BE8',swing:.5,grid:12,revBeats:1,drums:{kick:'X.....x.x...',snare:'...X.....X..',hat:'x.xx.xx.xx.x'},bass:[[0,1],[8,.5]]},
+ triplet:{name:'셋잇단',short:'셋으로 쪼갠 박',color:'#C89BE8',swing:.5,grid:12,revBeats:1,drums:{kick:'X.....x.x...',snare:'...X.....X..',hat:'x.xx.xx.xx.x'},bass:[[0,1],[8,.5]]},
  break:{name:'브레이크',short:'소리 없이 박 유지',color:'#9DB4B6',swing:null,grid:16,revBeats:null,drums:{},bass:[]},
  count:{name:'카운트',short:'하나 둘 셋 넷',color:'#FFF3DC',swing:.5,grid:16,revBeats:1,drums:{kick:'X...............',hat:'x...x...x...x...'},bass:[]}};
 /* 동사 ↔ 요리 동작 1:1 */
@@ -1500,13 +1500,13 @@ const CallTable={
 /* T71-a 니기리 과정 = 기믹(1:1). verb = 그 과정을 연습하는 입력(판정 규칙은 T68-a 동사 그대로) · gimmick = 화면에 쓰는 기믹 이름 · step = 실제 니기리 순서 번호(①~⑥)
    why = 「이 손놀림은 니기리의 ○○ 과정이에요」 다음 줄(왜 이 입력이 그 과정인가) · flow는 구간이 아니라 변주 경계에서 채점(실전 내내 걸침) */
 const ProcTable={
- tezu:{name:'손 적시기',short:'테즈',gimmick:'박 짚기',verb:'poly',icon:'tezu',step:1,color:'#74C9E6',why:'손끝을 물에 적시며 박을 몸에 새겨요 · 음악이 바뀌어도 이 박이 손을 지켜요'},
+ tezu:{name:'손 적시기',short:'테즈',gimmick:'박 짚기',verb:'poly',icon:'tezu',step:1,color:'#74C9E6',why:'손끝을 물에 적시며 박을 몸에 새겨요. 음악이 바뀌어도 이 박이 손을 지켜요'},
  shape:{name:'모양 잡기',short:'모양',gimmick:'굴리기',verb:'spin',icon:'spin',step:2,color:'#F7B94E',why:'떠낸 밥을 손바닥 사이에서 굴려 둥근 타원으로 · 원 그리기 = 손바닥 사이 회전'},
- press:{name:'쥐기',short:'쥐기',gimmick:'양손 폴리',verb:'poly',icon:'poly',step:3,color:'#7FCB5B',why:'왼손은 받치고 오른손 두 손가락이 리듬 있게 눌러 모양을 굳혀요 · 두 손 역할이 달라요'},
- flip:{name:'뒤집기',short:'뒤집기',gimmick:'던지고 받기',verb:'toss',icon:'toss',step:4,color:'#E89A5C',why:'손안에서 한 점을 뒤집어 받아요(고테가에시) · 돌아 떨어지는 순간을 받아요'},
- finish:{name:'다듬기',short:'다듬기',gimmick:'즉흥',verb:'free',icon:'free',step:5,color:'#E8503C',why:'고양이가 보여 준 손질을 내 방식으로 바꿔 모양을 완성해요 · 자유 변형'},
- flow:{name:'흐름 맞추기',short:'흐름',gimmick:'변주 타기',verb:'vary',icon:'vary',step:0,color:'#C89BE8',why:'손님 흐름(스윙·하프·브레이크·가속)이 바뀌어도 손은 박 위에'},
- place:{name:'올리기·내놓기',short:'착',gimmick:'착',verb:'place',icon:'place',step:6,color:'#FFF3DC',why:'마지막 박에 네타를 딱 올려 접시에 내놓아요'}};
+ press:{name:'쥐기',short:'쥐기',gimmick:'양손 폴리',verb:'poly',icon:'poly',step:3,color:'#7FCB5B',why:'왼손은 받치고 오른손 두 손가락이 리듬 있게 눌러 모양을 굳혀요. 두 손 역할이 달라요'},
+ flip:{name:'뒤집기',short:'뒤집기',gimmick:'던지고 받기',verb:'toss',icon:'toss',step:4,color:'#E89A5C',why:'손안에서 한 점을 뒤집어 받아요(고테가에시). 돌아 떨어지는 순간을 받아요'},
+ finish:{name:'다듬기',short:'다듬기',gimmick:'즉흥',verb:'free',icon:'free',step:5,color:'#E8503C',why:'고양이가 보여 준 손질을 내 방식으로 바꿔 모양을 완성해요. 자유 변형'},
+ flow:{name:'변주 타기',short:'변주',gimmick:'변주 타기',verb:'vary',icon:'vary',step:0,color:'#C89BE8',why:'손님 흐름(스윙 · 하프타임 · 브레이크 · 가속)이 바뀌어도 손은 박 위에'},
+ place:{name:'착',short:'착',gimmick:'착',verb:'place',icon:'place',step:6,color:'#FFF3DC',why:'마지막 박에 횟감을 딱 올려 접시에 내놓아요'}};
 const ProcOrder=['tezu','shape','press','flip','finish','place'];/* 실제 니기리 순서(한 점) */
 /* 횟감(실전 판 이름 = 그 판에서 마지막에 밥 위에 올라가는 네타). kind = nigiri | gunkan(김 띠) */
 const NetaTable={
@@ -1526,64 +1526,64 @@ const FIN=(call,roles,feel,o={})=>({proc:'finish',verb:'free',call,roles,feel,..
 const COUNT=(line)=>({proc:'count',verb:'count',bars:2,feel:'count',line});
 const RemixStageTable=[
  /* ── T74-a 입문 — 첫 쥐기(type intro · 처음부터 열림 · 해금 줄과 따로). 스승 수업으로 키를 하나씩 익힌 뒤 이 악보 = 느린 실전 맛보기 한 점(손 적시기 → 예고 붙은 하프타임 한 번 → 모양 잡기 → 뒤집기 → 착에 광어). 끝나면 스승 대사로 p1에 이어짐 ── */
- {id:'p0',type:'intro',neta:'gwangeo',proc:'tezu',name:'첫 쥐기',gimmick:'입문',stars:1,sub:'스승과 키를 하나씩 익히고 · 느린 박으로 한 점을 처음부터 끝까지',bpm:72,guide:'full',win:WIN.intro,procs:['tezu','shape','flip','flow'],finale:'첫 한 점, 착!',
+ {id:'p0',type:'intro',neta:'gwangeo',proc:'tezu',name:'첫 쥐기',gimmick:'입문',stars:1,sub:'스승과 키를 하나씩 익히고 느린 박으로 한 점을 처음부터 끝까지',bpm:72,guide:'full',win:WIN.intro,procs:['tezu','shape','flip','flow'],finale:'첫 한 점, 착!',
   sections:[COUNT('첫 한 점 — 손 적시기 → 모양 잡기 → 뒤집기 → 착'),
-   SEC('tezu',2,'straight',{piece:0,line:'손끝을 적셔요 · 박마다 A'}),
+   SEC('tezu',2,'straight',{piece:0,line:'손끝을 적셔요. 박마다 A'}),
    SEC('tezu',2,'half',{piece:0,left:H2,line:'느긋하게 · 2박마다 A'}),
-   SEC('shape',2,'half',{piece:0,graceBeats:1,line:'밥을 굴려요 · ↑→↓← 또는 드래그 · 2박에 한 바퀴'}),
-   SEC('flip',2,'straight',{piece:0,line:'뒤집어요 · 떨어지는 순간 스페이스',tosses:[[0,1],[2,3],[4,5],[6,7]]}),
-   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 스페이스 · 광어를 올려요!'})]},
+   SEC('shape',2,'half',{piece:0,graceBeats:1,line:'밥을 굴려요. ↑ → ↓ ← 또는 드래그 · 2박에 한 바퀴'}),
+   SEC('flip',2,'straight',{piece:0,line:'뒤집어요. 떨어지는 순간 Space',tosses:[[0,1],[2,3],[4,5],[6,7]]}),
+   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 Space. 광어를 올려요!'})]},
  /* ── 연습 — 과정 익히기(실제 니기리 순서 · 입력이 쉬운 것부터) ── */
- {id:'p1',type:'practice',proc:'tezu',product:'bowl',name:'손 적시기',gimmick:'박 짚기',stars:1,sub:'A 하나로 박을 짚어요 · 곧은 박 → 하프 → 브레이크 → 더블',bpm:80,guide:'full',win:WIN.easy,procs:['tezu','flow'],finale:'손끝이 촉촉해요, 준비 끝!',
+ {id:'p1',type:'practice',proc:'tezu',product:'bowl',name:'손 적시기',gimmick:'박 짚기',stars:1,sub:'A 하나로 박을 짚어요. 곧은 박 → 하프타임 → 브레이크 → 더블타임',bpm:80,guide:'full',win:WIN.easy,procs:['tezu','flow'],finale:'손끝이 촉촉해요, 준비 끝!',
   sections:[COUNT('하나 둘 셋 넷 · 넷 다음 박부터 A'),
    SEC('tezu',3,'straight',{tier:1,line:'손끝을 물에 적시며 박마다 A · 톡 톡 톡 톡'}),
    SEC('tezu',2,'half',{tier:1,left:H2,line:'하프타임 · 2박마다 A — 느긋하게'}),
    SEC('tezu',2,'straight',{tier:1,line:'다시 박마다 A'}),
    SEC('tezu',1,'break',{tier:1,line:'브레이크! 소리 없이 박마다 A'}),
-   SEC('tezu',2,'straight',{tier:1,line:'돌아와요 · 첫 박부터 다시 박마다 A'}),/* T73-a 1 → 2마디: 더블타임 예고가 두 마디 들어갈 자리 */
+   SEC('tezu',2,'straight',{tier:1,line:'돌아와요. 첫 박부터 다시 박마다 A'}),/* T73-a 1 → 2마디: 더블타임 예고가 두 마디 들어갈 자리 */
    SEC('tezu',3,'double',{tier:2,left:E8,line:'2단계! 더블타임 · 반 박마다 A'}),
    SEC('tezu',2,'straight',{tier:2,line:'다시 박마다 A'}),
    SEC('tezu',1,'break',{tier:2,line:'마지막 브레이크!'}),
-   SEC('place',1,'straight',{at:[0],line:'돌아와요! 첫 박에 스페이스 · 손끝을 탁 털어요'})]},
- {id:'p2',type:'practice',proc:'shape',product:'shari',name:'모양 잡기',gimmick:'굴리기',stars:1,sub:'원을 그려 밥을 굴려요 · 하프타임(2박에 한 바퀴) → 1박에 한 바퀴',bpm:80,guide:'full',win:WIN.easy,procs:['shape'],finale:'둥근 샤리 완성!',
-  sections:[COUNT('하나 둘 셋 넷 · 넷 다음 박부터 굴려요'),
-   SEC('shape',6,'half',{tier:1,graceBeats:2,line:'떠낸 밥을 굴려요 · 마우스 드래그 또는 ↑→↓← · 2박에 한 바퀴'}),
+   SEC('place',1,'straight',{at:[0],line:'돌아와요! 첫 박에 Space. 손끝을 탁 털어요'})]},
+ {id:'p2',type:'practice',proc:'shape',product:'shari',name:'모양 잡기',gimmick:'굴리기',stars:1,sub:'원을 그려 밥을 굴려요. 하프타임(2박에 한 바퀴) → 1박에 한 바퀴',bpm:80,guide:'full',win:WIN.easy,procs:['shape'],finale:'둥근 샤리 완성!',
+  sections:[COUNT('하나 둘 셋 넷. 넷 다음 박부터 굴려요'),
+   SEC('shape',6,'half',{tier:1,graceBeats:2,line:'떠낸 밥을 굴려요. 마우스 드래그 또는 ↑ → ↓ ← · 2박에 한 바퀴'}),
    SEC('shape',4,'straight',{tier:2,line:'2단계! 두 배로 · 1박에 한 바퀴'}),
    SEC('shape',2,'half',{tier:2,line:'다시 느긋하게 · 2박에 한 바퀴'}),
    SEC('shape',6,'straight',{tier:2,line:'1박에 한 바퀴 · 끝까지 박마다 위로'}),
-   SEC('place',1,'straight',{at:[0],line:'첫 박에 스페이스 · 둥글게 잡은 밥을 내려놓아요'})]},
- {id:'p3',type:'practice',proc:'press',product:'pressed',name:'쥐기',gimmick:'양손 폴리',stars:2,sub:'왼손 A는 박마다 받치고 · 오른손 L은 2박마다 → 당김음 · 3-3-2로 눌러요',bpm:80,guide:'full',win:WIN.easy,procs:['press'],finale:'단단하게 쥐었어요!',
+   SEC('place',1,'straight',{at:[0],line:'첫 박에 Space. 둥글게 잡은 밥을 내려놓아요'})]},
+ {id:'p3',type:'practice',proc:'press',product:'pressed',name:'쥐기',gimmick:'양손 폴리',stars:2,sub:'왼손 A는 박마다 받치고 오른손 L은 2박마다 → 당김음 · 3-3-2로 눌러요',bpm:80,guide:'full',win:WIN.easy,procs:['press'],finale:'단단하게 쥐었어요!',
   sections:[COUNT('하나 둘 셋 넷 · 넷 다음 박부터 왼손 A'),
-   SEC('press',2,'straight',{tier:1,right:[],leftOnly:true,line:'왼손 A로 박마다 톡 · 밥을 받쳐요'}),
+   SEC('press',2,'straight',{tier:1,right:[],leftOnly:true,line:'왼손 A로 박마다 톡. 밥을 받쳐요'}),
    SEC('press',5,'straight',{tier:1,right:[0,2],rightFromBar:1,line:'오른손 L은 2박마다 꾹 · 첫 마디는 고양이 시범'}),
-   SEC('press',5,'straight',{tier:2,right:[1.5,3.5],rightFromBar:1,line:'2단계! 오른손은 뒷박 · 당김음으로 눌러요'}),
+   SEC('press',5,'straight',{tier:2,right:[1.5,3.5],rightFromBar:1,line:'2단계! 오른손은 뒷박. 당김음으로 눌러요'}),
    SEC('press',4,'straight',{tier:2,right:[0,1.5,3],rightFromBar:0,line:'3-3-2 · 오른손이 엇갈려 눌러요'}),
-   SEC('press',1,'straight',{tier:2,right:[],leftOnly:true,line:'왼손만 남아요 · 박 지키기'}),
-   SEC('place',1,'straight',{at:[0],line:'첫 박에 스페이스 · 쥔 밥을 내려놓아요'})]},
- {id:'p4',type:'practice',proc:'flip',product:'flipped',name:'뒤집기',gimmick:'던지고 받기',stars:2,sub:'포물선만 보고 받아요 · 1박·2박 → 스윙(뒷박이 살짝 늦게)',bpm:84,guide:'full',win:WIN.easy,procs:['flip'],finale:'한 점이 바로 앉았어요!',
-  sections:[COUNT('하나 둘 셋 넷 · 넷 다음 박부터 던져요'),
-   SEC('flip',5,'straight',{tier:1,line:'한 점을 띄워 뒤집어요 · 떨어지는 순간 스페이스 · 높을수록 늦게 떨어져요',tosses:[[0,1],[2,3],[4,6],[6,7],[8,9],[10,12],[12,13],[14,16],[16,17],[18,19]]}),
+   SEC('press',1,'straight',{tier:2,right:[],leftOnly:true,line:'왼손만 남아요. 박 지키기'}),
+   SEC('place',1,'straight',{at:[0],line:'첫 박에 Space. 쥔 밥을 내려놓아요'})]},
+ {id:'p4',type:'practice',proc:'flip',product:'flipped',name:'뒤집기',gimmick:'던지고 받기',stars:2,sub:'포물선만 보고 받아요. 1박 · 2박 → 스윙(뒷박이 살짝 늦게)',bpm:84,guide:'full',win:WIN.easy,procs:['flip'],finale:'한 점이 바로 앉았어요!',
+  sections:[COUNT('하나 둘 셋 넷. 넷 다음 박부터 던져요'),
+   SEC('flip',5,'straight',{tier:1,line:'한 점을 띄워 뒤집어요. 떨어지는 순간 Space. 높을수록 늦게 떨어져요',tosses:[[0,1],[2,3],[4,6],[6,7],[8,9],[10,12],[12,13],[14,16],[16,17],[18,19]]}),
    SEC('flip',4,'straight',{tier:1,line:'1박 · 2박이 섞여요',tosses:[[0,1],[1,3],[3,4],[4,5],[5,7],[7,8],[8,10],[10,11],[11,12],[12,14],[14,15]]}),
    SEC('flip',5,'swing',{tier:2,line:'2단계! 스윙 · 뒷박이 살짝 늦게 떨어져요',tosses:[[0,1.5],[2,3.5],[4,5.5],[6,7],[8,9.5],[10,11.5],[12,13],[14,15.5],[16,17.5],[18,19]]}),
    SEC('flip',4,'swing',{tier:2,line:'스윙 · 짧게 길게',tosses:[[0,1.5],[2,2.5],[3,4.5],[5,6],[6,7.5],[8,9.5],[10,11],[11,12.5],[13,14.5],[14.5,15.5]]}),
-   SEC('place',1,'swing',{at:[0],line:'첫 박에 스페이스 · 뒤집은 한 점을 내려놓아요'})]},
+   SEC('place',1,'swing',{at:[0],line:'첫 박에 Space. 뒤집은 한 점을 내려놓아요'})]},
  {id:'p5',type:'practice',proc:'finish',product:'finished',name:'다듬기',gimmick:'즉흥',stars:2,sub:'고양이 손질(콜)을 듣고 내 리듬으로 다듬어요 → 길게 주고받기',bpm:80,guide:'full',win:WIN.easy,procs:['finish'],finale:'모양이 다듬어졌어요!',
-  sections:[COUNT('하나 둘 셋 넷 · 고양이 손질부터 들어요'),
+  sections:[COUNT('하나 둘 셋 넷. 고양이 손질부터 들어요'),
    FIN('c1',['call','play','play','answer'],'straight',{tier:1,line:'손질을 듣고 내 리듬으로 · A톡 S탁 D쓱 K꾹 L착'}),
    FIN('c3',['call','play','play','answer'],'straight',{tier:1,line:'손질을 살짝 바꿔 다듬으면 더 좋아요'}),
    FIN('c2',['call','play','play','answer'],'straight',{tier:2,line:'2단계! 엇박 손질 · 여러 소리를 섞어요'}),
    FIN('c4',['call','play','play','mix','play','play','answer'],'straight',{tier:2,line:'길게 주고받기 · 고양이가 내 리듬을 섞어 돌려줘요'}),
-   SEC('place',1,'straight',{at:[0],line:'첫 박에 스페이스 · 다듬은 밥을 내려놓아요'})]},
+   SEC('place',1,'straight',{at:[0],line:'첫 박에 Space. 다듬은 밥을 내려놓아요'})]},
  /* ── 실전 — 오늘의 횟감. T77-a: 한 점 = 다섯 과정(손 적시기·모양 잡기·쥐기·뒤집기·다듬기)을 한 바퀴 + 착. r1은 니기리 순서대로 한 번씩 천천히 → 뒤 판일수록 반복·짧은 교대·순서 바꾸기로 섞임.
     낮춘 난이도: BPM 76·78·82·86·90→104 · 판정 창 intro·easy·easy·mid·mid(+ 굴리기 위상 허용 ×1.5 = RW) · 판마다 변주 0~2종 · 변주 경계는 과정 경계와 1마디 이상 떨어져 있고 경계끼리 2마디 이상 · 굴리기 = 곧은 박에서 2박에 한 바퀴(revBeats 2 — 음악은 그대로) · 쥐기 = 번갈아(A 하나·셋 + L 둘·넷) → 박마다 A + L 2박마다 → 뒷박 L · 16분·더블·3 대 4 없음 ── */
  {id:'r1',type:'real',neta:'gwangeo',name:'광어',order:1,stars:2,sub:'손님 주문 1점 · 다섯 과정을 순서대로 한 번씩 · 변주 없이 느리게',bpm:76,guide:'full',win:RW(WIN.intro),procs:['tezu','shape','press','flip','finish'],finale:'광어 한 점, 착!',
   sections:[COUNT('손님 주문 — 광어 1점 · 넷 다음 박부터 손 적시기'),
-   SEC('tezu',2,'straight',{piece:0,left:H2,line:'손끝을 적셔요 · 2박마다 A'}),
-   SEC('shape',2,'straight',{piece:0,revBeats:2,graceBeats:1,line:'밥을 굴려 모양을 잡아요 · 2박에 한 바퀴'}),
-   SEC('press',3,'straight',{piece:0,left:H2,right:[1,3],rightFromBar:1,line:'쥐어요 · 하나 A · 둘 L · 셋 A · 넷 L · 첫 마디는 고양이 시범'}),
-   SEC('flip',2,'straight',{piece:0,line:'뒤집어요 · 떨어지는 순간 스페이스',tosses:[[0,1],[2,3],[4,5],[6,7]]}),
-   FIN('c1',['call','play','answer'],'straight',{piece:0,line:'다듬어요 · 고양이 손질을 내 리듬으로'}),
-   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 스페이스 · 광어를 올려요!'})]},
+   SEC('tezu',2,'straight',{piece:0,left:H2,line:'손끝을 적셔요. 2박마다 A'}),
+   SEC('shape',2,'straight',{piece:0,revBeats:2,graceBeats:1,line:'밥을 굴려 모양을 잡아요. 2박에 한 바퀴'}),
+   SEC('press',3,'straight',{piece:0,left:H2,right:[1,3],rightFromBar:1,line:'쥐어요. 하나 A · 둘 L · 셋 A · 넷 L · 첫 마디는 고양이 시범'}),
+   SEC('flip',2,'straight',{piece:0,line:'뒤집어요. 떨어지는 순간 Space',tosses:[[0,1],[2,3],[4,5],[6,7]]}),
+   FIN('c1',['call','play','answer'],'straight',{piece:0,line:'다듬어요. 고양이 손질을 내 리듬으로'}),
+   SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 Space. 광어를 올려요!'})]},
  {id:'r2',type:'real',neta:'yeoneo',name:'연어',order:2,stars:2,sub:'손님 주문 2점 · 두 번째 점은 쥐기를 먼저 · 스윙 뒤집기',bpm:78,guide:'lite',win:RW(WIN.easy),procs:['tezu','shape','press','flip','finish','flow'],finale:'연어 두 점, 착!',
   sections:[COUNT('손님 주문 — 연어 2점'),
    SEC('tezu',1,'straight',{piece:0,line:'손 적시기 · 박마다 A'}),
@@ -1599,7 +1599,7 @@ const RemixStageTable=[
    SEC('flip',2,'swing',{piece:1,line:'뒤집기 · 스윙 · 뒷박이 살짝 늦게',tosses:[[0,1.5],[2,3.5],[4,5.5]]}),
    SEC('flip',1,'straight',{piece:1,line:'다시 곧은 박',tosses:[[0,1]]}),
    FIN('c1',['call','play','answer'],'straight',{piece:1,line:'다듬기'}),
-   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착 · 연어를 올려요!'})]},
+   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착. 연어를 올려요!'})]},
  {id:'r3',type:'real',neta:'saeu',name:'새우',order:3,stars:3,sub:'손님 주문 2점 · 쥐기와 뒤집기가 번갈아 · 셋잇단 뒤집기',bpm:82,guide:'lite',win:RW(WIN.easy),procs:['tezu','shape','press','flip','finish','flow'],finale:'새우 두 점, 착!',
   sections:[COUNT('손님 주문 — 새우 2점'),
    SEC('tezu',1,'straight',{piece:0,line:'손 적시기'}),
@@ -1616,7 +1616,7 @@ const RemixStageTable=[
    SEC('flip',1,'straight',{piece:1,line:'다시 곧은 박',tosses:[[0,1]]}),
    SEC('press',1,'straight',{piece:1,right:[0,2],rightFromBar:0,line:'한 번 더 쥐어요'}),
    FIN('c3',['call','play','answer'],'straight',{piece:1,line:'다듬기'}),
-   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착 · 새우를 올려요!'})]},
+   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착. 새우를 올려요!'})]},
  {id:'r4',type:'real',neta:'anago',name:'아나고',order:4,stars:3,sub:'손님 주문 2점 · 뒤집기 먼저 · 브레이크 · 스윙 뒤집기',bpm:86,guide:'lite',win:RW(WIN.mid),procs:['tezu','shape','press','flip','finish','flow'],finale:'아나고 두 점, 착!',
   sections:[COUNT('손님 주문 — 아나고 2점'),
    SEC('tezu',1,'straight',{piece:0,line:'손 적시기'}),
@@ -1627,7 +1627,7 @@ const RemixStageTable=[
    SEC('place',1,'straight',{piece:0,at:[0],line:'첫 박에 착 · 아나고 1점째!'}),
    SEC('tezu',1,'straight',{piece:1,line:'손 적시기 · 박마다 A'}),
    SEC('tezu',2,'break',{piece:1,left:H2,line:'브레이크! 소리 없이 2박마다 A'}),
-   SEC('tezu',1,'straight',{piece:1,line:'돌아와요 · 박마다 A'}),
+   SEC('tezu',1,'straight',{piece:1,line:'돌아와요. 박마다 A'}),
    SEC('press',1,'straight',{piece:1,left:H2,right:[1,3],rightFromBar:0,line:'쥐기 · 번갈아'}),
    SEC('shape',2,'straight',{piece:1,revBeats:2,graceBeats:1,line:'모양 잡기'}),
    SEC('press',1,'straight',{piece:1,right:[0,2],rightFromBar:0,line:'한 번 더 쥐어요'}),
@@ -1635,7 +1635,7 @@ const RemixStageTable=[
    SEC('flip',2,'swing',{piece:1,line:'뒤집기 · 스윙',tosses:[[0,1.5],[2,3.5],[4,5.5]]}),
    SEC('flip',1,'straight',{piece:1,line:'다시 곧은 박',tosses:[[0,1]]}),
    FIN('c1',['call','play','answer'],'straight',{piece:1,line:'다듬기'}),
-   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착 · 아나고를 올려요!'})]},
+   SEC('place',1,'straight',{piece:1,at:[0],line:'첫 박에 착. 아나고를 올려요!'})]},
  {id:'r5',type:'real',neta:'daebaetsal',name:'참치 대뱃살',order:5,boss:true,stars:4,sub:'오마카세 마지막 · 손님 주문 3점 · 과정이 짧게 섞이고 점점 빨라져요(90 → 104)',bpm:90,guide:'lite',win:RW(WIN.mid),procs:['tezu','shape','press','flip','finish','flow'],finale:'참치 대뱃살 세 점, 착!',
   sections:[COUNT('오마카세 마지막 — 참치 대뱃살 3점'),
    SEC('tezu',1,'straight',{piece:0,line:'손 적시기'}),
@@ -1659,33 +1659,33 @@ const RemixStageTable=[
    SEC('flip',1,'straight',{piece:2,line:'뒤집기',tosses:[[0,1],[2,3]]}),
    SEC('press',1,'straight',{piece:2,right:[0,2],rightFromBar:0,line:'쥐기'}),
    FIN('c1',['call','play'],'straight',{piece:2,line:'마지막 다듬기'}),
-   SEC('place',1,'straight',{piece:2,at:[0],line:'첫 박에 착 · 대뱃살을 올려요!'})]}];
+   SEC('place',1,'straight',{piece:2,at:[0],line:'첫 박에 착. 대뱃살을 올려요!'})]}];
 /* 점수: 박 판정 딱/좋아요/놓침 · 동사 점수 = 0~100 · 합계 = 등장한 동사 평균(변주 포함) */
 const RemixScoreTable={perfect:1,ok:.6,miss:0,verbWeights:{spin:1,toss:1,poly:1,free:1,vary:1}};
 /* 검수 메모(가장 잘한 과정 칭찬 + 가장 약한 과정 요령) — T71-a: 동사가 아니라 니기리 과정별 */
 const CatLineTable={
- best:{tezu:'박 짚기가 흔들리지 않아요!',shape:'밥이 박마다 위를 지났어요!',press:'두 손이 따로 놀아요, 드러머 같아요!',flip:'받는 손이 정확해요!',finish:'다듬는 손이 멋져요, 제가 따라 했어요!',flow:'흐름이 바뀌어도 손이 박 위에 있어요!'},
- tip:{tezu:'음악이 바뀌면 고양이 손가락을 보고 박을 세요',shape:'원은 박마다 위를 지나게 그려요',press:'왼손은 메트로놈처럼, 오른손만 춤춰요',flip:'높이 뜰수록 늦게 떨어져요 · 그림자를 봐요',finish:'여러 소리를 섞고 고양이 리듬을 살짝 바꿔 봐요',flow:'브레이크 땐 마음속으로 하나 둘 셋 넷'},
- spam:'같은 키만 반복했죠? 고양이가 하품해요',
- perfect:'완벽해요! 다음 판으로 가요',
- retry:'손이 아직 박을 쫓아가요 · 천천히 다시 해 봐요'};/* T69-a: 가장 높은 동작도 70 미만이면 칭찬 대신 */
+ best:{tezu:'처음의 박자를 잘 짚었네.',shape:'모양이 좋은 밥이네.',press:'두 손이 잘 어우러졌네.',flip:'정확히 받았네.',finish:'고양이의 박자를 아는구먼.',flow:'흐름이 바뀌어도 박자를 탈줄 아는구먼.'},
+ tip:{tezu:'처음의 박자부터 잘 짚어야 하네.',shape:'원을 박자에 맞춰 그려야 모양이 잡히네.',press:'왼손과 오른손이 잘 어우러져야 하네.',flip:'그림자를 잘 보고 맞춰야 하네.',finish:'잘 맞는 소리가 있다네.',flow:'브레이크 땐 마음속으로 하나 둘 셋 넷. 잊지 말게.'},
+ spam:'같은 것만 반복하면 다듬을 수 없다네.',
+ perfect:'완벽하네! 이제 다음도 잘하겠구먼.',
+ retry:'아직 수련이 부족하네. 좀 더 해보게.'};/* T69-a: 가장 높은 동작도 70 미만이면 칭찬 대신 */
 /* T69-a 마무리 표: 등급별 네타 위치(dx px · rot 도, 착 오차 부호 쪽으로)·윤기(0~1)·스승 반응(nod 끄덕 · hmm 눈썹 · shake 고개 젓기)·한 줄 평(스승 말투).
    errDxPerMs = 착 오차 1 ms당 밀림(px, ±errDxMax) · placeGloss = 착 판정이 윤기에 곱하는 값 · miss = 착을 놓쳤을 때(늦게 털썩 — 더 비뚤고 낮게) */
 const FinaleTable={
- grades:{'금':{dx:0,rot:0,gloss:1,react:'nod',line:'쥐는 손이 살아 있구나'},
-  '은':{dx:7,rot:3,gloss:.72,react:'nod',line:'좋구나. 박에 조금만 더 붙여 보거라'},
-  '동':{dx:16,rot:7,gloss:.45,react:'hmm',line:'손이 박을 쫓아가기 바쁘구나'},
-  '한 번 더':{dx:30,rot:13,gloss:.2,react:'shake',line:'다시. 박부터 몸에 새기거라'}},
+ grades:{'금':{dx:0,rot:0,gloss:1,react:'nod',line:'쥐는 손이 살아 있구먼'},
+  '은':{dx:7,rot:3,gloss:.72,react:'nod',line:'좋네. 박에 조금만 더 붙여 보게'},
+  '동':{dx:16,rot:7,gloss:.45,react:'hmm',line:'손이 박을 쫓아가기 바쁘구먼'},
+  '한 번 더':{dx:30,rot:13,gloss:.2,react:'shake',line:'다시. 박부터 몸에 새기게'}},
  errDxPerMs:.1,errDxMax:14,placeGloss:{perfect:1,ok:.85,miss:.6},
- miss:{dx:22,rot:9,dy:6,line:'착이 늦었구나. 네타가 미끄러졌다'}};
+ miss:{dx:22,rot:9,dy:6,line:'착이 늦었네. 횟감이 미끄러졌구먼'}};
 /* T71-a 연습판 「과정 검수」 스승 한 줄 평(과정 × 등급, 스승 말투 -구나/-거라) · miss = 마지막 박(내려놓기)을 놓쳤을 때 */
 const ProcLineTable={
- tezu:{'금':'박이 손끝에 붙었구나','은':'좋구나. 바뀔 때 한 박 먼저 세어 보거라','동':'박이 손을 떠나는구나. 마음속으로 세거라','한 번 더':'다시. 손끝을 적시며 박부터 세거라'},
- shape:{'금':'밥이 손안에서 둥글게 돌았구나','은':'둥글구나. 박마다 위를 지나게 굴려 보거라','동':'밥알이 흩어지는구나. 천천히 크게 굴리거라','한 번 더':'다시. 손바닥 사이에서 원부터 그리거라'},
- press:{'금':'두 손이 제 일을 아는구나','은':'좋구나. 왼손은 더 고르게 받쳐 보거라','동':'누르는 손이 받치는 손을 흔드는구나','한 번 더':'다시. 왼손 박부터 몸에 새기거라'},
- flip:{'금':'떨어지는 순간을 정확히 받았구나','은':'좋구나. 그림자를 보고 받아 보거라','동':'받는 손이 늦구나. 높이를 읽거라','한 번 더':'다시. 떨어지는 순간만 보거라'},
- finish:{'금':'네 손맛이 살아 있구나','은':'좋구나. 소리를 더 섞어 보거라','동':'흉내만 내는구나. 살짝 바꿔 보거라','한 번 더':'다시. 고양이 손질부터 잘 듣거라'},
- miss:'마지막 박을 놓쳤구나. 끝까지 세거라'};
+ tezu:{'금':'박이 손끝에 붙었구먼','은':'좋네. 바뀔 때 한 박 먼저 세어 보게','동':'박이 손을 떠나는구먼. 마음속으로 세어 보게','한 번 더':'다시. 손끝을 적시며 박부터 세어 보게'},
+ shape:{'금':'밥이 손안에서 둥글게 돌았구먼','은':'둥글구먼. 박마다 위를 지나게 굴려 보게','동':'밥알이 흩어지는구먼. 천천히 크게 굴리게','한 번 더':'다시. 손바닥 사이에서 원부터 그리게'},
+ press:{'금':'두 손이 제 일을 아는구먼','은':'좋네. 왼손은 더 고르게 받쳐 보게','동':'누르는 손이 받치는 손을 흔드는구먼','한 번 더':'다시. 왼손 박부터 몸에 새기게'},
+ flip:{'금':'떨어지는 순간을 정확히 받았구먼','은':'좋네. 그림자를 보고 받아 보게','동':'받는 손이 늦네. 높이를 읽게','한 번 더':'다시. 떨어지는 순간만 보게'},
+ finish:{'금':'자네 손맛이 살아 있구먼','은':'좋네. 소리를 더 섞어 보게','동':'흉내만 내는구먼. 살짝 바꿔 보게','한 번 더':'다시. 고양이 손질부터 잘 듣게'},
+ miss:'마지막 박을 놓쳤구먼. 끝까지 세어 보게'};
 /* 봇(검증용). sigma = 박 오차 표준편차(ms) · spin: input = mouse|arrows, phaseMs = 일정한 위상 어긋남, wobble = 속도 흔들림(라디안 진폭), wobbleSec = 주기 · skip = 놓칠 확률 · free: style = vary|random|spam · drift = 브레이크 중 박 늘어짐(비율) */
 const BotTable={
  skilled:{sigma:12,catchSigma:12,skip:0,spin:{input:'mouse',phaseMs:0,wobble:.05,wobbleSec:3,jitter:.01},free:{style:'vary',sigma:12},drift:0},
@@ -1696,52 +1696,52 @@ const BotTable={
    stages = 판마다 첫 진입 인사(hello) · 단원 목록(이미 익힌 단원은 건너뜀) · 시작 말(go) · 다시 들어올 때 카운트 동안 스승 한 줄(recap) · bridges = 판이 끝나면 스승 대사로 다음 판에 이어 붙이기(p0 → p1 · p5 → r1)
    lessonWin = 수업 판정 창(입문 판 수업 = intro · 그 밖 = easy) · tryBars = 직접 해 보기 반복 마디 수 · goodQ = 굴리기 한 박 성공 품질 · freeOk = 즉흥 마디 성공 점수·타수 */
 const TutorialTable={tryBars:12,goodQ:.55,freeOk:{score:.4,hits:3},
- feedback:{good:['딱이에요!','좋아요, 그 느낌이에요!','그렇죠! 박 위에 있어요','잘했어요!'],ok:'좋아요',early:'조금 빨라요 · 소리를 듣고 눌러요',late:'조금 늦어요 · 박이 오기 전에 준비해요',miss:'괜찮아요 · 다음 박에 다시 해 봐요'},
+ feedback:{good:['딱일세!','좋네, 그 느낌일세!','그렇지! 박 위에 있구먼','잘했네!'],ok:'좋네',early:'조금 빠르네. 소리를 듣고 누르게',late:'조금 늦네. 박이 오기 전에 준비하게',miss:'괜찮네. 다음 박에 다시 해 보게'},
  units:{
-  welcome:{name:'어서 와요',say:[['어서 와요. 오늘부터 이 가게에서 니기리를 배워요','니기리 한 점은 박에 맞춘 손놀림 몇 가지로 만들어져요'],['키를 하나씩 천천히 알려 줄게요','Space로 다음 말 · R로 다시 보기 · Tab으로 넘기기']]},
+  welcome:{name:'첫인사',say:[['흠. 역시 스시에는 밥이 생명이지.','한 번의 니기리는 리듬으로 만들어진다네.'],['하나씩 천천히 알려줄 테니 한 번 해보게.','Space로 다음 말 · R로 다시 보기 · Tab으로 넘기기']]},
   beat:{name:'박 짚기',proc:'tezu',keys:'A',loop:[{proc:'tezu',bars:1,feel:'straight'}],count:'pulse',need:4,
-   say:[['먼저 손끝을 물에 적셔요 · 이게 박 짚기예요','음악의 박마다 A를 눌러요 · 톡 톡 톡 톡']],demo:'잘 봐요 · 고양이가 박마다 A를 먼저 눌러요',try:'이제 해 봐요 · 박마다 A',done:'좋아요! 박이 손끝에 붙었어요'},
+   say:[['먼저 손끝에 물을 묻히면서 박자를 느껴보게.','음악의 박마다 A를 누르게. 톡 톡 톡 톡']],demo:'고양이의 박자를 확인하면 더 쉬울 걸세.',try:'이제 해 보게. 박마다 A',done:'좋네! 박자가 손에 붙기 시작했구먼.'},
   half:{name:'하프타임',proc:'tezu',keys:'A',loop:[{proc:'tezu',bars:1,feel:'half',left:H2}],count:'pulse',need:3,
-   say:[['음악이 느긋해지는 하프타임이에요','이땐 손도 크게 · 2박에 한 번만 A · 쿵 — 짝 —'],['바뀌기 전에 위에 예고가 떠요','남은 박 4 · 3 · 2 · 1을 보고 준비하면 돼요']],demo:'잘 봐요 · 2박에 한 번 A',try:'해 봐요 · 하나 둘에 A 한 번',done:'잘했어요! 느긋해져도 박은 그대로예요',late:'조금 늦어요 · 느긋해도 박은 정확히 와요'},
+   say:[['잠깐 쉬어주는 구간이네.','이땐 손도 크게. 2박에 한 번만 A · 쿵 — 짝 —'],['바뀌기 전에 위에 예고가 뜰 테니 준비를 잘 하게','남은 박 4 · 3 · 2 · 1을 보고 준비하면 되네']],demo:'잘 보게. 2박에 한 번 A',try:'한번 해 보게. 하나 둘에 A 한 번',done:'잘했네! 느긋해져도 박은 그대로일세',late:'조금 늦네. 느긋해도 박은 정확히 온다네'},
   break:{name:'브레이크',proc:'tezu',keys:'A',loop:[{proc:'tezu',bars:1,feel:'straight'},{proc:'tezu',bars:1,feel:'break'}],count:'pulse',countIn:'break',need:4,
-   say:[['브레이크는 소리가 잠깐 멈추는 마디예요','소리가 없어도 박은 계속 가요 · 마음속으로 세며 A']],demo:'잘 봐요 · 쉿 — 소리 없이도 박마다 A',try:'해 봐요 · 소리가 멈춘 마디에서 4번 맞히면 돼요',done:'훌륭해요! 마음속 박이 생겼어요',late:'소리가 없으면 손이 늦어져요 · 하나 둘 셋 넷 세어 봐요'},
+   say:[['브레이크는 소리가 잠깐 멈추는 마디일세','소리가 없어도 박은 계속 간다네. 마음속으로 세며 A를 누르게']],demo:'잘 보게. 쉿 — 소리 없이도 박마다 A',try:'해 보게. 소리가 멈춘 마디에서 4번 맞히면 되네',done:'훌륭하네! 마음속에 박이 생겼구먼',late:'소리가 없으면 손이 늦어지지. 하나 둘 셋 넷 세어 보게'},
   double:{name:'더블타임',proc:'tezu',keys:'A',loop:[{proc:'tezu',bars:1,feel:'double',left:E8}],count:'pulse',need:6,
-   say:[['더블타임은 두 배로 바빠져요','반 박마다 A · 따다다다 따다다다']],demo:'잘 봐요 · 반 박마다 A',try:'해 봐요 · 반 박마다 A',done:'빨라져도 흔들리지 않았어요!'},
-  spin:{name:'굴리기',proc:'shape',keys:'↑→↓← · 드래그',loop:[{proc:'shape',bars:1,feel:'half'}],count:'spin',need:4,
-   say:[['이번엔 떠낸 밥을 굴려 모양을 잡아요','마우스로 원을 그리거나 ↑ → ↓ ← 를 차례로 눌러요'],['꼭대기(↑)를 지날 때가 박이에요','2박에 한 바퀴 · 천천히 크게 돌려요']],demo:'잘 봐요 · 2박에 한 바퀴',try:'해 봐요 · ↑ → ↓ ← 또는 드래그로 원',done:'밥이 둥글게 돌았어요!',early:'조금 빨라요 · 2박에 한 바퀴로 천천히',late:'조금 늦어요 · 꼭대기를 박에 맞춰 지나요'},
-  spin1:{name:'1박에 한 바퀴',proc:'shape',keys:'↑→↓← · 드래그',loop:[{proc:'shape',bars:1,feel:'straight'}],count:'spin',need:4,
-   say:[['이제 두 배로 굴려요','1박에 한 바퀴 · 박마다 꼭대기를 지나요']],demo:'잘 봐요 · 1박에 한 바퀴',try:'해 봐요 · 박마다 꼭대기',done:'빠르게 굴려도 둥글어요!',early:'너무 빨라요 · 밥이 납작해져요',late:'조금 늦어요 · 한 박에 딱 한 바퀴'},
+   say:[['더블타임은 두 배로 바빠진다네','반 박마다 A를 누르게. 따다다다 따다다다']],demo:'잘 보게. 반 박마다 A',try:'해 보게. 반 박마다 A',done:'빨라져도 흔들리지 않았구먼!'},
+  spin:{name:'굴리기',proc:'shape',keys:'↑ → ↓ ← · 드래그',loop:[{proc:'shape',bars:1,feel:'half'}],count:'spin',need:4,
+   say:[['이번엔 떠낸 밥을 굴려 모양을 잡아보게.','원을 그리면서 잡아보게.'],['꼭대기(↑)를 지날 때를 박으로 잘 두게.','천천히, 두 박자를 기억하게']],demo:'잘 보게. 두 박자네.',try:'직접 해보게. 원을 그리는 걸세.',done:'밥이 아주 예쁘게 둥글어졌다네!',early:'조금 빠르다네. 조급할 필요 없네.',late:'조금 늦네. 좀더 힘차게 해보게.'},
+  spin1:{name:'1박에 한 바퀴',proc:'shape',keys:'↑ → ↓ ← · 드래그',loop:[{proc:'shape',bars:1,feel:'straight'}],count:'spin',need:4,
+   say:[['이제 두 배로 굴려 보게','1박에 한 바퀴일세. 박마다 꼭대기를 지나야 하네']],demo:'잘 보게. 1박에 한 바퀴',try:'해 보게. 박마다 꼭대기',done:'빠르게 굴려도 둥글구먼!',early:'너무 빠르네. 그러다 밥이 납작해지네',late:'조금 늦네. 한 박에 딱 한 바퀴일세'},
   right:{name:'두 손 쥐기',proc:'press',keys:'A + L',loop:[{proc:'press',bars:1,feel:'straight',right:[0,2],rightFromBar:0}],count:'right',need:3,
-   say:[['쥐기는 두 손이 따로 움직여요','왼손 A는 박마다 받치고 · 오른손 L은 2박마다 꾹']],demo:'잘 봐요 · A는 박마다, L은 하나 · 셋에',try:'해 봐요 · L을 3번 맞히면 돼요(A도 같이)',done:'두 손이 제 일을 해요!'},
+   say:[['쥐기는 두 손이 따로 움직인다네','왼손 A는 박마다 받치고, 오른손 L은 2박마다 꾹 누르게']],demo:'잘 보게. A는 박마다, L은 하나 · 셋에',try:'해 보게. L을 3번 맞히면 되네(A도 같이)',done:'두 손이 제 일을 하는구먼!'},
   sync:{name:'당김음',proc:'press',keys:'A + L',loop:[{proc:'press',bars:1,feel:'straight',right:[1.5,3.5],rightFromBar:0}],count:'right',need:3,
-   say:[['이번엔 오른손이 뒷박에 들어가요','왼손 A는 그대로 · L은 둘 반 · 넷 반에 꾹']],demo:'잘 봐요 · L이 박 사이에 들어가요',try:'해 봐요 · 박 사이에 L',done:'엇박도 손에 붙었어요!',early:'조금 빨라요 · 박 다음 반 박까지 기다려요'},
+   say:[['이번엔 오른손이 뒷박에 들어가네','왼손 A는 그대로 두고, L은 둘 반 · 넷 반에 꾹 누르게']],demo:'잘 보게. L이 박 사이에 들어가지',try:'해 보게. 박 사이에 L',done:'엇박도 손에 붙었구먼!',early:'조금 빠르네. 박 다음 반 박까지 기다리게'},
   catch:{name:'뒤집어 받기',proc:'flip',keys:'Space',loop:[{proc:'flip',bars:1,feel:'straight',tosses:[[0,1],[2,3]]}],count:'toss',need:3,
-   say:[['한 점을 손안에서 띄워 뒤집어요','떨어져 손에 닿는 순간 Space · 그림자가 커질 때예요']],demo:'잘 봐요 · 떨어지는 순간 Space',try:'해 봐요 · 3번 받으면 돼요',done:'떨어지는 순간을 정확히 받았어요!',early:'조금 빨라요 · 손에 닿을 때까지 기다려요',late:'조금 늦어요 · 그림자를 보고 미리 준비해요'},
+   say:[['마지막 한 점, 잘 받아야 하네.','떨어져 손에 닿는 순간 Space, 박자와 그림자를 잘 보게']],demo:'떨어지는 순간 Space',try:'3번 받아보게',done:'바로 그 박자네!',early:'조금 빠르네. 손에 닿을 때까지 기다리게',late:'조금 늦네. 그림자를 보고 미리 준비하게'},
   swing:{name:'스윙 받기',proc:'flip',keys:'Space',loop:[{proc:'flip',bars:1,feel:'swing',tosses:[[0,1.5],[2,3.5]]}],count:'toss',need:3,
-   say:[['스윙은 뒷박이 살짝 늦게 와요','따라라 따라라 · 조금 늦게 떨어지는 걸 받아요']],demo:'잘 봐요 · 뒷박이 살짝 늦어요',try:'해 봐요 · 늦게 오는 뒷박',done:'출렁이는 박도 잘 받아요!',early:'조금 빨라요 · 스윙은 살짝 늦게 와요'},
+   say:[['스윙은 뒷박이 살짝 늦게 온다네','따라라 따라라. 조금 늦게 떨어지는 걸 받게']],demo:'잘 보게. 뒷박이 살짝 늦지',try:'해 보게. 늦게 오는 뒷박',done:'출렁이는 박도 잘 받는구먼!',early:'조금 빠르네. 스윙은 살짝 늦게 온다네'},
   triplet:{name:'셋잇단 받기',proc:'flip',keys:'Space',loop:[{proc:'flip',bars:1,feel:'triplet',tosses:[[0,1],[2,2+2/3]]}],count:'toss',need:3,
-   say:[['셋잇단은 한 박을 셋으로 쪼개요','따다닥 따다닥 · 짧게 떨어지는 것도 받아요']],demo:'잘 봐요 · 짧게 짧게',try:'해 봐요 · 3번 받으면 돼요',done:'셋으로 쪼개도 정확해요!'},
-  free:{name:'다듬기 즉흥',proc:'finish',keys:'A S D K L',loop:[{proc:'finish',feel:'straight',call:'c1',roles:['call','play']}],count:'free',need:1,
-   say:[['다듬기는 내 손맛을 내는 시간이에요','고양이 손질을 한 마디 듣고 · 다음 마디에 A S D K L로'],['똑같이 따라 하기보다','소리를 섞고 살짝 바꾸면 더 좋아요']],demo:'잘 봐요 · 고양이가 듣고 바꿔 쳐요',try:'해 봐요 · 고양이 다음 마디에 내 리듬(3번 이상)',done:'손맛이 살아 있어요!',spam:'같은 키만 눌렀어요 · 여러 소리를 섞어요',empty:'반쵸 차례 마디에 쳐 봐요',weak:'박 칸에 맞춰 조금 더 섞어 봐요'},
+   say:[['셋잇단은 한 박을 셋으로 쪼갠다네','따다닥 따다닥. 짧게 떨어지는 것도 받게']],demo:'잘 보게. 짧게 짧게',try:'3번 받아보게',done:'셋으로 쪼개도 정확하구먼!'},
+  free:{name:'다듬기(즉흥)',proc:'finish',keys:'A S D K L',loop:[{proc:'finish',feel:'straight',call:'c1',roles:['call','play']}],count:'free',need:1,
+   say:[['다듬기는 자네 손맛을 내는 시간일세','고양이 손질을 한 마디 듣고, 다음 마디에 A S D K L로 쳐 보게'],['똑같이 따라 하기보다','소리를 섞고 살짝 바꾸면 더 좋다네']],demo:'잘 보게. 고양이가 듣고 바꿔 치지',try:'해 보게. 고양이 다음 마디에 자네 리듬(3번 이상)',done:'손맛이 살아 있구먼!',spam:'같은 키만 눌렀구먼. 여러 소리를 섞어 보게',empty:'자네 차례 마디에 쳐 보게',weak:'박 칸에 맞춰 조금 더 섞어 보게'},
   place:{name:'착',proc:'place',neta:'gwangeo',keys:'Space',loop:[{proc:'place',bars:1,feel:'straight',at:[0]}],count:'place',need:1,
-   say:[['마지막은 착이에요','횟감이 밥 위로 미끄러져 오면 · 첫 박에 Space']],demo:'잘 봐요 · 착!',try:'해 봐요 · 첫 박에 Space',done:'광어가 밥 위에 딱 앉았어요!',early:'조금 빨라요 · 첫 박까지 기다려요',late:'조금 늦어요 · 미끄러져 오는 동안 준비해요'},
-  mix:{name:'섞인 과정',say:[['다음 손님부터는 과정이 섞여 나와요','쥐기를 먼저 하거나 · 뒤집기 사이에 한 번 더 쥐기도 해요'],['과정이 바뀌기 한 마디 전에 위에 예고가 떠요','「다음 과정」을 보고 손을 미리 옮겨요']]},
-  order:{name:'손님 주문',say:[['이제 손님 주문을 받아요','한 점은 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착 순서예요'],['익힌 과정을 순서대로 이어서 쥐면','마지막 착에 그 횟감이 딱 올라가요']]},
-  accel:{name:'빨라져요',proc:'tezu',keys:'A',loop:[{proc:'tezu',bars:1,feel:'straight',bpm:90},{proc:'tezu',bars:2,feel:'straight',bpmTo:97},{proc:'tezu',bars:1,feel:'straight'}],bpm:90,count:'pulse',countIn:'accel',need:6,
-   say:[['손님이 몰리면 박이 점점 빨라져요','두 마디에 걸쳐 조금씩 · 박마다 A로 따라가요']],demo:'잘 봐요 · 점점 빨라져요',try:'해 봐요 · 빨라지는 마디에서 6번',done:'빨라지는 박도 놓치지 않아요!',late:'조금 늦어요 · 박이 점점 당겨져요'}},
+   say:[['마지막은 착일세','횟감이 밥 위로 미끄러져 오면, 첫 박에 Space를 누르게']],demo:'잘 보게. 착!',try:'해 보게. 첫 박에 Space',done:'광어가 밥 위에 딱 앉았구먼!',early:'조금 빠르네. 첫 박까지 기다리게',late:'조금 늦네. 미끄러져 오는 동안 준비하게'},
+  mix:{name:'섞인 과정',say:[['다음 손님부터는 과정이 섞여 나온다네','쥐기를 먼저 하거나, 뒤집기 사이에 한 번 더 쥐기도 하지'],['과정이 바뀌기 한 마디 전에 위에 예고가 뜰 걸세','「다음 과정」을 보고 손을 미리 옮기게']]},
+  order:{name:'손님 주문',say:[['이제 손님 주문을 받을 차례일세','한 점은 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착 순서일세'],['익힌 과정을 순서대로 이어서 쥐면','마지막 착에 그 횟감이 딱 올라간다네']]},
+  accel:{name:'가속',proc:'tezu',keys:'A',loop:[{proc:'tezu',bars:1,feel:'straight',bpm:90},{proc:'tezu',bars:2,feel:'straight',bpmTo:97},{proc:'tezu',bars:1,feel:'straight'}],bpm:90,count:'pulse',countIn:'accel',need:6,
+   say:[['손님이 몰리면 박이 점점 빨라진다네','두 마디에 걸쳐 조금씩 빨라지네. 박마다 A로 따라가게']],demo:'잘 보게. 점점 빨라지지',try:'해 보게. 빨라지는 마디에서 6번',done:'빨라지는 박도 놓치지 않는구먼!',late:'조금 늦네. 박이 점점 당겨진다네'}},
  stages:{
-  p0:{units:['welcome','beat','spin','catch','half','place'],go:['키를 다 익혔어요! 이제 처음부터 끝까지 한 점을 쥐어 봐요','느린 박이에요 · Space를 누르면 시작해요'],recap:'느린 박으로 한 점 · 천천히 해 봐요'},
-  p1:{hello:[['「손 적시기」 과정이에요','손끝을 적시며 박을 몸에 새겨요 · 음악이 바뀌어도 이 박이 손을 지켜요']],units:['beat','half','break','double'],go:['이제 판 전체를 이어서 해 봐요','하프 · 브레이크 · 더블이 차례로 와요 · Space로 시작'],recap:'박마다 A · 음악이 바뀌어도 박은 그대로예요'},
-  p2:{hello:[['「모양 잡기」 과정이에요','떠낸 밥을 손바닥 사이에서 굴려 둥근 모양을 잡아요']],units:['spin','spin1'],go:['이제 판 전체를 해 봐요','2박에 한 바퀴 → 1박에 한 바퀴 · Space로 시작'],recap:'꼭대기를 박에 맞춰 · 원을 크게 그려요'},
-  p3:{hello:[['「쥐기」 과정이에요','왼손은 받치고 오른손 두 손가락이 리듬 있게 눌러요']],units:['beat','right','sync'],go:['이제 판 전체를 해 봐요','왼손은 메트로놈 · 오른손만 춤춰요 · Space로 시작'],recap:'왼손 A는 박마다 · 오른손 L은 따로'},
-  p4:{hello:[['「뒤집기」 과정이에요','손안에서 한 점을 뒤집어 받아요 · 높을수록 늦게 떨어져요']],units:['catch','swing'],go:['이제 판 전체를 해 봐요','1박 · 2박 → 스윙 · Space로 시작'],recap:'떨어지는 순간에 Space · 그림자를 봐요'},
-  p5:{hello:[['「다듬기」 과정이에요','고양이 손질을 듣고 내 방식으로 바꿔 모양을 완성해요']],units:['free'],go:['이제 판 전체를 해 봐요','길게 주고받기까지 · Space로 시작'],recap:'고양이 손질을 듣고 · 살짝 바꿔 쳐요'},
-  r1:{units:['order','mix','place'],go:['첫 손님이에요 · 광어 한 점','Space를 누르면 주문이 들어와요'],recap:'과정을 순서대로 · 마지막 착에 광어'},
-  r3:{units:['triplet'],go:['새우 두 점 · 셋잇단이 처음 나와요','Space로 시작'],recap:'셋잇단은 짧게 짧게 받아요'},
-  r5:{units:['accel'],go:['오마카세 마지막 · 참치 대뱃살 세 점','점점 빨라져요 · Space로 시작'],recap:'점점 빨라져도 손은 박 위에 있어요'}},
+  p0:{units:['welcome','beat','spin','catch','half','place'],go:['키는 다 익혔군! 이제 처음부터 끝까지 한 점을 쥐어 보게','느린 박일세. Space를 누르면 시작하네'],recap:'느린 박으로 한 점 쥐어 보세. 천천히 해 보게'},
+  p1:{hello:[['「손 적시기」 과정일세','손끝을 적시며 박을 몸에 새기게. 음악이 바뀌어도 이 박이 손을 지켜 줄 걸세']],units:['beat','half','break','double'],go:['이제 판 전체를 이어서 해 보게','하프 · 브레이크 · 더블이 차례로 올 걸세. Space로 시작하게'],recap:'박마다 A를 누르게. 음악이 바뀌어도 박은 그대로일세'},
+  p2:{hello:[['「모양 잡기」 과정일세','떠낸 밥을 손바닥 사이에서 굴려 둥근 모양을 잡게']],units:['spin','spin1'],go:['이제 판 전체를 해 보게','2박에 한 바퀴 → 1박에 한 바퀴일세. Space로 시작하게'],recap:'꼭대기를 박에 맞춰 원을 크게 그리게'},
+  p3:{hello:[['「쥐기」 과정일세','왼손은 받치고, 오른손 두 손가락으로 리듬 있게 누르게']],units:['beat','right','sync'],go:['이제 판 전체를 해 보게','왼손은 메트로놈, 오른손만 춤추게. Space로 시작하게'],recap:'왼손 A는 박마다 · 오른손 L은 따로'},
+  p4:{hello:[['「뒤집기」 과정일세','손안에서 한 점을 뒤집어 받게. 높을수록 늦게 떨어진다네']],units:['catch','swing'],go:['이제 판 전체를 해 보게','1박 · 2박 → 스윙일세. Space로 시작하게'],recap:'떨어지는 순간에 Space를 누르게. 그림자를 보게'},
+  p5:{hello:[['「다듬기」 과정일세','고양이 손질을 듣고 자네 방식으로 바꿔 모양을 완성하게']],units:['free'],go:['이제 판 전체를 해 보게','길게 주고받기까지 해 보세. Space로 시작하게'],recap:'고양이 손질을 듣고 살짝 바꿔 치게'},
+  r1:{units:['order','mix','place'],go:['첫 손님일세. 광어 한 점','Space를 누르면 주문이 들어올 걸세'],recap:'과정을 순서대로 · 마지막 착에 광어'},
+  r3:{units:['triplet'],go:['새우 두 점일세. 셋잇단이 처음 나온다네','Space로 시작하게'],recap:'셋잇단은 짧게 짧게 받게'},
+  r5:{units:['accel'],go:['오마카세 마지막일세. 참치 대뱃살 세 점','점점 빨라질 걸세. Space로 시작하게'],recap:'점점 빨라져도 손은 박 위에 두게'}},
  bridges:{
-  p0:{to:'p1',pass:['첫 한 점, 잘 쥐었어요!','이제 과정을 하나씩 깊게 익혀 봐요 · 첫 과정은 「손 적시기」예요'],fail:['처음엔 다 그래요 · 손이 박을 기억하기 시작했어요','과정을 하나씩 익히면 금방 늘어요 · 첫 과정 「손 적시기」로 가요']},
-  p5:{to:'r1',pass:['다섯 과정을 모두 익혔어요!','이제 손님 주문을 받아 봐요 · 첫 손님은 「광어」예요'],needPass:true}},
+  p0:{to:'p1',pass:['첫 한 점, 잘 쥐었네!','이제 과정을 하나씩 깊게 익혀 보게. 첫 과정은 「손 적시기」일세'],fail:['처음엔 다 그렇다네. 손이 박을 기억하기 시작했네','과정을 하나씩 익히면 금방 늘 걸세. 첫 과정 「손 적시기」로 가세']},
+  p5:{to:'r1',pass:['다섯 과정을 모두 익혔구먼!','이제 손님 주문을 받아 보게. 첫 손님은 「광어」일세'],needPass:true}},
  lessonWin:{p0:'intro'}};
 
 const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
@@ -1796,7 +1796,7 @@ function buildCues(C){const TC=TempoCueTable,K=TC.kinds,S=C.stage,secs=C.secs,sr
  if(TC.procCue.includes(S.type))for(let i=2;i<secs.length;i++){const a=secs[i-1],b=secs[i];if(a.proc===b.proc||src.some(q=>Math.abs(q.b-b.b0)<1e-9))continue;src.push({tr:null,b:b.b0,show:'proc',from:a.feel,to:b.feel,accel:false,ret:false,cueOnly:true,proc:true});}/* T77-a 과정 바뀜 예고(실전) */
  src.sort((a,b)=>a.b-b.b);C.cues=[];let prevB=C.countBeats?C.countBeats-4:0;
  for(const q of src){const sec=C.secAt(q.b),pv=C.secAt(q.b-1),afterBreak=pv.feel==='break',want=q.b-(TC.basic.includes(S.id)&&!afterBreak?TC.previewBasicBeats:TC.previewBeats),b0=Math.max(want,prevB),k=K[q.show]||K.straight;
-  const name=q.ret&&q.show!=='return'?`돌아와요 → ${k.name}`:q.accel&&q.show!=='accel'?`${k.name} · 빨라져요`:k.name;
+  const name=q.ret&&q.show!=='return'?`복귀 → ${k.name}`:q.accel&&q.show!=='accel'?`${k.name} · 가속`:k.name;
   const ghost=!!k.ghost&&!(q.accel&&q.from===q.to)&&sec.feel!=='break';
   C.cues.push({id:C.cues.length,tr:q.tr,b:q.b,t:C.timeOf(q.b),b0,tFrom:C.timeOf(b0),tAdaptTo:C.timeOf(q.b+TC.adapt.beats),kind:q.show,name,short:q.accel&&q.show!=='accel'?K.accel.short:k.short,say:q.proc?`${k.say} 「${ProcTable[sec.proc].name}」`:q.accel&&q.show!=='accel'?k.say+' · 점점 빨리':k.say,cat:k.cat,from:q.from,to:q.to,accel:q.accel,ret:q.ret,cueOnly:q.cueOnly,ghost,
    nextProc:sec.proc!==pv.proc?sec.proc:null,nextLine:sec.line||'',targetFeel:sec.feel==='break'?'break':feelOf(sec),cards:[q.show,q.accel&&q.show!=='accel'?'accel':null].filter(x=>x&&K[x]&&K[x].first)});
@@ -1994,7 +1994,7 @@ function lessonEvents(run,U){const C=run.C,out=[],secOf=i=>C.secs[i];
  if(U.count==='free')for(const b of run.free.bars){if(b.role!=='play'||!b.score||!lessonCounts(U,secOf(b.sec)))continue;const s=b.score,ok=s.score>=TutorialTable.freeOk.score&&s.n>=TutorialTable.freeOk.hits&&!s.flags.includes('spam');/* 같은 키 연타는 다듬기가 아님 */out.push({id:'f'+b.id,t:b.t1,ok,score:+s.score.toFixed(3),n:s.n,kind:ok?'good':s.flags.includes('spam')?'spam':!s.n?'empty':'weak'});}
  return out.sort((a,b)=>a.t-b.t);}
 /* 칭찬·교정 한마디: 딱이면 칭찬(번갈아) · 좋아요면 「좋아요 · 」+ 빠름/늦음 교정 · 실패면 그 종류 교정(단원 문구가 있으면 그것) */
-function lessonLine(U,ev,i=0){const F=TutorialTable.feedback;if(ev.kind==='good')return F.good[i%F.good.length];if(ev.ok)return F.ok+' · '+(U[ev.kind]||F[ev.kind]||F.miss);return U[ev.kind]||F[ev.kind]||F.miss;}
+function lessonLine(U,ev,i=0){const F=TutorialTable.feedback;if(ev.kind==='good')return F.good[i%F.good.length];if(ev.ok)return F.ok+'. '+(U[ev.kind]||F[ev.kind]||F.miss);return U[ev.kind]||F[ev.kind]||F.miss;}
 /* 판정 창 밖에서 누른 키(빈손): 가장 가까운 셀 대상보다 앞이면 early · 뒤면 late(1.5박보다 멀면 null) */
 function strayKind(run,U,t){const C=run.C,L=U.count==='pulse'?run.pulses:U.count==='right'?run.rights:U.count==='toss'?run.tosses:U.count==='place'?run.places:[],f=U.count==='toss'?'tLand':'t';let best=null,bd=1e9;
  for(const x of L){if(!lessonCounts(U,C.secs[x.sec]))continue;const d=Math.abs(t-x[f]);if(d<bd){bd=d;best=x;}}if(!best||bd>C.beatDur(0)*1.5)return null;return {kind:t<best[f]?'early':'late',ms:Math.round((t-best[f])*1000),t:best[f]};}
@@ -2044,7 +2044,7 @@ const RemixUITable={
  judge:{perfect:['딱!','#7FCB5B'],ok:['좋아요','#F7B94E'],miss:['놓쳤어요','#E8503C']},
  marksOf:{perfect:['○','#7FCB5B'],ok:['△','#F7B94E'],miss:['×','#E8503C']},
  pads:['A','S','D','K','L'],sndColor:{tok:'#74C9E6',tak:'#F7B94E',sseuk:'#7FCB5B',kkuk:'#E8503C',chak:'#FFF3DC'},
- kindName:{practice:'연습',real:'실전'},tierName:{1:'1단계 · 쉬움',2:'2단계 · 조금 어려워요'},stepNo:['','①','②','③','④','⑤','⑥'],
+ kindName:{practice:'연습',real:'실전'},tierName:{1:'1단계 · 쉬움',2:'2단계 · 조금 어려움'},stepNo:['','①','②','③','④','⑤','⑥'],
  dialog:{x:384,y:312,w:1152,h:72},caps:{spin:44,pad:30,slot:34},/* T77-a 키캡 크기 */keyLabel:{pulse:'A',right:'L',place:'Space',toss:'Space',spin:'↑'},/* T74-a 스승 대화창(스승 아래 · 놀이 요소 위 띠) · 박 줄 키 표시 */
  steps:{y:1050,w:146,h:36,gap:8},count:{x:410,y:432,w:1100,h:236},served:{x:1500,y:1000,step:132}};
 const RemixAudioTable={busGain:.55,wordGain:.95,liveWordGain:.85,spinNoise:{hz:[900,2600],q:.9,gainMax:.09,tau:.04},topTick:{word:'tokA',gain:.45},arrowTick:{word:'tokA',gain:.18},catch:{perfect:{word:'chak',gain:.9},ok:{word:'tak',gain:.7}},drop:{word:'dull',gain:1},whiff:{word:'hwik',gain:.25},place:{word:'chak',miss:'dull',gold:{inst:'ting',vel:.9}},lookaheadSec:.25,intervalMs:25,maxLateSec:.05,logMax:6000};
@@ -2213,7 +2213,7 @@ function hhFrame(now,B,sec,warn){const E=X.el.hh,H=CastTable.hh,M=CatMotionTable
  const resting=!catNear(catNotes(),t,G.restBeats*bd,G.restBeats*bd).length;if(resting)nod=Math.max(nod,G.grooveNod*catNod(t,'hh'));
  const brk=sec?.feel==='break';
  if(sT?.verb==='free'){const bar=X.run.free.bars.find(b=>b.sec===sT.i&&t>=b.t0&&t<b.t1);if(bar?.role==='call'){b='들어 봐요!';caps=(bar.pattern||[]).map(([,s])=>L.SoundKey[s]).slice(0,G.capMax);mouth='grin';}
-  else if(bar?.role==='play'){b='반쵸 차례 · 섞어서!';caps=null;}else if(bar){eyes='happy';}}
+  else if(bar?.role==='play'){b='자네 차례 · 섞어서!';caps=null;}else if(bar){eyes='happy';}}
  if(sT?.verb==='poly'&&!sT.leftOnly&&C.previews.length){const pv=C.previews.filter(p=>p.sec===sT.i);if(pv.length&&C.beatAt(t)<pv[pv.length-1].b+.5&&C.beatAt(t)>=sT.b0){b='오른손은 이렇게!';caps=['L'];let p=0;for(const q of pv)p=Math.max(p,catPulse(t-q.t));if(p>.05){paw=Math.max(paw,H.beckonDeg*1.5*p);if(p>.5)mouth='grin';}}}
  if(warn&&warn.pre){fingers=Math.max(1,Math.min(4,Math.ceil(warn.left)));eyes='wide';mouth='grin';b=warn.pre.say;}else if(warn&&warn.ad&&B-warn.ad.b<1){b='지금!';eyes='wide';mouth='grin';}
  const dq=catCue(t,'hh');if(dq){const nx=catNext(dq);demoOn=nx.length>0;let g=0;for(const x of nx)g=Math.max(g,catPulse(t-x.td));demo=g;paw=Math.max(paw,G.demoPaw*H.beckonDeg*g);const cc=[];for(const x of nx){const c=catCap(x);if(cc[cc.length-1]!==c||x.k==='A'||x.k==='L')cc.push(c);}if(cc.length)caps=cc.slice(0,G.capMax);}/* 예고 시범: 다음 마디 노트를 앞발로 · 말풍선 = 키캡 */
@@ -2368,13 +2368,13 @@ function buildMenu(){if(!menuEl)return;const P=X.prog,nx=L.RemixProgress.next(X.
   const why=X.all?null:L.RemixProgress.why(P,s.id),need=why?why.need.map(id=>stageOf(id).name):[];
   const lockTxt=!need.length?'':s.type==='real'&&s.order===1?`연습 다섯 과정을 모두 통과하면 열려요${need.length<5?` · 남은 ${need.length}개`:''}`:`「${need[0]}」${josa(need[0],'을','를')} 통과하면 열려요`;
   const art=pr?sushiSvg(s.product,{gloss:b?.pass?1:.5}):sushiSvg(s.neta,{gloss:b?.pass?1:.5});
-  const mid=pr?`<div class="rxProc"><span class="rxGim">${procIcon(s.proc)}${s.gimmick}</span><span>= 니기리 과정 ${RemixUITable.stepNo[T.step]}</span></div><p class="rxWhy">${T.why.split(' · ')[0]}</p>`
+  const mid=pr?`<div class="rxProc"><span class="rxGim">${procIcon(s.proc)}${s.gimmick}</span><span>= 니기리 과정 ${RemixUITable.stepNo[T.step]}</span></div><p class="rxWhy">${T.why.split(/\. | · /)[0]}</p>`
    :`<div class="rxFlow">${L.ProcOrder.map(p=>`<i title="${procName(p)}" style="color:${PT[p].color}">${procIcon(p)}</i>`).join('<b>›</b>')}</div><p class="rxWhy">손님 주문 ${C.pieces}점 · 과정 순서대로 쥐고 마지막 착에 ${s.name}${josa(s.name,'이','가')} 딱</p>`;
   return `<button class="rxCard${pr?' prac':' real'}${open?'':' locked'}${s.id===nx&&open?' first':''}" data-stage="${s.id}"${open?'':' aria-disabled="true"'}><div class="rxCardTop"><b>${keyOf(s)} · ${stageTag(s)}</b><span class="rxStars" aria-label="난이도 ${s.stars}">${'★'.repeat(s.stars)}<i>${'★'.repeat(5-s.stars)}</i></span></div><div class="rxArt">${art}</div><h3>${s.name}</h3>${mid}<p>${s.bpm}${bpm2?' → '+bpm2:''} BPM · 약 ${secs}초</p>${b?`<em class="rxBest">${b.grade==='한 번 더'?'다시':b.grade}<br>${b.total}</em>`:''}${open?'':`<div class="rxLock">${LOCK}<span>${lockTxt}</span></div>`}</button>`;};
  const nS=stageOf(nx);menuEl.innerHTML=`<div class="rxTitle">니기리 리믹스</div><div class="rxSub">먼저 니기리를 만드는 과정을 하나씩 익히고 → 오늘의 횟감으로 한 점을 처음부터 끝까지 쥐어요</div>
  <div class="rxRowHead"><span class="rxRowTag">연습</span>과정 익히기<small>손놀림 하나 = 니기리 과정 하나 · 앞 과정을 통과하면 다음 과정</small>${introBtn()}<button class="rxLessonReset" id="rxLessonReset">스승 설명 다시 듣기</button></div><div class="rxCards">${practiceIds().map(card).join('')}</div>
  <div class="rxRowHead real"><span class="rxRowTag">실전</span>오늘의 횟감<small>손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착 · 마지막 착에 그 횟감이 딱</small></div><div class="rxCards">${realIds().map(card).join('')}</div>
- <div class="rxHint">\` = 입문 · 숫자 1~5 = 연습 · 6~9, 0 = 실전 · 클릭 · Enter = 다음 판 「${stageTitle(nS)}」</div>
+ <div class="rxHint">\` = 입문 · 숫자 1~5 = 연습 · 6~9, 0 = 실전 · 클릭 · Enter = 다음 판 「${stageTitle(nS)}」 · 판 중 H = 수업 다시 보기</div>
  <div class="rxOld"><button id="rxOldBtn" aria-expanded="false">옛 판 ▸</button><div class="rxOldBox" id="rxOldBox" hidden>예전 실험(손 문장 · 그루브 · 수련 판)은 그대로 남아 있어요.<br><button id="rxOldGo">옛 판 화면으로</button></div></div>`;
  menuEl.querySelectorAll('.rxCard,.rxIntroBtn').forEach(b=>b.addEventListener('click',()=>tryGo(b.dataset.stage)));menuEl.querySelector('#rxLessonReset').addEventListener('click',e=>{X.prog={...X.prog,lessons:[],lessonStages:[]};saveProg();e.currentTarget.classList.add('on');e.currentTarget.textContent='스승 설명을 처음부터 다시 들려줘요 ✓';});menuEl.querySelector('#rxOldBtn').addEventListener('click',e=>{const box=menuEl.querySelector('#rxOldBox');box.hidden=!box.hidden;e.currentTarget.textContent=box.hidden?'옛 판 ▸':'옛 판 ▾';e.currentTarget.setAttribute('aria-expanded',String(!box.hidden));});
  menuEl.querySelector('#rxOldGo').addEventListener('click',()=>setActive(false));}
@@ -2387,21 +2387,21 @@ function tierScores(run){const C=run.C,acc={},gv=g=>L.RemixScoreTable[g]??0,add=
  return Object.keys(acc).sort().map(t=>({tier:+t,score:Math.round(100*acc[t].reduce((a,b)=>a+b,0)/acc[t].length),n:acc[t].length}));}
 const markOf=v=>v>=85?RemixUITable.marksOf.perfect:v>=55?RemixUITable.marksOf.ok:RemixUITable.marksOf.miss;
 function buildResult(R){const S=stageOf(X.stageId),D=R.procDetail||{},F=R.finale||{},pr=S.type==='practice',U=RemixUITable;
- const lineOf=(p,d)=>{if(!d)return '';const v=PT[p].verb;return v==='spin'?`위상 오차 평균 ${d.meanAbsErrMs} ms · 납작 ${d.flat} · 흩어짐 ${d.scatter}`:v==='toss'?`딱 ${d.perfect} · 좋아요 ${d.ok} · 놓침 ${d.miss} / ${d.n}`:v==='poly'?(p==='tezu'?`박 ${d.pulses}번 · 놓침 ${d.leftMiss} · 흔들림 ${d.leftSigmaMs} ms`:`왼손 ${d.left} (흔들림 ${d.leftSigmaMs} ms) · 오른손 ${d.right}`):v==='free'?`그루브 ${d.groove} · 다양성 ${d.diversity} · 응답 ${d.response}${d.spam?' · 같은 키 반복':''}`:v==='vary'?`변주 경계 ${d.transitions.length}곳 · 브레이크 복귀 ${d.transitions.filter(t=>t.kind==='return').map(t=>Math.round(t.q*100)).join('·')||'-'}`:'';};
+ const lineOf=(p,d)=>{if(!d)return '';const v=PT[p].verb;return v==='spin'?`위상 오차 평균 ${d.meanAbsErrMs} ms · 납작 ${d.flat} · 흩어짐 ${d.scatter}`:v==='toss'?`딱 ${d.perfect} · 좋아요 ${d.ok} · 놓침 ${d.miss} · 전체 ${d.n}`:v==='poly'?(p==='tezu'?`박 ${d.pulses}번 · 놓침 ${d.leftMiss} · 흔들림 ${d.leftSigmaMs} ms`:`왼손 ${d.left} (흔들림 ${d.leftSigmaMs} ms) · 오른손 ${d.right}`):v==='free'?`그루브 ${d.groove} · 다양성 ${d.diversity} · 응답 ${d.response}${d.spam?' · 같은 키 반복':''}`:v==='vary'?`변주 경계 ${d.transitions.length}곳 · 브레이크 복귀 ${d.transitions.filter(t=>t.kind==='return').map(t=>Math.round(t.q*100)).join('·')||'-'}`:'';};
  const rows=Object.keys(R.procs).map(k=>{const [m,mc]=markOf(R.procs[k]);return `<div class="rxRow"><span class="rxMark" style="color:${mc}">${m}</span><span>${procName(k)}</span><div class="rxBar"><i style="width:${R.procs[k]}%;background:${PT[k].color}"></i></div><span>${R.procs[k]}</span><small>${PT[k].gimmick} · ${lineOf(k,D[k])}</small></div>`;}).join('');
  const fins=(R.finales||[]).filter(Boolean),pg=F.placeG||R.places?.[0]||'miss',[pm,pmc]=U.marksOf[pg];
- const pDesc=pr?`${U.judge[pg][0]}${F.err!=null?` · ${F.err>0?'+':''}${Math.round(F.err)} ms`:''}`:fins.length>1?fins.map((f,i)=>`${i+1}점째 ${U.judge[f.placeG][0]}`).join(' · '):`${U.judge[pg][0]}${F.err!=null?` · ${F.err>0?'+':''}${Math.round(F.err)} ms`:''} · 네타 ${Math.abs(F.dx||0)<3?'가운데':F.dx>0?'오른쪽으로 '+Math.round(F.dx)+' px':'왼쪽으로 '+Math.round(-F.dx)+' px'}${F.rot?` · ${Math.abs(F.rot).toFixed(0)}° 기움`:''}`;
- const pRow=`<div class="rxRow"><span class="rxMark" style="color:${pmc}">${pm}</span><span>${pr?'내려놓기':'착 · 올리기'}</span><span style="grid-column:3/5;font-size:23px">${pDesc}</span></div>`;
+ const pDesc=pr?`${U.judge[pg][0]}${F.err!=null?` · ${F.err>0?'+':''}${Math.round(F.err)} ms`:''}`:fins.length>1?fins.map((f,i)=>`${i+1}점째 ${U.judge[f.placeG][0]}`).join(' · '):`${U.judge[pg][0]}${F.err!=null?` · ${F.err>0?'+':''}${Math.round(F.err)} ms`:''} · 횟감 ${Math.abs(F.dx||0)<3?'가운데':F.dx>0?'오른쪽으로 '+Math.round(F.dx)+' px':'왼쪽으로 '+Math.round(-F.dx)+' px'}${F.rot?` · ${Math.abs(F.rot).toFixed(0)}° 기움`:''}`;
+ const pRow=`<div class="rxRow"><span class="rxMark" style="color:${pmc}">${pm}</span><span>${pr?'내려놓기':'착'}</span><span style="grid-column:3/5;font-size:23px">${pDesc}</span></div>`;
  const tiers=pr?tierScores(X.run):[],pieces=pr?[]:L.pieceScores(X.run);const nx=nextId(X.stageId),nS=nx&&stageOf(nx),open=nx&&isOpen(nx),face={nod:{eyes:'closed',mouth:'smile'},hmm:{eyes:'open',mouth:'flat'},shake:{eyes:'narrow',mouth:'frown'}}[F.react||'hmm'];
  const nName=nS?(nS.type==='practice'?`다음 과정 「${nS.name}」${josa(nS.name,'이','가')}`:nS.order===1?`실전 「${nS.name}」${josa(nS.name,'이','가')}`:`다음 횟감 「${nS.name}」${josa(nS.name,'이','가')}`):'';
- const unlock=S.type==='intro'?`<div class="rxUnlock">다음은 첫 과정 「${nS.name}」이에요</div>`:R.unlocked?`<div class="rxUnlock">${nName} 열렸어요!</div>`:!R.pass?`<div class="rxUnlock no">「동」 이상이면 통과 · 다음 판이 열려요</div>`:nx&&!open&&nS.type==='real'&&nS.order===1?`<div class="rxUnlock no">연습 다섯 과정을 다 통과하면 실전이 열려요</div>`:nx?'':`<div class="rxUnlock">오마카세 마지막 판까지 통과했어요!</div>`;
+ const unlock=S.type==='intro'?`<div class="rxUnlock">다음은 첫 과정 「${nS.name}」${josa(nS.name,'이에요','예요')}</div>`:R.unlocked?`<div class="rxUnlock">${nName} 열렸어요!</div>`:!R.pass?`<div class="rxUnlock no">「동」 이상이면 통과 · 다음 판이 열려요</div>`:nx&&!open&&nS.type==='real'&&nS.order===1?`<div class="rxUnlock no">연습 다섯 과정을 다 통과하면 실전이 열려요</div>`:nx?'':`<div class="rxUnlock">오마카세 마지막 판까지 통과했어요!</div>`;
  const plate=pr?`<div class="rxPlate">${sushiSvg(S.product,{dx:F.dx||0,rot:F.rot||0,gloss:F.gloss??.5})}</div>`:`<div class="rxPlate rxPlates n${Math.max(1,fins.length)}">${(fins.length?fins:[F]).map(f=>`<div>${sushiSvg(S.neta,{dx:f.dx||0,rot:f.rot||0,gloss:f.gloss??.5})}</div>`).join('')}</div>`;
  const extra=tiers.length>1?`<div class="rxTier">단계별 — ${tiers.map(t=>`${U.tierName[t.tier]} <b>${t.score}</b>`).join(' · ')}</div>`:pieces.length>1?`<div class="rxTier">한 점씩 — ${pieces.map(t=>`${t.piece+1}점째 <b>${t.score}</b>`).join(' · ')}</div>`:'';
  const head=pr?`<em>과정 검수</em><h2>${S.name}</h2><span class="rxStars">${'★'.repeat(S.stars)}<i>${'★'.repeat(5-S.stars)}</i></span><span>${S.gimmick} · 니기리 과정 ${U.stepNo[PT[S.proc].step]}</span>`:`<em>검수표</em><h2>${S.name}</h2><span class="rxStars">${'★'.repeat(S.stars)}<i>${'★'.repeat(5-S.stars)}</i></span><span>${S.type==='intro'?'입문 · 느린 박으로 첫 한 점':`실전 ${S.order} · 손님 주문 ${X.C.pieces}점`}</span>`;
  resultEl.innerHTML=`<div class="rxSheet${pr?'':' real'}"><div class="rxSL"><div class="rxSH">${head}</div>${pr?`<div class="rxWhyLine">이 손놀림은 니기리의 「${S.name}」 과정이에요 — ${PT[S.proc].why}</div>`:''}<div class="rxRows">${rows}${pRow}</div>
  ${extra}<div class="rxMemo">검수 메모 — 「${R.comment[0]}」<br>「${R.comment[1]}」</div></div>
- <div class="rxSR">${plate}<div class="rxStamp" aria-label="등급 ${R.grade}">${R.grade==='한 번 더'?'다시':R.grade}<small>${R.total}</small></div><div class="rxFace">${masterSvg('rxmr',face)}</div><div class="rxSay">「${F.line||''}」</div>${unlock}</div></div>
- <div class="rxBtns"><button data-a="next">${open?`다음 판 「${nS.name}」 (Enter)`:'한 번 더 (Enter)'}</button><button data-a="retry">다시 (Space)</button><button data-a="menu">메뉴 (Esc)</button></div>`;
+ <div class="rxSR">${plate}<div class="rxStamp" aria-label="등급 ${R.grade==='한 번 더'?'다시':R.grade}">${R.grade==='한 번 더'?'다시':R.grade}<small>${R.total}</small></div><div class="rxFace">${masterSvg('rxmr',face)}</div><div class="rxSay">「${F.line||''}」</div>${unlock}</div></div>
+ <div class="rxBtns">${open?`<button data-a="next">다음 판 「${nS.name}」 (Enter)</button><button data-a="retry">다시 (Space)</button>`:'<button data-a="retry">다시 (Enter · Space)</button>'}<button data-a="menu">메뉴 (Esc)</button></div>`;
  resultEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.a;if(a==='retry')go(X.stageId);else if(a==='next')go(open?nx:X.stageId);else toMenu();}));}
 
 /* ── 그리기 ── */
@@ -2466,7 +2466,7 @@ function drawSpin(now,B,sec){const U=RemixUITable.spin,R=X.run,rev=L.revOf(sec);
  if(X.C.stage.guide==='full'){const ga=TAU*B/rev;oval(U.cx+Math.sin(ga)*U.ring,U.cy-Math.cos(ga)*U.ring,16,16,'#FFF3DC55','#FFF3DC99',3);}
  if(th!=null){const a=X.disp.th;ctx.lineWidth=14;ctx.strokeStyle=q>.7?C0.good:q>.35?C0.gold:C0.bad;ctx.beginPath();ctx.arc(U.cx,U.cy,U.ring,-Math.PI/2+a-.9,-Math.PI/2+a);ctx.stroke();oval(U.cx+Math.sin(a)*U.ring,U.cy-Math.cos(a)*U.ring,22,22,C0.gold,'#0A1017',4);}
  const a=X.disp.th,lift=Math.sin(a)*22;handShape(U.cx-205,U.cy+40,1,lift,.5);handShape(U.cx+205,U.cy+40,-1,-lift,.5);riceBall(U.cx,U.cy,U.rice.w,U.rice.h,a,X.disp.squash,X.disp.scatter);
- const st=!th?'원을 그려요 (드래그 · ↑→↓←)':ratio<=0.05?'멈췄어요 · 계속 돌려요':ratio>1.3?'너무 빨라요 · 밥이 납작해요':ratio<.72?'너무 느려요 · 밥알이 흩어져요':smp&&Math.abs(smp.errMs)>120?(smp.errMs<0?'박보다 앞서요':'박보다 늦어요'):'좋아요 · 박마다 위를 지나요';text(st,U.cx,U.cy+U.ring+64,30,q>.7?C0.good:q>.35?C0.gold:C0.warn,'center',800,'#0A1017');
+ const st=!th?'원을 그려요 (드래그 · ↑ → ↓ ←)':ratio<=0.05?'멈췄어요. 계속 돌려요':ratio>1.3?'너무 빨라요. 밥이 납작해요':ratio<.72?'너무 느려요. 밥알이 흩어져요':smp&&Math.abs(smp.errMs)>120?(smp.errMs<0?'박보다 앞서요':'박보다 늦어요'):'좋아요. 박마다 위를 지나요';text(st,U.cx,U.cy+U.ring+64,30,q>.7?C0.good:q>.35?C0.gold:C0.warn,'center',800,'#0A1017');
  text(rev===2?'2박에 한 바퀴':'1박에 한 바퀴',U.cx,U.cy+U.ring+104,24,C0.sub,'center',800,'#0A1017');}
 function drawToss(now){const U=RemixUITable.toss,R=X.run,nid=X.C.stage.neta,toss=(x,xx,yy,r,s=1)=>x.obj==='neta'?drawNeta(nid,xx,yy,110*s,r):riceBall(xx,yy,70*s,52*s,r*3);handShape(U.handX-70,U.handY+40,1,0,.9);handShape(U.handX+70,U.handY+40,-1,0,.9);
  for(const x of R.tosses){if(now<x.tToss-.15||now>x.tLand+.9)continue;const x0=U.handX+x.side*U.fromDX,x1=U.handX,y1=U.handY,u=(now-x.tToss)/(x.tLand-x.tToss);
@@ -2474,7 +2474,7 @@ function drawToss(now){const U=RemixUITable.toss,R=X.run,nid=X.C.stage.neta,toss
   if(u<=1){const sh=.25+.75*u;oval(x1,y1+60,48*sh,12*sh,`rgba(10,16,23,${.25+.5*u})`);const xx=x0+(x1-x0)*u,yy=y1-4*x.h*u*(1-u);toss(x,xx,yy,u*TAU*x.flightBeats*.5);continue;}
   const age=now-x.tLand;if(x.res&&x.res.g!=='miss'){ctx.globalAlpha=Math.max(0,1-age/.9);toss(x,x1,y1-8,0);if(age<.25)oval(x1,y1-10,60+age*200,30+age*90,null,x.res.g==='perfect'?C0.good:C0.gold,6);ctx.globalAlpha=1;}
   else if(x.res){const k=Math.min(1,age/.5),yy=y1+k*150-Math.sin(k*Math.PI)*40;ctx.globalAlpha=Math.max(0,1-age/.9);toss(x,x1+30*k,yy,k*2);ctx.globalAlpha=1;}}
- const caught=R.tosses.filter(x=>x.res&&x.res.g!=='miss').length,done=R.tosses.filter(x=>x.res).length;text(`뒤집어 받은 개수 ${caught} / ${done}`,U.handX,U.handY+150,26,C0.sub,'center',800,'#0A1017');}
+ const caught=R.tosses.filter(x=>x.res&&x.res.g!=='miss').length,done=R.tosses.filter(x=>x.res).length;text(`뒤집어 받은 개수 ${caught}/${done}`,U.handX,U.handY+150,26,C0.sub,'center',800,'#0A1017');}
 function drawPoly(now,B,sec){const U=RemixUITable.poly,R=X.run;X.disp.tilt+=(R.tilt-X.disp.tilt)*.12;const la=now-X.disp.leftAt,ra=now-X.disp.rightAt;
  if(sec.proc==='tezu'){/* 손 적시기: 왼손이 박마다 물그릇에 손끝을 톡(물결) — 밥·오른손 없음 */const dip=la<.16?1-la/.16:0,bx=U.lx+300,by=U.ly+10;drawNeta('bowl',bx,by,250,0,{});if(dip>0)oval(bx,by-30,50+120*(1-dip),10+18*(1-dip),null,'#DFF4FB',4);handShape(U.lx+60,U.ly+30,1,-18*dip,.3);}
  else{handShape(U.lx,U.ly+30,1,la<.12?-10*(1-la/.12):0,.2);riceBall(U.lx-10,U.ly-50,170,112,0,1,Math.abs(X.disp.tilt)>14?.5:0,X.disp.tilt);
@@ -2487,19 +2487,19 @@ function drawPoly(now,B,sec){const U=RemixUITable.poly,R=X.run;X.disp.tilt+=(R.t
   const preview=k<(sec.rightFromBar??0);for(const p of sec.right){const a=p/4*TAU,B0=sec.b0+4*k+p,r=R.rights.find(x=>Math.abs(x.b-B0)<1e-6),col=preview?'#FFF3DC':r?.res?(r.res.g==='miss'?C0.bad:r.res.g==='perfect'?C0.good:C0.gold):'#FFF3DCaa';oval(G.x+Math.sin(a)*(G.r-32),G.y-Math.cos(a)*(G.r-32),14,14,col,'#0A1017',3);}
   const a=phase*TAU;ctx.strokeStyle=C0.cream;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(G.x,G.y);ctx.lineTo(G.x+Math.sin(a)*(G.r-10),G.y-Math.cos(a)*(G.r-10));ctx.stroke();text(preview?'고양이 시범 · 들어 봐요':'오른손 고리',G.x,G.y+G.r+26,22,preview?C0.gold:C0.sub,'center',800,'#0A1017');}}
 function drawFree(now,B,sec){const U=RemixUITable.free,R=X.run,bars=R.free.bars.filter(b=>b.sec===sec.i),cur=bars.find(b=>now>=b.t0-.07&&now<b.t1-.07)||bars[0],S=U.strip;
- const roleLine={call:'힙합 고양이의 콜 · 들어 봐요',play:'반쵸 차례 · 자유롭게!',mix:'전통 고양이가 반쵸 리듬을 섞어 돌려줘요',answer:'전통 고양이의 대답 · 반쵸 리듬이 섞였어요'}[cur.role];text(roleLine,960,U.line.y,34,cur.role==='play'?C0.gold:C0.cream,'center',900,'#0A1017');
+ const roleLine={call:'힙합 고양이의 콜 · 들어 봐요',play:'자네 차례 · 자유롭게!',mix:'전통 고양이가 방금 친 리듬을 섞어 돌려줘요',answer:'전통 고양이의 대답 · 방금 친 리듬이 섞였어요'}[cur.role];text(roleLine,960,U.line.y,34,cur.role==='play'?C0.gold:C0.cream,'center',900,'#0A1017');
  const strip=(y,label,pat,hits,steps,bar,col)=>{rr(S.x,y,S.w,S.h,14,'#0A1017cc','#3E5A60',3);text(label,S.x-14,y+S.h/2,22,C0.sub,'right',800);const cw=S.w/steps;for(let i=0;i<steps;i++)if(i%(steps/4)===0){ctx.fillStyle='#3E5A60';ctx.fillRect(S.x+i*cw,y+6,2,S.h-12);}
   for(const [st,snd] of pat||[]){oval(S.x+(st+.5)*cw,y+S.h/2,17,17,RemixUITable.sndColor[snd]+(col?'':'66'),'#0A1017',2);text(L.SoundKey[snd],S.x+(st+.5)*cw,y+S.h/2+1,18,'#0A1017','center',900);}
   if(hits&&bar&&bar.role==='play')for(let j=0;j<4;j++){const st=j*steps/4;if(!hits.some(h=>Math.abs(h.step-st)<steps/8))capKey('?',S.x+(st+.5)*cw,y+S.h/2,RemixUITable.caps.slot,'#0A1017','#9DB4B6',now>=bar.t0&&now<bar.t1&&Math.floor(X.C.beatAt(now)-bar.b0)===j?C0.gold:'#3E5A60',2);}/* T77-a 빈 칸 = 「여기서 아무 키나」 */
   for(const h of hits||[]){const hx=S.x+(h.step+.5)*cw+Math.max(-cw/2,Math.min(cw/2,h.err/1000/((bar.t1-bar.t0)/steps)*cw));oval(hx,y+S.h/2,18,18,RemixUITable.sndColor[h.snd],'#0A1017',3);text(h.k,hx,y+S.h/2+1,19,'#0A1017','center',900);}
   if(bar&&now>=bar.t0&&now<bar.t1){const x=S.x+S.w*(X.C.beatAt(now)-bar.b0)/4;ctx.fillStyle=C0.cream;ctx.fillRect(x-2,y-6,4,S.h+12);}};
  const ref=cur.role==='play'?(cur.callRef!=null?R.free.bars[cur.callRef]:null):cur;const refPat=ref?(ref.role==='call'?ref.pattern:ref.dyn):null;
- strip(S.y,'고양이',refPat,null,cur.steps,cur.role!=='play'?cur:null,cur.role!=='play');strip(S.y+S.h+S.gap,'반쵸',null,cur.role==='play'?cur.hits:[],cur.steps,cur.role==='play'?cur:null,true);
+ strip(S.y,'고양이',refPat,null,cur.steps,cur.role!=='play'?cur:null,cur.role!=='play');strip(S.y+S.h+S.gap,'자네',null,cur.role==='play'?cur.hits:[],cur.steps,cur.role==='play'?cur:null,true);
  const sc=[...bars].reverse().find(b=>b.score);if(sc){const s=sc.score,x=U.score.x,y=U.score.y;rr(x,y,300,150,16,'#0A1017cc');[['그루브',s.pocket,C0.good],['다양성',s.diversity,C0.gold],['응답',s.response,C0.sky]].forEach(([n,v,c],i)=>{text(n,x+16,y+28+i*44,22,C0.cream,'left',800);rr(x+110,y+18+i*44,170,18,9,'#1E3746');rr(x+110,y+18+i*44,170*v,18,9,c);});}
  const play=cur.role==='play'&&now>=cur.t0-.07&&now<cur.t1,hk=play?cur.hits.map(h=>h.k):[],used=new Set(hk),run3=hk.length>=3&&hk.slice(-3).every(k=>k===hk[hk.length-1])?hk[hk.length-1]:null;/* T77-a 섞기 표시 */
  const pw=U.padW,gap=U.padGap,x0=960-(5*pw+4*gap)/2;RemixUITable.pads.forEach((k,i)=>{const K=L.KeySoundTable[k],age=now-(X.disp.padAt[k]??-9),on=age<.15,x=x0+i*(pw+gap),y=U.padY-(on?8:0),warn=run3===k,fresh=play&&!used.has(k);rr(x,y+6,pw,pw*.92,22,'#0A1017',null);rr(x,y,pw,pw*.92,22,on?RemixUITable.sndColor[K.snd]:warn?'#3A2A2A':'#132430',warn?C0.warn:fresh?C0.gold:'#0A1017',fresh||warn?6:5);text(k,x+pw/2,y+42,44,on?'#0A1017':C0.cream,'center',900);text(K.label+' · '+K.cook,x+pw/2,y+100,22,on?'#0A1017':C0.sub,'center',800);
   if(play&&used.has(k)&&!warn)text('✓',x+pw-18,y+18,24,C0.good,'center',900,'#0A1017');if(warn)text('또?',x+pw-24,y+18,22,C0.warn,'center',900,'#0A1017');});
- if(cur.role==='play'||cur.role==='call'){const n=used.size,ty=U.padY-34;const msg=cur.role==='call'?'고양이 손질을 들어요 · 다음 마디에 A S D K L 중 아무 키나':run3?'같은 키만 연타하면 감점 · 다른 키를 섞어요':'아무 키나 박에 맞춰 · 여러 키를 섞을수록 좋아요';const w=capText(msg,960-70,ty,700,24,run3?C0.warn:C0.cream,'center',800,'#0A1017');
+ if(cur.role==='play'||cur.role==='call'){const n=used.size,ty=U.padY-34;const msg=cur.role==='call'?'고양이 손질을 들어요. 다음 마디에 A S D K L 중 아무 키나':run3?'같은 키만 연타하면 감점이에요. 다른 키를 섞어요':'아무 키나 박에 맞춰 쳐요. 여러 키를 섞을수록 좋아요';const w=capText(msg,960-70,ty,700,24,run3?C0.warn:C0.cream,'center',800,'#0A1017');
   if(cur.role==='play'){text('섞은 키',960+300,ty,20,C0.cream,'center',800,'#0A1017');for(let j=0;j<5;j++)oval(960+352+j*22,ty,8,8,j<n?C0.gold:'#132430',j<n?'#0A1017':'#3E5A60',2);}}
  const ha=now-X.disp.catHit,bump=ha<.15?1-ha/.15:0;riceBall(U.rice.x,U.rice.y,150,100,X.C.beatAt(now)*.6,1+bump*.18,0);}
 /* T77-a 굴리기 방향키캡(링 안쪽 위·오른쪽·아래·왼쪽): 다음에 누를 키 = 금색 테 · 방금 누른 키 = 금색으로 채움 · 같은 키·겹침으로 무시된 키 = 회색 */
@@ -2517,7 +2517,7 @@ function drawPlace(now,B,sec,pre=1){const U=RemixUITable.place,C=X.C,S=C.stage,p
  /* pre < 1 = 착 1박 전(앞 구간 마지막 박): 접시(연습 = 도마)·밥이 서서히 나타나고 결과물이 위에서 미끄러져 온다 */ctx.globalAlpha=pre;if(pr){rr(U.x-210,U.y+18,420,46,14,'#B98455','#0A1017',5);rr(U.x-196,U.y+28,392,6,3,'#D3A273');}else{oval(U.x,U.y+44,200,48,'#E9E2D2','#0A1017',5);oval(U.x,U.y+38,160,32,'#F6F1E6');if(nk==='gunkan')gunkanBack(U.x,U.y);else riceBall(U.x,U.y,160,84,0);}ctx.globalAlpha=1;
  const from=U.from,hov={x:U.x,y:U.y+U.hoverDy},land={x:U.x+(F?.dx||0),y:U.y+(pr?-24:nk==='gunkan'?-34:U.landDy)+(F?.dy||0)};let x,y,rot=0,sq=1,gloss=0,gt=9;
  if(!p.res){const u=clamp((now-(p.t-bd))/bd),e=rm?(u>0?1:0):ease(u);x=from.x+(hov.x-from.x)*e;y=from.y+(hov.y-from.y)*e-(rm?0:Math.sin(Math.PI*e)*40);rot=-.25*(1-e);if(now>p.t&&!rm)y+=Math.sin(now*18)*3;
-  oval(U.x,U.y-36,70*e,12*e,'#0A101744');const dt=p.t-now;if(dt>-.25&&dt<2*bd){const r=40+U.r0*Math.max(0,dt)/(2*bd);oval(U.x,U.y-30,r,r*.45,null,dt<.08?C0.good:C0.gold,6);text(pr?'스페이스 · 내려놓기!':'스페이스 · 착!',U.x,U.y+120,30,C0.cream,'center',900,'#0A1017');}}
+  oval(U.x,U.y-36,70*e,12*e,'#0A101744');const dt=p.t-now;if(dt>-.25&&dt<2*bd){const r=40+U.r0*Math.max(0,dt)/(2*bd);oval(U.x,U.y-30,r,r*.45,null,dt<.08?C0.good:C0.gold,6);text(pr?'Space · 내려놓기!':'Space · 착!',U.x,U.y+120,30,C0.cream,'center',900,'#0A1017');}}
  else{const lt=F?.t??p.res.t,age=now-lt,k=rm?1:clamp(age/.08);x=hov.x+(land.x-hov.x)*k;y=hov.y+(land.y-hov.y)*k;rot=(F?.rot||0)*k*Math.PI/180;if(!rm&&age>=.08&&age<.3)sq=1-.14*Math.sin(Math.PI*(age-.08)/.22);
   if(age>0&&age<.3&&p.res.g!=='miss'&&!rm)oval(U.x,U.y-30,90+age*260,30+age*90,null,p.res.g==='perfect'?C0.good:C0.gold,6);const insp=age-CastTable.master.inspectDelay;if(F&&insp>=0){gloss=F.gloss;gt=insp;}}
  drawNeta(id,x,y,nk==='gunkan'?170:190,rot,{sq,gloss,t:gt,now});if(nk==='gunkan'){ctx.globalAlpha=pre;gunkanFront(U.x,U.y);ctx.globalAlpha=1;}
@@ -2530,9 +2530,9 @@ function drawServed(now){const V=RemixUITable.served,L2=servedList(now);if(!L2.l
 function drawSteps(now,sec){const T=RemixUITable.steps,S=X.C.stage,n=L.ProcOrder.length,x0=960-(n*T.w+(n-1)*T.gap)/2,cur=S.type==='practice'?(sec?.proc==='place'?'place':S.proc):sec?.proc;
  for(const [i,p] of L.ProcOrder.entries()){const x=x0+i*(T.w+T.gap),on=p===cur,P=PT[p];rr(x,T.y-T.h/2,T.w,T.h,T.h/2,on?P.color:'#0A1017cc',on?'#0A1017':'#3E5A60',3);fitText(`${RemixUITable.stepNo[P.step]} ${p==='place'?'착':P.name}`,x+T.w/2,T.y+1,T.w-14,19,on?'#0A1017':'#9DB4B6','center',900);if(i<n-1)text('›',x+T.w+T.gap/2,T.y,20,'#3E5A60','center',900);}}
 function preSlide(now){const C=X.C;for(const p of X.run.places){if(p.res)continue;const bd=C.beatDur(Math.floor(p.b));if(now>=p.t-bd&&now<p.t)return {p,a:clamp((now-(p.t-bd))/bd*1.6)};}return null;}
-function countIntro(){const S=X.C.stage;if(S.type==='practice'){const T=PT[S.proc];return [`이 손놀림은 니기리의 「${S.name}」 과정이에요`,T.why,`${S.gimmick} — ${S.sub}`];}
- return [`${S.boss?'오마카세 마지막 · ':''}손님 주문 — ${S.name} ${X.C.pieces}점`,`한 점 = 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착`,`연습한 과정을 순서대로 이어서 · 착마다 ${S.name}${josa(S.name,'이','가')} 딱 올라가요`];}
-function drawCount(now,B){const cb=X.C.countBeats||4,i=Math.floor(B)-(cb-4);if(B>=cb)return;if(i<0){const K=RemixUITable.count,[a,b,c]=countIntro();rr(K.x,K.y,K.w,K.h,26,'#0A1017e6',X.C.stage.type==='practice'?C0.sky:C0.gold,5);fitText(a,960,K.y+56,K.w-60,44,X.C.stage.type==='practice'?C0.sky:C0.gold,'center',900);fitText(b,960,K.y+122,K.w-60,28,C0.cream,'center',800);fitText(c,960,K.y+178,K.w-60,25,C0.sub,'center',800);return;}
+function countIntro(){const S=X.C.stage;if(S.type==='intro'){const nm=L.NetaTable[S.neta]?.name||S.name;return ['입문 — 느린 박으로 첫 한 점','한 점 = 손 적시기 → 모양 잡기 → 뒤집기 → 착',`처음부터 끝까지 이어 쥐면 착에 ${nm}${josa(nm,'이','가')} 딱 올라가요`];}/* T79-a: 입문은 실전 문구(손님 주문 · 6과정) 대신 입문 카드 */if(S.type==='practice'){const T=PT[S.proc];return [`이 손놀림은 니기리의 「${S.name}」 과정이에요`,T.why,`${S.gimmick} — ${S.sub}`];}
+ return [`${S.boss?'오마카세 마지막 · ':''}손님 주문 — ${S.name} ${X.C.pieces}점`,`한 점 = 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착`,`연습한 과정을 순서대로 이어 쥐면 착마다 ${S.name}${josa(S.name,'이','가')} 딱 올라가요`];}
+function drawCount(now,B){const cb=X.C.countBeats||4,i=Math.floor(B)-(cb-4);if(B>=cb)return;if(i<0&&X.lesson)return;/* T79-a: 수업 단원 악보의 카운트 앞(첫 마디)엔 판 안내 카드를 안 그림 — 「손님 주문 — …」 같은 엉뚱한 카드가 0.7초 보이던 것 */if(i<0){const K=RemixUITable.count,[a,b,c]=countIntro();rr(K.x,K.y,K.w,K.h,26,'#0A1017e6',X.C.stage.type==='practice'?C0.sky:C0.gold,5);fitText(a,960,K.y+56,K.w-60,44,X.C.stage.type==='practice'?C0.sky:C0.gold,'center',900);fitText(b,960,K.y+122,K.w-60,28,C0.cream,'center',800);fitText(c,960,K.y+178,K.w-60,25,C0.sub,'center',800);return;}
  const fr=B-Math.floor(B);text(['하나','둘','셋','넷'][i],960,600,150*(1.1-(X.rm?0:.1*fr)),C0.cream,'center',900,'#0A1017');}
 /* T73-a 예고: 지금 보여 줄 예고(pre = 예고 마디 안, 가장 가까운 경계) · 적응 구간(ad = 경계 뒤 2박) · 남은 박 · 첫 등장 카드(보여 주는 순간 「본 종류」로 저장) */
 function cueNow(now){const C=X.C;let pre=null,ad=null;for(const q of C.cues){if(now>=q.tFrom&&now<q.t&&(!pre||q.t<pre.t))pre=q;if(now>=q.t&&now<q.tAdaptTo)ad=q;}const B=C.beatAt(now),card=pre?X.cards[pre.id]||null:null;
@@ -2622,7 +2622,7 @@ function lessonLoad(uid,demo=true){const Ls=X.lesson;cancelAll();X.C=L.buildChar
 function lessonIdle(){const Ls=X.lesson,nx=Ls.q.slice(Ls.qi).find(s=>s.type==='unit'&&LT.units[s.uid].loop);if(nx){if(Ls.loadedUid!==nx.uid||Ls.frozen==null)lessonLoad(nx.uid,true);return;}
  if(Ls.loadedUid!=='stage'){cancelAll();X.C=L.buildChart(Ls.stage);X.run=L.makeRun(X.C);resetRunView();Ls.loadedUid='stage';}Ls.frozen=-1;}/* 말뿐인 단계 = 다음 단원(없으면 그 판) 악보를 멈춘 채 보여 줌(박 줄에 키 미리 보기) */
 function startLesson(id,o={}){const S=stageOf(id);if(!S)return;const plan=o.plan||L.lessonPlan(S.id,X.prog.lessons||[],X.prog.lessonStages||[],!!o.force);if(!plan)return;cancelAll();X.bot=null;X.botEv=null;X.bridge=null;X.recap='';X.stageId=S.id;
- const q=[];for(const pg of plan.hello)q.push({type:'say',lines:pg});for(const u of plan.units)q.push({type:'unit',uid:u});q.push({type:'go',lines:plan.go.length?plan.go:['이제 판 전체를 해 봐요','Space로 시작']});
+ const q=[];for(const pg of plan.hello)q.push({type:'say',lines:pg});for(const u of plan.units)q.push({type:'unit',uid:u});q.push({type:'go',lines:plan.go.length?plan.go:['이제 판 전체를 해 보게','Space로 시작하게']});
  X.lesson={stage:S.id,plan,q,qi:-1,phase:'say',page:0,pages:[],U:null,uid:null,hits:0,need:0,fb:null,fbN:0,history:[],frozen:-1,auto:o.auto||null,loads:0,loadedUid:null,phaseAt:performance.now(),seenEv:new Set(),demoEv:[],autoEv:[],demoI:0,autoI:0,log:[]};
  X.mode='play';showPanels();log('rx_lesson_start',{stage:S.id,units:plan.units,hello:plan.hello.length,force:!!o.force});lessonStep(0);}
 function lessonStep(i){const Ls=X.lesson;if(!Ls)return;Ls.qi=i;const st=Ls.q[i];if(!st)return lessonFinish();Ls.page=0;Ls.phaseAt=performance.now();Ls.fb=null;Ls.fbN=0;
@@ -2645,7 +2645,7 @@ function lessonKey(code,e){const Ls=X.lesson;if(code==='Escape')return toMenu();
  if(ph==='say'||ph==='done'||ph==='go'){if(code==='Space'||code==='Enter')lessonNext();return;}
  if(ph==='try'&&!Ls.auto){const k=KEYMAP[code];if(!k)return;const t=songNow(e.timeStamp),r=feed({type:'key',key:k,t},true);if(r&&r.kind==='stray')lessonStray(t,k);}}
 const unitKey=U=>U.count==='pulse'?'A':U.count==='right'?'L':U.count==='toss'||U.count==='place'?'Space':null;
-function lessonStray(t,k){const Ls=X.lesson;if(!Ls||Ls.phase!=='try')return;const U=Ls.U,want=unitKey(U),now=X.lastNow;if(want&&k!==want&&!(want==='L'&&k==='A')){Ls.fb={text:`${U.keys} 키로 해요`,kind:'key',ok:false,t:now};return;}
+function lessonStray(t,k){const Ls=X.lesson;if(!Ls||Ls.phase!=='try')return;const U=Ls.U,want=unitKey(U),now=X.lastNow;if(want&&k!==want&&!(want==='L'&&k==='A')){Ls.fb={text:`${U.keys} 키로 하게`,kind:'key',ok:false,t:now};return;}
  if(want!==k)return;const sk=L.strayKind(X.run,U,t);if(!sk)return;Ls.fb={text:L.lessonLine(U,{kind:sk.kind,ok:false}),kind:sk.kind,ok:false,t:now,ms:sk.ms,stray:true};Ls.history.push({kind:sk.kind,ok:false,ms:sk.ms,stray:true});log('rx_lesson_ev',{uid:Ls.uid,kind:sk.kind,ok:false,stray:true,ms:sk.ms,hits:Ls.hits});}
 function lessonFeed(now){const Ls=X.lesson;if(!Ls||Ls.frozen!=null)return;while(Ls.demoI<Ls.demoEv.length&&Ls.demoEv[Ls.demoI].t<=now){const e=Ls.demoEv[Ls.demoI++];X.lastNow=e.t;feed(e,true);if(e.type==='key')Ls.demoKey={k:e.key,t:e.t};}
  if(Ls.auto&&Ls.phase==='try')while(Ls.autoI<Ls.autoEv.length&&Ls.autoEv[Ls.autoI].t<=now){const e=Ls.autoEv[Ls.autoI++];X.lastNow=e.t;const r=feed(e,true);if(r&&r.kind==='stray'&&e.type==='key')lessonStray(e.t,e.key);}X.lastNow=now;}
@@ -2659,11 +2659,11 @@ function lessonTick(now){const Ls=X.lesson;if(!Ls)return;
 /* 대화창에 보일 내용(원본 = 캔버스 · UI 판 = DOM이 같은 값을 읽음) */
 function dialogView(now){const Ls=X.lesson;if(!Ls)return null;const st=Ls.q[Ls.qi]||{},U=Ls.U,ph=Ls.phase,pg=Ls.pages?.[Ls.page]||[];let l1='',l2='',l2k='sub',tag='',keys='';
  if(ph==='say'||ph==='go'){l1=pg[0]||'';l2=pg[1]||'';keys=(ph==='go'?'Space 시작':'Space 다음')+(Ls.pages.length>1?` (${Ls.page+1}/${Ls.pages.length})`:'')+' · R 다시 보기 · Tab 넘기기 · Esc 메뉴';tag=U?U.name:ph==='go'?'시작':'인사';}
- else if(ph==='demo'||ph==='wait'){l1=U.demo||'잘 봐요';l2=`누를 키 ${U.keys} · 고양이가 먼저 보여 줘요`;keys='R 시범 다시 · Tab 넘기기';tag='시범';l2k='sky';}
- else if(ph==='try'){l1=U.try||'해 봐요';const f=Ls.fb;if(f&&now-f.t<2.2&&now>=f.t-.05){l2=f.text;l2k=f.kind==='good'?'good':f.ok?'gold':'warn';}else{l2=`누를 키 ${U.keys} · 틀려도 괜찮아요 · ${Ls.need}번 맞힐 때까지 기다려요`;}keys='R 시범 다시 · Tab 넘기기';tag='직접 해 보기';}
- else if(ph==='good'||ph==='done'){l1=U.done||'좋아요!';l2=ph==='done'?'다음으로 가요':'잘했어요 · 마디 끝까지 들어요';l2k='good';keys='Space 다음 · R 다시 보기';tag='통과';}
+ else if(ph==='demo'||ph==='wait'){l1=U.demo||'잘 보게';l2=`누를 키는 ${U.keys}. 고양이가 먼저 보여 줄 걸세`;keys='R 시범 다시 · Tab 넘기기';tag='시범';l2k='sky';}
+ else if(ph==='try'){l1=U.try||'해 보게';const f=Ls.fb;if(f&&now-f.t<2.2&&now>=f.t-.05){l2=f.text;l2k=f.kind==='good'?'good':f.ok?'gold':'warn';}else{l2=`누를 키는 ${U.keys}. 틀려도 괜찮네. ${Ls.need}번 맞힐 때까지 기다리겠네`;}keys='R 시범 다시 · Tab 넘기기';tag='직접 해 보기';}
+ else if(ph==='good'||ph==='done'){l1=U.done||'좋네!';l2=ph==='done'?'다음으로 가세':'잘했네. 마디 끝까지 들어 보게';l2k='good';keys='Space 다음 · R 다시 보기';tag='통과';}
  const units=Ls.q.filter(s=>s.type==='unit'),ui=units.indexOf(st);
- return {l1,l2,l2k,tag,keys,need:['try','good','done'].includes(ph)?Ls.need:0,hits:Math.min(Ls.hits,Ls.need),phase:ph,unit:U?.name||'',step:ui>=0?`${ui+1} / ${units.length}`:'',talking:ph==='say'||ph==='go'||ph==='good'||ph==='done',happy:ph==='good'||ph==='done'||(!!Ls.fb&&Ls.fb.kind==='good'&&now-Ls.fb.t<1)};}
+ return {l1,l2,l2k,tag,keys,need:['try','good','done'].includes(ph)?Ls.need:0,hits:Math.min(Ls.hits,Ls.need),phase:ph,unit:U?.name||'',step:ui>=0?`${ui+1}/${units.length}`:'',talking:ph==='say'||ph==='go'||ph==='good'||ph==='done',happy:ph==='good'||ph==='done'||(!!Ls.fb&&Ls.fb.kind==='good'&&now-Ls.fb.t<1)};}
 const DLGCOL={sub:C0.sub,sky:C0.sky,good:C0.good,gold:C0.gold,warn:C0.warn};
 function drawDialog(now){X.dlgRect=null;const v=dialogView(now);if(!v)return;const D=RemixUITable.dialog,col=v.phase==='go'||v.phase==='good'||v.phase==='done'?C0.good:v.phase==='demo'?C0.sky:C0.gold;X.dlgRect={x:D.x,y:D.y,w:D.w,h:D.h};
  rr(D.x,D.y,D.w,D.h,16,'#0A1017f2',col,4);rr(D.x+12,D.y+10,72,26,10,C0.stamp,null);text('스승',D.x+48,D.y+24,17,C0.paper,'center',900);if(v.tag)fitText(v.tag,D.x+48,D.y+52,76,14,col,'center',900);
@@ -2697,7 +2697,7 @@ const api={startLesson,lessonStep,drawAt:t=>draw(t),dialogView,lessonState:()=>X
    const d=(await ctxO.startRendering()).getChannelData(0);for(const k of kicks){const t0=k.t-from+pad;let i=Math.floor((t0-.01)*sr),base=0;for(let j=i-40;j<i;j++)base=Math.max(base,Math.abs(d[j]||0));while(i<d.length&&Math.abs(d[i])<=Math.max(thr,base*1.5))i++;out.push({tr:tr.kind,b:+k.b.toFixed(3),errMs:+((i/sr-t0)*1000).toFixed(3)});}}
   return {thr,n:out.length,maxAbsMs:out.length?Math.max(...out.map(o=>Math.abs(o.errMs))):0,list:out};},
  init(){if(!ON)return;X.prog=loadProg();X.all=query.get('rall')==='1';if(query.get('rreset')==='1'){X.prog={best:{}};saveProg();}X.rm=rmNow();X.lessonsOn=query.get('rlesson')!=='0';X.lessonForce=query.get('rlesson')==='1';buildDom();setActive(true);requestAnimationFrame(frame);setInterval(()=>{if(X.active&&X.mode==='play')schedule();},RemixAudioTable.intervalMs);
-  const qs0=query.get('rstage'),qb=query.get('rbot'),qs=qs0&&stageOf(qs0)?stageOf(qs0).id:null;if(qs){if(qb&&L.BotTable[qb])setTimeout(()=>api.startBot(qs,qb,Number(query.get('rseed'))||1),300);else{X.stageId=qs;X.mode='ready';const S=stageOf(qs);const pr=S.type==='practice';startEl.innerHTML=`<div class="rxArt" style="height:220px;margin-top:110px">${sushiSvg(pr?S.product:S.neta,{gloss:1}).replace('width="100%" height="100%"','width="352" height="220"')}</div><div class="rxTitle" style="margin-top:10px">${stageTag(S)} · ${stageTitle(S)}</div><div class="rxSub">${pr?`이 손놀림은 니기리의 「${S.name}」 과정이에요 — ${PT[S.proc].why}`:`손님 주문 ${L.buildChart(S.id).pieces}점 · 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착`}</div><div class="rxSub">${S.sub}</div><div class="rxHint" style="margin-top:60px;font-size:34px;color:#FFF3DC">아무 키나 누르거나 클릭하면 시작해요</div>`;startEl.addEventListener('click',()=>go(qs));showPanels();}}
+  const qs0=query.get('rstage'),qb=query.get('rbot'),qs=qs0&&stageOf(qs0)?stageOf(qs0).id:null;if(qs){if(qb&&L.BotTable[qb])setTimeout(()=>api.startBot(qs,qb,Number(query.get('rseed'))||1),300);else{X.stageId=qs;X.mode='ready';const S=stageOf(qs);const pr=S.type==='practice';startEl.innerHTML=`<div class="rxArt" style="height:220px;margin-top:110px">${sushiSvg(pr?S.product:S.neta,{gloss:1}).replace('width="100%" height="100%"','width="352" height="220"')}</div><div class="rxTitle" style="margin-top:10px">${stageTag(S)} · ${stageTitle(S)}</div><div class="rxSub">${pr?`이 손놀림은 니기리의 「${S.name}」 과정이에요 — ${PT[S.proc].why}`:S.type==='intro'?'입문 · 느린 박으로 한 점 · 손 적시기 → 모양 잡기 → 뒤집기 → 착':`손님 주문 ${L.buildChart(S.id).pieces}점 · 손 적시기 → 모양 잡기 → 쥐기 → 뒤집기 → 다듬기 → 착`}</div><div class="rxSub">${S.sub}</div><div class="rxHint" style="margin-top:60px;font-size:34px;color:#FFF3DC">아무 키나 누르거나 클릭하면 시작해요</div>`;startEl.addEventListener('click',()=>go(qs));showPanels();}}
   else if(X.lessonsOn&&!X.all&&!Object.keys(X.prog.best||{}).length&&!(X.prog.lessons||[]).length)startLesson('p0');/* T74-a: 진행 기록이 없는 첫 플레이어는 바로 입문 수업부터 */}};
 if(ON){window.addEventListener('keydown',onKey,true);window.addEventListener('keyup',e=>{if(X.active)e.stopImmediatePropagation();},true);}
 window.__rx=api;return api;})();
