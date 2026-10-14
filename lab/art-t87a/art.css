@@ -1,0 +1,121 @@
+/* T87-a: 그림·스타일만 적용. 기존 한글 문구·게임 배치는 유지한다. */
+:root{--art-ink:#38261e;--art-paper:#fff0d4;--art-teal:#176365;--art-coral:#ed7852;--art-gold:#ffba42;--art-accent:#ed7852}
+#rxRoot{background:#e6b574!important;color:var(--art-ink)!important}
+#rxRoot,#rxRoot *{font-family:'Jua','Malgun Gothic',sans-serif!important}
+#rxRoot .t72Backdrop{filter:none;opacity:1}
+#rxRoot .t72Shade{background:linear-gradient(#281c1408,#281c1400 65%,#281c1422)}
+#rxRoot .t72Board{filter:none;opacity:.96}
+#rxRoot .rxPanel{background:linear-gradient(#fff0d4e8,#f9e0adef);color:var(--art-ink)}
+#rxRoot .rxTitle{color:var(--art-teal);font-size:66px;text-shadow:2px 2px 0 #fff0d4,4px 4px 0 var(--art-coral);letter-spacing:2px}
+#rxRoot .rxSub,#rxRoot .rxHint,#rxRoot .rxRowHead,#rxRoot .rxRowHead small{color:var(--art-ink)}
+#rxRoot .rxRowTag{background:var(--art-teal);color:var(--art-paper);border:3px solid var(--art-ink);border-radius:9px;box-shadow:3px 3px 0 var(--art-accent)}
+#rxRoot .rxRowHead.real .rxRowTag{background:var(--art-coral);color:var(--art-ink)}
+#rxRoot .rxCard{border:5px solid var(--art-ink);border-radius:18px 23px 16px 20px;background:radial-gradient(circle,#38261e12 1px,transparent 1.4px) 0 100%/10px 10px,var(--art-paper);box-shadow:5px 7px 0 var(--art-ink);color:var(--art-ink);overflow:hidden}
+#rxRoot .rxCard.prac{background:linear-gradient(160deg,#dff0da,#faf2d6);color:var(--art-ink)}
+#rxRoot .rxCard h3{color:var(--art-teal)}
+#rxRoot .rxCard p,#rxRoot .rxProc{color:#674a36}
+#rxRoot .rxCardTop b{background:var(--art-gold);border:2px solid var(--art-ink);color:var(--art-ink)}
+#rxRoot .rxStars{color:#d05c35;text-shadow:1px 1px 0 #fff0d4}
+#rxRoot .rxStars i{color:#cfbc97}
+#rxRoot .rxCard.first,#rxRoot .rxCard:hover,#rxRoot .rxCard:focus-visible{border-color:var(--art-teal);outline-color:var(--art-coral)}
+#rxRoot .rxCard.locked{background:#e6d7b9;border-color:#715a46}
+#rxRoot .rxCard.locked .rxArt,#rxRoot .rxCard.locked h3{filter:grayscale(.65);opacity:.8}
+#rxRoot .rxGim,#rxRoot .rxFlow,#rxRoot .rxChips span{background:var(--art-teal);color:var(--art-paper);border:2px solid var(--art-ink);border-radius:9px}
+#rxRoot .rxFlow b{color:#f8c35e}
+#rxRoot .rxIntroBtn,#rxRoot .rxLessonReset,#rxRoot .rxOld>button{background:var(--art-paper);color:var(--art-teal);border:3px solid var(--art-ink);box-shadow:3px 4px 0 var(--art-coral);border-radius:12px}
+#rxRoot .rxIntroBtn small{color:#674a36}
+#rxRoot .rxIntroBtn.first{background:var(--art-gold);color:var(--art-ink);outline-color:var(--art-teal)}
+#rxRoot .rxSheet,#rxRoot .rxBridge{border:7px solid var(--art-ink);border-image:none;border-radius:20px 12px 24px 15px;background:var(--art-paper);box-shadow:8px 10px 0 var(--art-teal),11px 13px 0 var(--art-coral)}
+#rxRoot .rxSheet:before{border-color:var(--art-teal)}
+#rxRoot .rxSH{border-color:var(--art-teal)}
+#rxRoot .rxSH em{background:var(--art-coral);color:var(--art-ink)}
+#rxRoot .rxStamp{background:#fff0d4bb;border-color:#d55339;color:#d55339;box-shadow:2px 2px 0 #efad80}
+#rxRoot .rxBtns button{background:var(--art-teal);border:4px solid var(--art-ink);color:var(--art-paper);box-shadow:4px 5px 0 var(--art-ink);border-radius:12px}
+#rxRoot .rxBtns button:first-child{background:var(--art-gold);color:var(--art-ink)}
+#rxRoot .rxBtns button:hover{outline:4px solid var(--art-coral)}
+#rxRoot .t72Plaque{background:var(--art-paper);color:var(--art-ink);border:5px solid var(--art-ink);box-shadow:4px 5px 0 var(--art-coral);border-radius:15px 10px 17px 10px}
+#rxRoot .t72Plaque h2{color:var(--art-teal)}
+#rxRoot .t72Plaque small,#rxRoot .t72Plaque p{color:#674a36}
+#rxRoot .t72Slot small,#rxRoot .t72Slot em{color:#f8d593}
+#rxRoot .t72Slot strong{color:#fff0d4}
+#rxRoot .t72Beat{background:var(--art-teal);border:4px solid var(--art-ink);box-shadow:3px 4px 0 var(--art-coral);color:var(--art-paper);border-radius:13px}
+#rxRoot .t72Beat small{color:#ffe0a3}
+#rxRoot .t72Warn,#rxRoot .t74Dlg{background:#164e50;border-color:var(--art-ink);box-shadow:4px 5px 0 var(--art-coral);border-radius:12px}
+#rxRoot .t72Rail{filter:none;border-image:none;border:5px solid var(--art-ink);border-radius:18px;background:#f6dfb4;box-shadow:5px 7px 0 var(--art-ink)}
+#rxRoot .t72Rail h3{left:20px;top:16px}
+#rxRoot .t72Tickets{left:11px;top:83px}
+#rxRoot .t72Ticket{border:3px solid var(--art-ink);border-image:none;border-radius:11px;background:#ffefcf;padding:8px;box-shadow:3px 3px 0 #b58a5f;gap:5px}
+#rxRoot .t72Ticket.next{background:#dbebd4;border-image:none}
+#rxRoot .t72Ticket.active{background:#ffc76c;border-image:none;filter:none;box-shadow:4px 4px 0 var(--art-coral)}
+#rxRoot .t72Ticket .arrow{right:-50px;top:20px}
+#rxRoot .t72Completion{left:12px;bottom:15px;color:var(--art-ink)}
+#rxRoot .t72Completion small{color:var(--art-teal)}
+#rxRoot .t72Guest{filter:none}
+#rxRoot .t72Guests:after{background:#bf7746;border-color:var(--art-ink);filter:none;box-shadow:0 -3px 0 var(--art-ink),0 8px 0 #6d483a}
+#rxRoot .t72RailMode,#rxRoot .t72Judge p,#rxRoot .t72MeterNumber{color:var(--art-paper);text-shadow:2px 2px 0 var(--art-ink)}
+#rxRoot #rxMsBub{border:4px solid var(--art-ink)!important;box-shadow:4px 5px 0 var(--art-coral);background:var(--art-paper)!important;transform:rotate(-1deg)}
+#rxRoot .t74Face{background:#ffdf9e;border:3px solid var(--art-ink)}
+#rxRoot .rxCap{border-color:var(--art-ink);border-radius:7px;background:var(--art-paper);color:var(--art-teal);box-shadow:1px 1px 0 var(--art-coral)}
+/* 메뉴 삽화·결과 인물의 셰이더 캔버스는 고정 크기이며 텍스트를 포함하지 않는다. */
+.artMenuPortrait{position:absolute;left:80px;top:38px;width:170px;height:170px;pointer-events:none;transform:rotate(-6deg)}
+.artMenuDish{position:absolute;right:80px;top:45px;width:200px;height:140px;object-fit:contain;pointer-events:none;transform:rotate(5deg)}
+.artGpu{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;object-fit:contain}
+.artPose{transform-origin:50% 90%}
+.artStaticImage{width:100%;height:100%;object-fit:contain}
+/* 세로 화면의 메뉴·결과는 스크롤 가능한 만화 칸. 판 진행 좌표는 원본 그대로. */
+@media(max-width:600px){
+ #rxRoot:has(#rxMenu:not([hidden])) #rxStage,#rxRoot:has(#rxResult:not([hidden])) #rxStage{width:100vw;height:100vh;transform:none!important}
+ #rxRoot:has(#rxMenu:not([hidden])) .t72Scene,#rxRoot:has(#rxResult:not([hidden])) .t72Scene{width:100vw;height:100vh;overflow:hidden}
+ #rxRoot:has(#rxMenu:not([hidden])) .t72Backdrop,#rxRoot:has(#rxResult:not([hidden])) .t72Backdrop{width:100vw;height:100vh}
+ #rxRoot #rxMenu,#rxRoot #rxResult{overflow:auto;justify-content:flex-start;align-items:center;padding:20px 12px 30px;gap:0}
+ #rxRoot .rxTitle{font-size:36px;letter-spacing:0;margin-top:12px;text-align:center}
+ #rxRoot .rxSub,#rxRoot .rxHint{font-size:14px;text-align:center}
+ #rxRoot .rxRowHead{width:100%;font-size:22px;flex-wrap:wrap;gap:8px;margin-top:24px}
+ #rxRoot .rxRowHead small{font-size:13px;white-space:normal;margin:0;line-height:1.5}
+ #rxRoot .rxRowTag{font-size:17px;padding:2px 8px}
+ #rxRoot .rxIntroBtn{width:100%;order:2;margin:5px 0;font-size:18px;padding:8px;flex-wrap:wrap}
+ #rxRoot .rxIntroBtn small{font-size:12px}
+ #rxRoot .rxLessonReset{font-size:13px;padding:7px}
+ #rxRoot .rxCards{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+ #rxRoot .rxCard{height:228px;min-width:0;padding:10px;border-width:3px;gap:6px;box-shadow:3px 4px 0 var(--art-ink)}
+ #rxRoot .rxCardTop{gap:2px}
+ #rxRoot .rxCardTop b{font-size:12px;padding:1px 4px;white-space:nowrap}
+ #rxRoot .rxStars{font-size:14px;letter-spacing:0;white-space:nowrap}
+ #rxRoot .rxArt{height:83px}
+ #rxRoot .rxCard h3{font-size:23px;white-space:nowrap}
+ #rxRoot .rxCard p,#rxRoot .rxProc{font-size:12px;white-space:normal;line-height:1.4}
+ #rxRoot .rxGim{font-size:12px;padding:2px 4px;white-space:nowrap}
+ #rxRoot .rxGim svg{width:16px;height:16px}
+ #rxRoot .rxFlow{gap:1px;padding:2px 4px;max-width:100%}
+ #rxRoot .rxFlow svg{width:17px;height:17px}
+ #rxRoot .rxFlow b{font-size:11px}
+ #rxRoot .rxWhy{font-size:12px!important;height:auto!important}
+ #rxRoot .rxLock{font-size:12px;top:46px}
+ #rxRoot .rxCard.first:after{font-size:11px;bottom:8px;right:8px}
+ #rxRoot .rxOld{position:static;margin-top:18px}
+ #rxRoot .rxOld>button{font-size:14px}
+ .artMenuPortrait,.artMenuDish{display:none}
+ #rxRoot .rxSheet{width:100%;margin-top:18px;min-height:0;display:flex;flex:none;flex-direction:column;border-width:4px;overflow:visible}
+ #rxRoot .rxSheet:before{display:none}
+ #rxRoot .rxSL{padding:16px 12px;flex:none}
+ #rxRoot .rxSH{white-space:normal;gap:4px 8px;padding-bottom:8px}
+ #rxRoot .rxSH h2{font-size:29px}
+ #rxRoot .rxSH em,#rxRoot .rxSH span{font-size:15px}
+ #rxRoot .rxTier{font-size:14px;margin-top:8px;padding:7px}
+ #rxRoot .rxRows{gap:8px}
+ #rxRoot .rxRow{grid-template-columns:25px 78px 1fr 28px;gap:6px;font-size:16px}
+ #rxRoot .rxRow small{font-size:11px;margin-top:0;line-height:1.4}
+ #rxRoot .rxMark{font-size:23px}
+ #rxRoot .rxBar{height:17px;border-width:2px}
+ #rxRoot .rxMemo,#rxRoot .rxWhyLine{font-size:15px;line-height:1.5;margin-top:10px;padding-top:9px}
+ #rxRoot .rxSR{padding:0 12px 16px;border-top:3px dashed #b98956;flex:none}
+ #rxRoot .rxPlate{width:230px;height:140px;margin-top:10px}
+ #rxRoot .rxStamp,#rxRoot .rxSheet.real .rxPlates.n3~.rxStamp{left:auto;right:13px;top:92px;width:76px;height:76px;font-size:25px;border-width:5px}
+ #rxRoot .rxStamp small{font-size:15px}
+ #rxRoot .rxFace{width:90px;height:85px;margin-top:4px}
+ #rxRoot .rxSay{font-size:19px;margin-top:2px}
+ #rxRoot .rxUnlock{font-size:15px;padding:5px 8px;margin-top:8px}
+ #rxRoot .rxBtns{width:100%;flex:none;flex-direction:column;gap:10px;margin-top:20px;padding:0 2px}
+ #rxRoot .rxBtns button{font-size:18px;padding:12px;border-width:3px}
+}
+@media(prefers-reduced-motion:reduce){.artPose{transform:none!important}}
